@@ -685,6 +685,8 @@ a:focus-visible, button:focus-visible, .btn:focus-visible, [tabindex]:focus-visi
 .skill-cat:nth-child(6) { --cat: #2e8b57; }  /* green */
 .skill-cat:nth-child(7) { --cat: #b04a86; }  /* rose */
 .skill-cat:nth-child(8) { --cat: #c2453d; }  /* coral */
+.skill-cat:nth-child(9) { --cat: #c97d2e; }  /* orange */
+.skill-cat:nth-child(10) { --cat: #4a7fbf; } /* steel blue */
 .skill-cat { border-top: 3px solid var(--cat, var(--accent)); transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease); }
 .skill-cat:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
 .skill-cat h3 { color: var(--cat, var(--accent)); }
