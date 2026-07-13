@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+<defs>
+  <radialGradient id="a1" cx="70%" cy="20%" r="65%">
+    <stop offset="0%" stop-color="#312e81" stop-opacity="0.5"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="a2" cx="20%" cy="75%" r="38%">
+    <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.28"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="sp" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="rgba(251,191,36,0)"/>
+    <stop offset="28%" stop-color="rgba(251,191,36,0.9)"/>
+    <stop offset="72%" stop-color="rgba(251,191,36,0.9)"/>
+    <stop offset="100%" stop-color="rgba(251,191,36,0)"/>
+  </linearGradient>
+  <linearGradient id="fl" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#312e81" stop-opacity="0.07"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </linearGradient>
+  <filter id="g4"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="g10"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="g20"><feGaussianBlur stdDeviation="20" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="800" height="450" fill="#060810"/>
+<rect width="800" height="450" fill="url(#a1)"/>
+<rect width="800" height="450" fill="url(#a2)"/>
+<rect x="0" y="355" width="800" height="95" fill="url(#fl)"/>
+<!-- Spine -->
+<rect x="399" y="0" width="2" height="450" fill="url(#sp)" filter="url(#g20)" opacity="0.75"/>
+<!-- Open book icon -->
+<g filter="url(#g10)" opacity="0.52">
+  <!-- Book spine -->
+  <line x1="178" y1="138" x2="178" y2="325" stroke="#818cf8" stroke-width="2.5"/>
+  <!-- Left page -->
+  <path d="M82 148 Q82 138 92 135 L175 128 L175 322 L92 330 Q82 332 82 322 Z" fill="none" stroke="#818cf8" stroke-width="1.5"/>
+  <!-- Right page -->
+  <path d="M181 128 L268 135 Q278 138 278 148 L278 322 Q278 332 268 330 L181 322 Z" fill="none" stroke="#818cf8" stroke-width="1.5"/>
+  <!-- Left page lines -->
+  <line x1="100" y1="162" x2="170" y2="158" stroke="#818cf8" stroke-width="1" opacity="0.4"/>
+  <line x1="100" y1="180" x2="170" y2="176" stroke="#818cf8" stroke-width="1" opacity="0.35"/>
+  <line x1="100" y1="198" x2="170" y2="195" stroke="#818cf8" stroke-width="1" opacity="0.35"/>
+  <line x1="100" y1="216" x2="170" y2="213" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <line x1="100" y1="234" x2="165" y2="231" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <line x1="100" y1="252" x2="170" y2="249" stroke="#818cf8" stroke-width="1" opacity="0.28"/>
+  <line x1="100" y1="270" x2="168" y2="267" stroke="#818cf8" stroke-width="1" opacity="0.25"/>
+  <!-- Right page lines -->
+  <line x1="188" y1="158" x2="258" y2="162" stroke="#818cf8" stroke-width="1" opacity="0.4"/>
+  <line x1="188" y1="176" x2="258" y2="180" stroke="#818cf8" stroke-width="1" opacity="0.35"/>
+  <line x1="188" y1="195" x2="258" y2="198" stroke="#818cf8" stroke-width="1" opacity="0.35"/>
+  <line x1="188" y1="213" x2="258" y2="216" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <line x1="188" y1="231" x2="252" y2="234" stroke="#818cf8" stroke-width="1" opacity="0.28"/>
+  <!-- Highlighted section (policy) -->
+  <rect x="188" y="249" width="70" height="22" rx="2" fill="#818cf8" opacity="0.12"/>
+  <line x1="188" y1="258" x2="258" y2="261" stroke="#818cf8" stroke-width="1.5" opacity="0.5"/>
+</g>
+<!-- RAG pipeline nodes -->
+<!-- Policy docs cluster (left) -->
+<g filter="url(#g10)">
+  <circle cx="450" cy="82" r="14" fill="#fbbf24" opacity="0.82"/>
+  <circle cx="450" cy="82" r="7" fill="#fef3c7"/>
+  <circle cx="510" cy="62" r="12" fill="#fbbf24" opacity="0.78"/>
+  <circle cx="510" cy="62" r="6" fill="#fef3c7"/>
+  <circle cx="575" cy="72" r="12" fill="#fbbf24" opacity="0.78"/>
+  <circle cx="575" cy="72" r="6" fill="#fef3c7"/>
+</g>
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="1" fill="none" opacity="0.32">
+  <line x1="450" y1="82" x2="510" y2="62"/>
+  <line x1="510" y1="62" x2="575" y2="72"/>
+</g>
+<!-- Hybrid retrieval node (ChromaDB + BM25) -->
+<g filter="url(#g10)">
+  <circle cx="510" cy="178" r="26" fill="#fbbf24"/>
+  <circle cx="510" cy="178" r="13" fill="#fef3c7"/>
+</g>
+<!-- Docs → Retrieval -->
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="1.4" fill="none" opacity="0.38">
+  <line x1="450" y1="96" x2="497" y2="157"/>
+  <line x1="510" y1="74" x2="510" y2="152"/>
+  <line x1="575" y1="84" x2="523" y2="157"/>
+</g>
+<!-- ReAct agent node (central) -->
+<g filter="url(#g10)">
+  <circle cx="590" cy="268" r="30" fill="#fbbf24"/>
+  <circle cx="590" cy="268" r="15" fill="#fef3c7"/>
+</g>
+<!-- Retrieval → ReAct -->
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="1.8" fill="none" opacity="0.42">
+  <line x1="526" y1="195" x2="572" y2="245"/>
+</g>
+<!-- ReAct self-loop -->
+<path d="M555 255 Q495 240 498 265 Q500 285 557 278" fill="none" stroke="#fbbf24" stroke-width="1.4" stroke-dasharray="5,3" filter="url(#g4)" opacity="0.38"/>
+<!-- Injection shield node (red) -->
+<g filter="url(#g20)">
+  <circle cx="680" cy="165" r="16" fill="#ef4444"/>
+  <circle cx="680" cy="165" r="8" fill="#fca5a5"/>
+</g>
+<g filter="url(#g4)" stroke="#ef4444" stroke-width="1.2" fill="none" opacity="0.4">
+  <line x1="536" y1="178" x2="664" y2="165"/>
+</g>
+<!-- GPT-4o answer node -->
+<g filter="url(#g10)">
+  <circle cx="700" cy="310" r="22" fill="#fbbf24"/>
+  <circle cx="700" cy="310" r="11" fill="#fef3c7"/>
+</g>
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="1.6" fill="none" opacity="0.4">
+  <line x1="618" y1="278" x2="682" y2="298"/>
+</g>
+<!-- Outer context nodes -->
+<g filter="url(#g10)">
+  <circle cx="762" cy="245" r="11" fill="#fbbf24" opacity="0.7"/>
+  <circle cx="758" cy="368" r="10" fill="#fbbf24" opacity="0.66"/>
+  <circle cx="638" cy="390" r="9" fill="#fbbf24" opacity="0.62"/>
+  <circle cx="488" cy="390" r="9" fill="#fbbf24" opacity="0.62"/>
+  <circle cx="432" cy="345" r="9" fill="#fbbf24" opacity="0.62"/>
+</g>
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="1" fill="none" opacity="0.28">
+  <line x1="720" y1="310" x2="762" y2="245"/>
+  <line x1="720" y1="318" x2="758" y2="368"/>
+  <line x1="700" y1="332" x2="638" y2="390"/>
+  <line x1="588" y1="298" x2="488" y2="390"/>
+  <line x1="575" y1="290" x2="432" y2="345"/>
+</g>
+<!-- Red accent nodes -->
+<g filter="url(#g20)">
+  <circle cx="398" cy="150" r="12" fill="#ef4444"/>
+  <circle cx="398" cy="150" r="6" fill="#fca5a5"/>
+  <circle cx="315" cy="285" r="9" fill="#ef4444" opacity="0.82"/>
+  <circle cx="315" cy="285" r="4.5" fill="#fca5a5"/>
+</g>
+<!-- Particles -->
+<g fill="#fbbf24" opacity="0.35" filter="url(#g4)">
+  <circle cx="295" cy="88" r="2.5"/>
+  <circle cx="352" cy="168" r="2"/>
+  <circle cx="768" cy="432" r="2.5"/>
+  <circle cx="262" cy="420" r="2"/>
+  <circle cx="628" cy="430" r="1.8"/>
+  <circle cx="318" cy="62" r="2"/>
+</g>
+<text x="400" y="436" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.18)" text-anchor="middle" letter-spacing="2.5">GPT-4o · LANGGRAPH REACT · CHROMADB · BM25 · HYBRID RAG · CLOUD RUN</text>
+</svg>

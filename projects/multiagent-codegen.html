@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <title>Multiagent CodeGen AI Platform · Dhanvardini Rajendran</title>
+  <meta name="description" content="Planning-first multi-agent code generation system: Planner, Coder, and Reviewer agents with prompt-injection hardening and an automated evaluation harness." />
+  <meta property="og:title" content="Multiagent CodeGen AI Platform · Case Study" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css?v=2" />
+  <link rel="stylesheet" href="../css/project-page.css?v=2" />
+  <link rel="stylesheet" href="../css/anim-bg.css" />
+  <script src="../js/anim-bg.js" defer></script>
+</head>
+<body>
+  <script>
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      try { if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.classList.add('motion'); } catch (e) {}
+    })();
+  </script>
+
+  <div class="cs-progress" id="csProgress"></div>
+
+  <header class="site-header" id="top">
+    <a href="../projects.html" class="cs-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All projects
+    </a>
+    <nav class="site-nav" aria-label="Section">
+      <a href="#pipeline">Architecture</a>
+      <a href="#agents">Agents</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#results">Results</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode">
+      <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="cs-hero has-anim-bg">
+      <div class="anim-bg" data-bg="constellation" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <p class="eyebrow">AI &amp; Data Systems &middot; Multi-Agent Code Generation</p>
+      <h1>Multiagent CodeGen AI Platform</h1>
+      <p class="cs-lead">A planning-first multi-agent code generation system where a Planner decomposes the task before a Coder generates the implementation, and a Reviewer checks quality and security before output is released. A preprocessing prompt-injection hardening layer and an automated evaluation harness complete the pipeline.</p>
+
+      <dl class="cs-meta">
+        <div><dt>Architecture</dt><dd>3-agent pipeline (Planner &rarr; Coder &rarr; Reviewer)</dd></div>
+        <div><dt>Framework</dt><dd>LangGraph</dd></div>
+        <div><dt>Security</dt><dd>Prompt-injection hardening layer</dd></div>
+        <div><dt>Evaluation</dt><dd>Automated eval harness</dd></div>
+      </dl>
+
+      <div class="cs-hero-actions">
+        <a class="btn btn-primary" href="https://github.com/DhanvardiniRajendran25/multiagent-codegen" target="_blank" rel="noopener">GitHub &rarr;</a>
+      </div>
+
+      <div class="cs-chips">
+        <span>LangGraph</span><span>Python</span><span>Multi-Agent</span>
+        <span>Prompt Security</span><span>Evaluation Harness</span><span>Code Quality</span>
+      </div>
+    </section>
+
+    <section class="cs-section" id="pipeline">
+      <p class="cs-label">System Architecture</p>
+      <h2>How a request becomes code</h2>
+      <p>Three agents in a strict linear pipeline, with a security check at input and an evaluation harness at output. The Planner-first design is the key architectural choice: no code is generated until a structured plan is approved.</p>
+
+      <div class="arch cs-reveal">
+        <div class="arch-row">
+          <div class="arch-node"><b>User Request</b><span>Natural language code generation task</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Prompt Injection Shield</b><span>Preprocessing guard &mdash; blocks malicious inputs before agent pipeline</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>Planner Agent</b><span>Task decomposition &rarr; structured implementation plan with subtasks and constraints</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>Coder Agent</b><span>Generates implementation against the Planner&rsquo;s spec, one subtask at a time</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>Reviewer Agent</b><span>Quality check &middot; security scan &middot; correctness verification &middot; pass or request revision</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Evaluation Harness</b><span>Automated test suite validates output before release</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Output</b><span>Reviewed, tested, security-cleared code</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" id="agents">
+      <p class="cs-label">Agent Roles</p>
+      <h2>Three agents, one responsibility each</h2>
+
+      <div class="cs-cards cs-reveal">
+        <div class="cs-card">
+          <h3>Planner Agent</h3>
+          <p>Receives the raw user request and decomposes it into a structured implementation plan: subtasks in dependency order, function signatures, data types, edge cases to handle, and explicit constraints (no external libraries, no side effects, etc.). The Planner output is a specification document — the Coder works from the spec, not from the raw request. This is the core design choice that reduces hallucination.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Coder Agent</h3>
+          <p>Takes the Planner's spec and generates code subtask by subtask, in the order defined by the plan. The Coder has a limited context window per subtask — it sees the spec, the current subtask, and the already-completed code. This constraint forces modular output that the Reviewer can check incrementally rather than reviewing one large block of code.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Reviewer Agent</h3>
+          <p>Runs three checks on the Coder's output: (1) <strong>correctness</strong> — does the code match the Planner's spec? (2) <strong>quality</strong> — are there logic errors, edge cases not handled, or performance issues? (3) <strong>security</strong> — are there injection vectors, hardcoded credentials, or unsafe operations? On failure, the Reviewer sends the code back to the Coder with specific revision instructions.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Evaluation Harness</h3>
+          <p>After the Reviewer approves, an automated test suite runs against the output: unit tests for the requested functionality, edge case tests generated from the Planner's constraints, and a regression suite to catch changes that break previously-passing behavior. Output is only released if all harness tests pass.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section narrow" id="decisions">
+      <p class="cs-label">Key Decisions</p>
+      <h2>Why it was built this way</h2>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 1</p>
+        <p><strong>Planning-first architecture: Planner before Coder.</strong> Direct code generation from a raw user request is the primary cause of hallucination and spec drift in code-generation systems. The Planner produces a structured intermediate representation — a spec — that the Coder follows exactly. Hallucination is dramatically reduced because the Coder is implementing a known spec, not interpreting a vague request. It also makes the system easier to debug: if the output is wrong, you can immediately check whether the Planner's spec was wrong or the Coder deviated from it.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 2</p>
+        <p><strong>Dedicated Reviewer agent instead of self-review.</strong> Self-review (asking the same LLM that generated the code to also check it) has a well-documented failure mode: the model tends to validate its own output rather than critique it. A separate Reviewer agent, given only the spec and the code, is more likely to surface genuine errors because it has no prior commitment to the code it's reviewing.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 3</p>
+        <p><strong>Prompt injection hardening at preprocessing, before the agent pipeline starts.</strong> In a code generation system, a prompt injection attack can cause the Planner to produce a spec that generates malicious code, which the Coder implements and the Reviewer may miss. Catching injections before any agent sees the input prevents the entire downstream pipeline from being compromised — it's far cheaper and more reliable than asking each agent to individually detect and resist injections.</p>
+      </div>
+    </section>
+
+    <section class="cs-section" id="results">
+      <p class="cs-label">Results</p>
+      <h2>What came out</h2>
+
+      <div class="cs-stats cs-reveal">
+        <div class="cs-stat"><b>3-agent</b><span>Planning-first pipeline (Planner &rarr; Coder &rarr; Reviewer)</span></div>
+        <div class="cs-stat"><b>Spec-driven</b><span>Coder works from Planner's structured spec — not raw requests</span></div>
+        <div class="cs-stat"><b>Security</b><span>Prompt injection hardened at preprocessing</span></div>
+        <div class="cs-stat"><b>Eval harness</b><span>Automated test suite gates every output</span></div>
+        <div class="cs-stat"><b>LangGraph</b><span>Stateful agent orchestration with revision loops</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span class="footer-name">Dhanvardini Rajendran</span>
+      <nav class="footer-links" aria-label="Contact">
+        <a href="mailto:dhanvardini.rajendran@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/dhanvardini/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/DhanvardiniRajendran25" target="_blank" rel="noopener">GitHub</a>
+        <a href="../assets/resume.pdf" download>Resume</a>
+      </nav>
+    </div>
+    <p class="footer-fine">&copy; <span id="year"></span> Dhanvardini Rajendran.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -4,18 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
-  <title>PodcastIQ · Case Study · Dhanvardini Rajendran</title>
-  <meta name="description" content="PodcastIQ: a 9-agent AI platform that makes 300+ podcasts searchable and verifiable with GraphRAG, a temporal knowledge graph, and hybrid fact-checking. Product case study by Dhanvardini Rajendran." />
-
+  <title>PodcastIQ · Dhanvardini Rajendran</title>
+  <meta name="description" content="9-agent LangGraph system with a 4-layer Snowflake knowledge base and Neo4j temporal graph for semantic search over 500 podcasts with hybrid fact-checking." />
   <meta property="og:title" content="PodcastIQ · Case Study" />
-  <meta property="og:description" content="A 9-agent AI podcast intelligence platform with GraphRAG, temporal claim tracking, and hybrid fact-checking." />
   <meta property="og:type" content="article" />
-  <meta property="og:image" content="https://dhanvardinirajendran25.github.io/assets/projects/podcastiq-hero.jpeg" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
   <link rel="stylesheet" href="../css/styles.css?v=2" />
   <link rel="stylesheet" href="../css/project-page.css?v=2" />
   <link rel="stylesheet" href="../css/anim-bg.css" />
@@ -33,18 +28,15 @@
 
   <div class="cs-progress" id="csProgress"></div>
 
-  <!-- ===== Header ===== -->
   <header class="site-header" id="top">
     <a href="../projects.html" class="cs-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       All projects
     </a>
     <nav class="site-nav" aria-label="Section">
-      <a href="#problem">Problem</a>
-      <a href="#solution">Solution</a>
-      <a href="#architecture">Architecture</a>
-      <a href="#prd">PRD</a>
-      <a href="#prototype">Prototype</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#agents">Agents</a>
+      <a href="#decisions">Decisions</a>
       <a href="#results">Results</a>
     </nav>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode">
@@ -54,679 +46,168 @@
   </header>
 
   <main>
-    <!-- ===== Hero ===== -->
     <section class="cs-hero has-anim-bg">
-      <div class="anim-bg" data-bg="rain" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
-      <p class="eyebrow">AI &amp; Agentic Systems</p>
+      <div class="anim-bg" data-bg="nodes" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <p class="eyebrow">AI &amp; Data Systems &middot; Multi-Agent + Knowledge Graph</p>
       <h1>PodcastIQ</h1>
-      <p class="cs-lead">Making podcast audio as searchable and verifiable as text on the web: a 9-agent system over a Snowflake warehouse and a Neo4j knowledge graph, with temporal claim tracking and hybrid fact-checking.</p>
+      <p class="cs-lead">A production-grade AI data system built on a 4-layer Snowflake knowledge base and a Neo4j temporal knowledge graph (10,610 nodes, 27,807 edges). A LangGraph router dispatches to 9 specialist agents for semantic search, fact-checking, timeline analysis, and cross-episode reasoning across 500 podcasts.</p>
 
       <dl class="cs-meta">
-        <div><dt>My role</dt><dd>Product Manager</dd></div>
-        <div><dt>Timeline</dt><dd>Feb to Apr 2026 (11 weeks)</dd></div>
-        <div><dt>Context</dt><dd>Course project, DAMG 7374, Northeastern</dd></div>
-        <div><dt>Team</dt><dd>3 builders</dd></div>
+        <div><dt>Knowledge Base</dt><dd>4-layer Snowflake pipeline</dd></div>
+        <div><dt>Graph</dt><dd>Neo4j &mdash; 10,610 nodes &middot; 27,807 edges</dd></div>
+        <div><dt>Router</dt><dd>LangGraph &mdash; 95.8% accuracy</dd></div>
+        <div><dt>Cost</dt><dd>$0.0012 / query</dd></div>
       </dl>
 
       <div class="cs-hero-actions">
-        <a class="btn" href="../assets/projects_attachments/PODCASTIQ%20SLIDES.html" target="_blank" rel="noopener">View the slide deck</a>
-        <a class="btn btn-primary" href="podcastiq-prd.html">Read the full PRD</a>
-        <a class="btn" href="https://github.com/Aadarsh-Ravi31/PodcastIQ" target="_blank" rel="noopener">View on GitHub</a>
-        <a class="btn" href="#prototype">Try the prototype</a>
-        <a class="btn" href="#deck">See the deck</a>
+        <a class="btn btn-primary" href="https://github.com/Aadarsh-Ravi31/PodcastIQ" target="_blank" rel="noopener">GitHub &rarr;</a>
       </div>
 
       <div class="cs-chips">
-        <span>300+ episodes</span><span>9 agents</span><span>95.8% router accuracy</span>
-        <span>BERTScore 0.774</span><span>~$0.0012 / query</span><span>100% embedding coverage</span>
+        <span>Snowflake Cortex</span><span>Neo4j</span><span>LangGraph</span><span>Python</span>
+        <span>Streamlit</span><span>YouTube Transcripts API</span><span>Vector Embeddings</span>
       </div>
     </section>
 
-    <div class="cs-cover">
-      <img src="../assets/projects/podcastiq-hero.jpeg" alt="PodcastIQ knowledge graph visualization" />
-    </div>
+    <section class="cs-section" id="pipeline">
+      <p class="cs-label">Data Pipeline Architecture</p>
+      <h2>From transcript to queryable knowledge</h2>
+      <p>Four Snowflake layers progressively structure raw transcripts into searchable semantic chunks and a temporal knowledge graph. The agent system sits entirely on top of this data layer.</p>
 
-    <!-- ===== Problem ===== -->
-    <section class="cs-section narrow" id="problem">
-      <div class="cs-reveal">
-        <p class="cs-label">The problem</p>
-        <h2>You cannot Ctrl+F a two-hour conversation.</h2>
-        <p>Over 5 million podcasts exist with thousands of hours of valuable content, but audio is fundamentally unsearchable. Finding one specific discussion means listening to whole episodes. Expert predictions and claims are made with no accountability over time, and there is no way to compare how different people discuss the same topic.</p>
-        <p>The users who feel this most are <strong>engineers, researchers, and students</strong> who need a specific answer, with a source, not three hours of airtime.</p>
-      </div>
-    </section>
-
-    <!-- ===== Target users & personas + JTBD ===== -->
-    <section class="cs-section" id="personas">
-      <div class="cs-reveal">
-        <p class="cs-label">Target users, personas &amp; jobs-to-be-done</p>
-        <h2>Three people, one unmet job.</h2>
-        <p>I anchored the product on three primary users. They look different on the surface, but underneath they share one job: get a trusted, sourced answer out of hours of audio without doing the listening themselves. I wrote each as a job-to-be-done so a feature could be judged on whether it actually moved the job forward.</p>
-        <div class="cs-cards">
-          <div class="cs-card"><h3>The Engineer</h3><p>Builds, and needs a precise answer with a timestamp, not a vibe. Wants to find the exact moment a framework was discussed and jump to the clip.<span class="cs-tradeoff">JTBD: When I need to know what an expert said about a specific topic, give me the exact passage and a link to hear it, so I can act without scrubbing the episode.</span></p></div>
-          <div class="cs-card"><h3>The Researcher</h3><p>Tracks how expert thinking moves over time and cares whether bold claims hold up against the open web.<span class="cs-tradeoff">JTBD: When I study a topic, show me how opinion evolved across years and fact-check the strong claims, with sources on both ends.</span></p></div>
-          <div class="cs-card"><h3>The Student</h3><p>Learning efficiently, wants the gist of an episode without the full runtime, then a next thing to watch.<span class="cs-tradeoff">JTBD: When I am short on time, summarize the key points and recommend what to watch next, with citations I can trust.</span></p></div>
+      <div class="arch cs-reveal">
+        <div class="arch-row">
+          <div class="arch-node"><b>YouTube Transcripts API</b><span>500 podcast episodes</span></div>
         </div>
-      </div>
-    </section>
-
-    <!-- ===== Current user journey ===== -->
-    <section class="cs-section" id="journey">
-      <div class="cs-reveal">
-        <p class="cs-label">Current user journey</p>
-        <h2>What finding an answer costs today.</h2>
-        <p>Before PodcastIQ, the path from a question to a sourced answer runs through a chain of workarounds, each one leaking time and trust. I mapped it to find where the job actually breaks.</p>
-        <div class="cs-cards">
-          <div class="cs-card"><h3>1 &middot; Search the web</h3><p>A keyword search surfaces an article that mentions a podcast, or a thread that paraphrases it, but rarely the source itself.</p></div>
-          <div class="cs-card"><h3>2 &middot; Find the episode</h3><p>Track down which of dozens of episodes the quote came from, often guessing from a title or a guest name.</p></div>
-          <div class="cs-card"><h3>3 &middot; Scrub the audio</h3><p>Open a two-to-three hour episode and scrub a timeline, or skim an auto-transcript with no semantic structure, hunting for the moment.</p></div>
-          <div class="cs-card"><h3>4 &middot; Trust, or do not</h3><p>Even once found, there is no easy way to check whether the claim held up, or how the same speaker framed it a year later.</p></div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>RAW</b><span>Snowflake VARIANT &mdash; unstructured JSON, schema-on-read</span></div>
         </div>
-        <div class="cs-callout">
-          <p>The job breaks at every step: the answer is unsourced, the search is manual, the verification is impossible. PodcastIQ collapses all four into a single typed question.</p>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>STAGING</b><span>22 columns &mdash; episode, speaker, timestamps, metadata</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>CURATED</b><span>120-second chunks with timestamp-linked URLs</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>SEMANTIC</b><span>Cortex embeddings per chunk &middot; claims extracted for fact-checking</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Cortex Search</b><span>Dense vector retrieval</span></div>
+          <div class="arch-node"><b>Neo4j Graph</b><span>10,610 nodes &middot; 27,807 edges</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>LangGraph Router</b><span>95.8% routing accuracy &rarr; 9 specialist agents</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Streamlit UI</b><span>Cited answers with timestamp links</span></div>
         </div>
       </div>
     </section>
 
-    <!-- ===== Competitive / market analysis ===== -->
-    <section class="cs-section" id="market">
-      <div class="cs-reveal">
-        <p class="cs-label">Competitive &amp; market analysis</p>
-        <h2>Where existing tools stop.</h2>
-        <p>Three classes of tool already touch this space. Each solves one slice of the job and leaves the rest open. I am framing this as my own reasoning about category gaps, not as a benchmarked head-to-head, the matrix maps which jobs each class structurally supports.</p>
-        <div class="cs-table-wrap">
-          <table class="cs-table">
-            <thead>
-              <tr>
-                <th>Capability</th>
-                <th>Podcast directories <span style="font-weight:400;">(e.g. Listen Notes)</span></th>
-                <th>Transcript / keyword search</th>
-                <th>Generic AI chatbots</th>
-                <th class="col-us">PodcastIQ</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><th>Find episodes by topic</th><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="col-us">Yes</td></tr>
-              <tr><th>Semantic answer to a question</th><td class="no">No</td><td class="no">Keyword only</td><td class="yes">Yes</td><td class="col-us">Yes</td></tr>
-              <tr><th>Cited, deep-linked source</th><td class="no">No</td><td class="no">Partial</td><td class="no">Rarely</td><td class="col-us">Every claim</td></tr>
-              <tr><th>Track how a view changed over time</th><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="col-us">Temporal graph</td></tr>
-              <tr><th>Fact-check a claim against the web</th><td class="no">No</td><td class="no">No</td><td class="no">Unreliable</td><td class="col-us">Hybrid 3-stage</td></tr>
-              <tr><th>Compare two speakers on a topic</th><td class="no">No</td><td class="no">No</td><td class="no">Weak</td><td class="col-us">Compare agent</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Directories help you find a show but never answer a question. Transcript search matches words, not meaning, and it cannot tell you whether a claim is true. Generic chatbots will answer confidently but cannot cite a timestamp or prove they did not invent it. The open lane is the intersection: a semantic, cited, time-aware, verifiable answer.</p>
-      </div>
-    </section>
+    <section class="cs-section" id="agents">
+      <p class="cs-label">Agent System</p>
+      <h2>9 specialist agents</h2>
 
-    <!-- ===== Product vision, strategy & positioning ===== -->
-    <section class="cs-section" id="strategy">
-      <div class="cs-reveal">
-        <p class="cs-label">Vision, strategy &amp; positioning</p>
-        <h2>The bet: trust is the moat.</h2>
-        <div class="cs-callout">
-          <p class="cs-label">Product vision</p>
-          <p>Make spoken-word content as searchable, comparable, and verifiable as text on the web, so that an expert conversation becomes a queryable source you can act on, not an archive you have to sit through.</p>
+      <div class="agent-grid cs-reveal">
+        <div class="agent-card">
+          <span class="agent-no">01</span>
+          <h3>Router</h3>
+          <p class="agent-model">LangGraph intent classifier</p>
+          <p>Classifies user intent and routes to the correct specialist. 95.8% accuracy on held-out queries.</p>
         </div>
-        <p>My strategy follows from one observation in the competitive map: every nearby tool can answer, but none can be <em>trusted</em>. So I bet the product on trust rather than coverage. Three positioning choices fall out of that bet:</p>
-        <div class="cs-cards">
-          <div class="cs-card"><h3>Verifiability over fluency</h3><p>A confident wrong answer is the failure mode of this whole category. Every claim deep-links to the exact timestamp and, when contested, to web evidence. The receipt is the product.</p></div>
-          <div class="cs-card"><h3>Time as a first-class dimension</h3><p>Competitors treat a podcast as a flat document. The temporal knowledge graph treats it as a record that evolves, which is the one capability no other tool in the map offers.</p></div>
-          <div class="cs-card"><h3>Depth over breadth, for now</h3><p>Rather than index everything shallowly, I went deep on a curated, time-stratified corpus so the temporal and comparison features actually have signal to work with.</p></div>
+        <div class="agent-card">
+          <span class="agent-no">02</span>
+          <h3>Semantic Search</h3>
+          <p class="agent-model">Cortex vector search</p>
+          <p>Dense retrieval over SEMANTIC layer embeddings. Returns ranked chunks with episode + timestamp citations.</p>
         </div>
-        <p><strong>Positioning statement:</strong> for engineers, researchers, and students who need a trusted answer out of long-form audio, PodcastIQ is an agentic podcast intelligence platform that returns cited, time-aware, fact-checked answers in seconds, unlike transcript search or generic chatbots, which can match words or sound fluent but cannot prove what they say.</p>
-      </div>
-    </section>
-
-    <!-- ===== Value proposition ===== -->
-    <section class="cs-section" id="value">
-      <div class="cs-reveal">
-        <p class="cs-label">Value proposition</p>
-        <h2>One sentence, three promises.</h2>
-        <div class="cs-callout">
-          <p><strong>Ask any question across hundreds of podcasts and get a short, cited answer in seconds, see how the experts&apos; views changed over time, and know which claims actually hold up, without listening to a single full episode.</strong></p>
+        <div class="agent-card">
+          <span class="agent-no">03</span>
+          <h3>Fact Checker</h3>
+          <p class="agent-model">Claim extraction + verification</p>
+          <p>Extracts factual claims from retrieved chunks and cross-checks them against other episodes in the corpus.</p>
         </div>
-        <div class="cs-cards">
-          <div class="cs-card"><h3>Save the hours</h3><p>Hundreds of hours of audio collapse into a typed question and a few seconds of wait. The runtime stops being the price of admission.</p></div>
-          <div class="cs-card"><h3>Trust the answer</h3><p>Every claim carries a deep link to its exact source moment, and contested claims are checked against the open web. You can verify, not just read.</p></div>
-          <div class="cs-card"><h3>See the change</h3><p>The temporal layer surfaces how a view escalated, softened, or got contradicted across years, an insight you would not know to ask for.</p></div>
+        <div class="agent-card">
+          <span class="agent-no">04</span>
+          <h3>Timeline Analyst</h3>
+          <p class="agent-model">Neo4j temporal traversal</p>
+          <p>Traces how topics, entities, and opinions evolved over time across episodes using the knowledge graph.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-no">05</span>
+          <h3>Cross-Episode Connector</h3>
+          <p class="agent-model">Graph path traversal</p>
+          <p>Finds non-obvious connections between episodes and guests via shared entities in the Neo4j graph.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-no">06</span>
+          <h3>Entity Tracker</h3>
+          <p class="agent-model">Named entity + graph lookup</p>
+          <p>Tracks people, companies, and concepts across the corpus &mdash; how many episodes, what context.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-no">07</span>
+          <h3>Topic Clusterer</h3>
+          <p class="agent-model">Embedding clustering</p>
+          <p>Groups semantically related chunks across episodes to surface topic clusters the user didn&rsquo;t explicitly ask for.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-no">08</span>
+          <h3>Contradiction Detector</h3>
+          <p class="agent-model">NLI + graph comparison</p>
+          <p>Identifies when a guest contradicts a prior statement in a different episode &mdash; flags with timestamps.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-no">09</span>
+          <h3>Summarizer</h3>
+          <p class="agent-model">LLM + citation assembly</p>
+          <p>Assembles agent outputs into a coherent cited answer with episode references and timestamp-linked URLs.</p>
         </div>
       </div>
     </section>
 
-    <!-- ===== Goal / North Star ===== -->
-    <section class="cs-section" id="goal">
-      <div class="cs-reveal">
-        <p class="cs-label">Goal &amp; success metrics</p>
-        <h2>Get to a trusted, sourced answer in seconds.</h2>
-        <div class="cs-callout">
-          <p class="cs-label">North Star metric &middot; TTTA</p>
-          <p><strong>Time-to-Trusted-Answer (TTTA)</strong>, the median time for a user to go from a question to a <em>correct, cited</em> answer they can act on without re-listening to the episode. It is the one number that captures the whole bet: retrieval that is fast, generation that is faithful, and a source on every claim.</p>
-        </div>
+    <section class="cs-section narrow" id="decisions">
+      <p class="cs-label">Key Decisions</p>
+      <h2>Why it was built this way</h2>
 
-        <p>One headline metric is not enough for an AI product, so TTTA sits on top of a layered metric tree: input KPIs that drive it, counter-metrics that keep it honest, and qualitative signals a dashboard cannot capture.</p>
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 1</p>
+        <p><strong>120-second chunk size for the CURATED layer.</strong> Chunk size is the most consequential retrieval parameter: too long and retrieved chunks contain noise that confuses the LLM; too short and each chunk loses the conversational context needed to make a claim meaningful. 120 seconds captures a full thought in a podcast conversation while remaining small enough for precise retrieval.</p>
+      </div>
 
-        <div class="metric-tree">
-          <div class="metric-col">
-            <p class="cs-label">Primary &middot; quantitative</p>
-            <ul>
-              <li><b>95.8%</b> router intent accuracy <span>(48-query test set)</span></li>
-              <li><b>~3.5s</b> end-to-end p95 latency <span>(target &lt; 5s)</span></li>
-              <li><b>0.774</b> BERTScore F1 <span>generation quality</span></li>
-              <li><b>100%</b> embedding coverage <span>13,807 / 13,807 chunks</span></li>
-              <li><b>~$0.0012</b> cost per query <span>under the credit cap</span></li>
-            </ul>
-          </div>
-          <div class="metric-col counter">
-            <p class="cs-label">Counter &middot; guardrail</p>
-            <ul>
-              <li><b>Faithfulness</b> GPT-4o judge flags answers that drift from sources</li>
-              <li><b>Hallucination rate</b> share of answers rated UNVERIFIED kept low</li>
-              <li><b>Blocked-query rate</b> 5-layer guardrail catch without false rejects</li>
-              <li><b>Web-search spend</b> Brave calls capped by the LLM pre-filter</li>
-            </ul>
-          </div>
-          <div class="metric-col qual">
-            <p class="cs-label">Qualitative &middot; signals</p>
-            <ul>
-              <li><b>Source trust</b> every claim deep-links to the exact YouTube timestamp</li>
-              <li><b>"I could verify it"</b> users can check the receipt, not just read the answer</li>
-              <li><b>Drift insight</b> the temporal view surfaces changes users did not know to ask</li>
-              <li><b>Honest uncertainty</b> low-confidence claims are labelled, not hidden</li>
-            </ul>
-          </div>
-        </div>
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 2</p>
+        <p><strong>Neo4j temporal graph alongside Snowflake Cortex Search.</strong> Vector search excels at finding semantically similar content but has no concept of time or entity relationships. The Neo4j graph adds structural reasoning: when did an entity first appear, how does it connect to other entities, did an opinion change over time? Neither system alone can answer those questions.</p>
+      </div>
 
-        <p class="cs-label" style="margin-top:1.6rem;">What the build actually delivered</p>
-        <div class="cs-stats">
-          <div class="cs-stat"><b>13,807</b><span>Searchable chunks at 100% coverage</span></div>
-          <div class="cs-stat"><b>8,660</b><span>Claims extracted &amp; attributed</span></div>
-          <div class="cs-stat"><b>243</b><span>Claim-evolution pairs detected</span></div>
-          <div class="cs-stat"><b>10,610</b><span>Graph nodes / 27,807 edges</span></div>
-        </div>
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 3</p>
+        <p><strong>LangGraph specialist routing over a single generalist agent.</strong> A single LLM trying to handle semantic search, fact-checking, and timeline analysis in one prompt performs worse than a specialist on each task. The routing overhead is one classification call. Each specialist is independently evaluatable and improvable &mdash; critical when the system needs to be debugged or extended.</p>
       </div>
     </section>
 
-    <!-- ===== Research / corpus ===== -->
-    <section class="cs-section" id="research">
-      <div class="cs-grid-2 cs-reveal">
-        <div>
-          <p class="cs-label">Research &amp; data</p>
-          <h2>A corpus built to make claims drift.</h2>
-          <p>The first extraction sorted by view count, which clustered episodes in late 2025 and left the temporal layer thin. I diagnosed it with a date-spread query, then ran a <strong>time-stratified re-extraction</strong>: 2 to 3 top episodes per year per channel across 2022 to 2024.</p>
-          <p>That added 36 episodes in minutes and gave the corpus the multi-year span needed to actually observe how opinions evolve, escalate, soften, or get contradicted.</p>
-        </div>
-        <div>
-          <div class="cs-stats" style="grid-template-columns:1fr 1fr;">
-            <div class="cs-stat"><b>25</b><span>Channels, 6 genres</span></div>
-            <div class="cs-stat"><b>300+</b><span>Episodes indexed</span></div>
-            <div class="cs-stat"><b>13,807</b><span>120-second chunks</span></div>
-            <div class="cs-stat"><b>76.9%</b><span>Episodes with named guest</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Solution ===== -->
-    <section class="cs-section" id="solution">
-      <div class="cs-reveal">
-        <p class="cs-label">The solution</p>
-        <h2>GraphRAG, plus a sense of time.</h2>
-        <p>The same idea has to land for two audiences: a recruiter skimming for the product story, and an engineer checking whether the system is real. So here it is in both voices.</p>
-
-        <div class="dual-voice">
-          <div class="dv-card">
-            <p class="dv-tag">In plain language</p>
-            <h3>It reads every episode so you don&rsquo;t have to.</h3>
-            <p>PodcastIQ turns hundreds of hours of audio into something you can <em>ask</em>. Type a question and it finds the exact moments people discussed it, writes a short answer, and links you straight to the timestamp so you can hear it yourself.</p>
-            <p>Two things make it more than search. It <strong>remembers time</strong>, so it can show you how an expert&rsquo;s opinion changed across years, not just what they said once. And it <strong>checks the receipts</strong>, flagging claims that don&rsquo;t hold up against the open web instead of repeating them confidently.</p>
-          </div>
-          <div class="dv-card tech">
-            <p class="dv-tag">Under the hood</p>
-            <h3>Hybrid retrieval over a temporal knowledge graph.</h3>
-            <p>A GraphRAG core pairs <strong>Cortex Search</strong> (hybrid vector + BM25 over 768-dim Arctic embeddings) with <strong>Neo4j</strong> graph traversal, so relationship queries that pure vector search cannot answer resolve as Cypher over a 10,610-node graph.</p>
-            <p>Above it sit two layers most search tools skip: a <strong>temporal knowledge graph</strong> that links a speaker&rsquo;s earlier and later claims and classifies the drift (revised / escalated / softened / contradicted / confirmed), and <strong>hybrid fact-checking</strong> where a free llama3.1-70b pre-filter resolves ~30 to 40% of claims before any paid Brave Search call.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Architecture ===== -->
-    <section class="cs-section" id="architecture">
-      <div class="cs-reveal">
-        <p class="cs-label">Architecture</p>
-        <h2>From raw transcripts to a queryable brain.</h2>
-        <div class="arch">
-          <div class="arch-row">
-            <div class="arch-node"><b>YouTube Transcripts</b><span>25 channels · 300+ eps</span></div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-row">
-            <div class="arch-node"><b>RAW</b><span>VARIANT payloads</span></div>
-            <div class="arch-node"><b>STAGING</b><span>22 flat columns</span></div>
-            <div class="arch-node"><b>CURATED</b><span>120s chunks + links</span></div>
-            <div class="arch-node"><b>SEMANTIC</b><span>embeddings · claims</span></div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-row">
-            <div class="arch-node"><b>Cortex Search</b><span>vector + keyword</span></div>
-            <div class="arch-node"><b>Neo4j graph</b><span>10,610 nodes · 27,807 edges</span></div>
-            <div class="arch-node"><b>Temporal + Fact-check</b><span>drift · Brave Search</span></div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-row">
-            <div class="arch-node accent"><b>LangGraph Router</b><span>intent classifier (8b)</span></div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-row">
-            <div class="arch-node"><b>9 specialist agents</b><span>search · summarize · graph · temporal · fact-check · compare · recommend · insight</span></div>
-            <div class="arch-node accent"><b>Streamlit UI</b><span>chat · graph explorer · dashboard</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== How it works ===== -->
-    <section class="cs-section" id="how">
-      <div class="cs-reveal">
-        <p class="cs-label">How it works · 1 router + 8 specialists</p>
-        <h2>One router, nine specialists.</h2>
-        <p>A <strong>Router</strong> agent (llama3.1-8b) classifies each query into one of eight intents and dispatches to a dedicated specialist, each its own agent with its own data path and prompt. A two-tier speaker attribution step (title parsing, then LLM inference with confidence scoring) tags every claim with who said it, no audio diarization required.</p>
-        <div class="agent-grid">
-          <div class="agent-card"><span class="agent-no">01</span><h3>Router</h3><p class="agent-model">llama3.1-8b</p><p>Zero-shot intent classifier across 8 categories; dispatches to the right specialist and falls back to SEARCH on any ambiguity.</p></div>
-          <div class="agent-card"><span class="agent-no">02</span><h3>Search</h3><p class="agent-model">Cortex Search · no LLM</p><p>Hybrid vector + BM25 retrieval of the top 8 chunks, each with a relevance score and a deep link to the exact timestamp.</p></div>
-          <div class="agent-card"><span class="agent-no">03</span><h3>Summarize</h3><p class="agent-model">llama3.1-70b</p><p>Synthesizes the retrieved chunks into a cited answer, using only the excerpts and linking every citation to its YouTube moment.</p></div>
-          <div class="agent-card"><span class="agent-no">04</span><h3>Knowledge Graph</h3><p class="agent-model">llama3.1-70b · Neo4j</p><p>Translates natural language to Cypher with a self-healing retry loop, runs it over the graph, then narrates the relationship answer.</p></div>
-          <div class="agent-card"><span class="agent-no">05</span><h3>Temporal</h3><p class="agent-model">8b + 70b</p><p>Links a speaker&rsquo;s earlier and later claims, classifies the drift, and narrates how a view changed with the receipts on both ends.</p></div>
-          <div class="agent-card"><span class="agent-no">06</span><h3>Fact-Check</h3><p class="agent-model">70b + Brave Search</p><p>Three stages: LLM pre-filter, then Brave Search for uncertain claims, then an LLM verdict with evidence URLs.</p></div>
-          <div class="agent-card"><span class="agent-no">07</span><h3>Compare</h3><p class="agent-model">8b + 70b</p><p>Contrasts two speakers (or channels) on a topic into agreements, disagreements, and unique takes, each line sourced.</p></div>
-          <div class="agent-card"><span class="agent-no">08</span><h3>Recommend</h3><p class="agent-model">8b + 70b</p><p>Suggests episodes via a 4-priority fallback chain: by guest, channel, topic, or most-recent, ranked by depth.</p></div>
-          <div class="agent-card"><span class="agent-no">09</span><h3>Insight</h3><p class="agent-model">llama3.1-70b</p><p>Meta-analysis across the corpus: most-debated topics, top speakers, and which channels drift most over time.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== By the numbers / charts ===== -->
-    <section class="cs-section" id="charts">
-      <div class="cs-reveal">
-        <p class="cs-label">By the numbers</p>
-        <h2>Evaluated, not asserted.</h2>
-        <p>Every claim on this page traces back to a measured number from a six-part evaluation suite. A few of them, drawn as I would put them in front of a stakeholder.</p>
-
-        <div class="chart-grid">
-          <!-- Latency per agent -->
-          <div class="chart-card">
-            <h3>End-to-end latency by agent</h3>
-            <p class="chart-sub">Mean response time, seconds. Target: p95 under 5s.</p>
-            <div class="barchart" style="--max:6;">
-              <div class="bar-row"><span class="bar-label">Search</span><span class="bar-track"><span class="bar-fill" style="width:25%"></span></span><span class="bar-val">1.5s</span></div>
-              <div class="bar-row"><span class="bar-label">Recommend</span><span class="bar-track"><span class="bar-fill" style="width:33%"></span></span><span class="bar-val">2.0s</span></div>
-              <div class="bar-row"><span class="bar-label">Fact-Check S1</span><span class="bar-track"><span class="bar-fill" style="width:42%"></span></span><span class="bar-val">2.5s</span></div>
-              <div class="bar-row"><span class="bar-label">Summarize</span><span class="bar-track"><span class="bar-fill" style="width:58%"></span></span><span class="bar-val">3.5s</span></div>
-              <div class="bar-row"><span class="bar-label">Temporal</span><span class="bar-track"><span class="bar-fill" style="width:63%"></span></span><span class="bar-val">3.8s</span></div>
-              <div class="bar-row"><span class="bar-label">Compare</span><span class="bar-track"><span class="bar-fill" style="width:67%"></span></span><span class="bar-val">4.0s</span></div>
-              <div class="bar-row"><span class="bar-label">Insight</span><span class="bar-track"><span class="bar-fill" style="width:70%"></span></span><span class="bar-val">4.2s</span></div>
-              <div class="bar-row"><span class="bar-label">Knowledge Graph</span><span class="bar-track"><span class="bar-fill" style="width:75%"></span></span><span class="bar-val">4.5s</span></div>
-              <div class="bar-row"><span class="bar-label">Fact-Check full</span><span class="bar-track"><span class="bar-fill over" style="width:92%"></span></span><span class="bar-val">5.5s</span></div>
-              <div class="bar-target" style="left:83.3%;"><span>5s target</span></div>
-            </div>
-          </div>
-
-          <!-- Fact-check funnel -->
-          <div class="chart-card">
-            <h3>Hybrid fact-check saves web calls</h3>
-            <p class="chart-sub">A free LLM pre-filter resolves claims before any paid Brave Search call.</p>
-            <div class="funnel">
-              <div class="funnel-row"><span class="funnel-label">Claims to verify</span><span class="funnel-bar" style="width:100%">100%</span></div>
-              <div class="funnel-row"><span class="funnel-label">Resolved by LLM pre-filter</span><span class="funnel-bar mid" style="width:37%">~35%</span></div>
-              <div class="funnel-row"><span class="funnel-label">Sent to web search</span><span class="funnel-bar end" style="width:65%">~65%</span></div>
-            </div>
-            <p class="chart-foot">Brave Search free tier (2,000 / month) was never exhausted; total external spend stayed in the single-digit dollars.</p>
-          </div>
-
-          <!-- Claim drift composition -->
-          <div class="chart-card">
-            <h3>Claim drift detected over time</h3>
-            <p class="chart-sub">243 claim-evolution pairs, by how the view changed.</p>
-            <div class="stackbar">
-              <span class="seg c-contra" style="width:59.3%">59%</span>
-              <span class="seg c-other" style="width:40.7%">41%</span>
-            </div>
-            <div class="stack-legend">
-              <span><i class="c-contra"></i>Contradicted &middot; 144 pairs</span>
-              <span><i class="c-other"></i>Revised / escalated / softened / confirmed &middot; 99</span>
-            </div>
-          </div>
-
-          <!-- Evaluation scorecard -->
-          <div class="chart-card">
-            <h3>Evaluation scorecard</h3>
-            <p class="chart-sub">Six dimensions, all measured against a target.</p>
-            <div class="scorecard">
-              <div class="score-item"><b>95.8%</b><span>Router accuracy</span></div>
-              <div class="score-item"><b>0.774</b><span>BERTScore F1</span></div>
-              <div class="score-item"><b>100%</b><span>Embedding coverage</span></div>
-              <div class="score-item"><b>~3.5s</b><span>p95 latency</span></div>
-              <div class="score-item"><b>$0.0012</b><span>Cost / query</span></div>
-              <div class="score-item"><b>9 / 9</b><span>Agents functional</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Interactive PRD ===== -->
-    <section class="cs-section" id="prd">
-      <div class="cs-reveal">
-        <p class="cs-label">Product requirements</p>
-        <h2>The PRD, the way I actually wrote it.</h2>
-        <p>Click through the document I worked from. This is the thinking that kept a nine-agent system from becoming nine science projects. For the complete version, with prompt engineering, the full evaluation framework, guardrails, and rollout plan, read the end-to-end PRD.</p>
-
-        <div class="prd-download">
-          <div>
-            <b>PodcastIQ, End-to-End Product Requirements</b>
-            <span>The full AI-PM document: metrics, personas, the 9-agent spec, prompt engineering, evaluation, safety, cost, and rollout.</span>
-          </div>
-          <a class="btn btn-primary" href="podcastiq-prd.html">Read / download the PRD (PDF)</a>
-        </div>
-
-        <div class="prd">
-          <div class="prd-head"><span class="prd-dot"></span><b>PodcastIQ: Product Requirements</b><span class="prd-file">PRD.md</span></div>
-          <div class="prd-tabs">
-            <button class="prd-tab is-active" type="button">Objective</button>
-            <button class="prd-tab" type="button">Users &amp; stories</button>
-            <button class="prd-tab" type="button">Requirements</button>
-            <button class="prd-tab" type="button">Scope</button>
-            <button class="prd-tab" type="button">Metrics</button>
-            <button class="prd-tab" type="button">Risks</button>
-          </div>
-          <div class="prd-panels">
-            <div class="prd-panel is-active">
-              <h4>Objective</h4>
-              <p>Make spoken-word content searchable, comparable, and verifiable. Prove that a temporal knowledge graph plus hybrid RAG can answer questions a transcript search engine cannot, in under five seconds, with a source on every claim.</p>
-              <ul>
-                <li><strong>Problem:</strong> audio is unsearchable; claims are unaccountable over time.</li>
-                <li><strong>Bet:</strong> GraphRAG + temporal layer + fact-checking is worth the added complexity.</li>
-                <li><strong>Constraint:</strong> stay under the Snowflake credit budget and free API tiers.</li>
-              </ul>
-            </div>
-            <div class="prd-panel">
-              <h4>Users &amp; stories</h4>
-              <div class="prd-story"><b>Engineer:</b> "Find every discussion of a framework across tech podcasts and jump to the exact timestamp."</div>
-              <div class="prd-story"><b>Researcher:</b> "Track how expert opinion on AI safety has evolved, and fact-check the bold claims."</div>
-              <div class="prd-story"><b>Student:</b> "Summarize the key points without watching the full episode, then recommend what to watch next."</div>
-            </div>
-            <div class="prd-panel">
-              <h4>Requirements (MoSCoW)</h4>
-              <div class="prd-moscow">
-                <div class="col"><h5>Must</h5><ul><li>Semantic search + timestamps</li><li>Router + Search + Summarize</li><li>100% embedding coverage</li><li>Cited answers</li></ul></div>
-                <div class="col"><h5>Should</h5><ul><li>Neo4j graph + Cypher agent</li><li>Claim extraction + attribution</li><li>Temporal drift detection</li></ul></div>
-                <div class="col"><h5>Could</h5><ul><li>Hybrid fact-checking</li><li>Compare / Recommend / Insight</li><li>Guardrails + eval suite</li></ul></div>
-                <div class="col"><h5>Won't (v1)</h5><ul><li>Audio diarization</li><li>User accounts</li><li>Real-time ingestion</li></ul></div>
-              </div>
-            </div>
-            <div class="prd-panel">
-              <h4>Scope</h4>
-              <ul>
-                <li><span class="prd-tag">In</span>300+ episodes, 25 channels, 6 genres, spanning 2022 to 2025.</li>
-                <li><span class="prd-tag">In</span>9 agents orchestrated by LangGraph; Streamlit UI with graph explorer and dashboard.</li>
-                <li><span class="prd-tag">In</span>Input guardrails: length, prompt-injection, scope, language; real-person disclaimer.</li>
-                <li><span class="prd-tag">Out</span>Whisper re-transcription, multi-language, Chrome extension, collaborative filtering.</li>
-              </ul>
-            </div>
-            <div class="prd-panel">
-              <h4>Success metrics</h4>
-              <ul>
-                <li><strong>Router accuracy</strong> across 48 queries: 95.8%.</li>
-                <li><strong>Generation quality:</strong> ROUGE + BERTScore F1 0.774, plus LLM-judged faithfulness and groundedness.</li>
-                <li><strong>Retrieval:</strong> Precision@1/3/8 and MRR with an LLM relevance judge.</li>
-                <li><strong>Cost:</strong> ~$0.0012 per query; whole project under the credit cap.</li>
-              </ul>
-            </div>
-            <div class="prd-panel">
-              <h4>Risks &amp; mitigation</h4>
-              <ul>
-                <li><strong>Sparse temporal data</strong> → time-stratified re-extraction to widen the date span.</li>
-                <li><strong>Fact-check cost / rate limits</strong> → LLM pre-filter resolves 60 to 70% before any web call.</li>
-                <li><strong>Attribution without audio</strong> → two-tier method with explicit confidence scoring.</li>
-                <li><strong>Scope creep (9 agents)</strong> → hard MVP-first priority; Insight agent was the cut line.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Interactive prototype ===== -->
-    <section class="cs-section" id="prototype">
-      <div class="cs-reveal">
-        <p class="cs-label">Prototype · illustrative demo of the live app</p>
-        <h2>Ask it something.</h2>
-        <p>Tap a query to see the shape of a real response: a synthesized answer, a confidence badge, and the sources behind it.</p>
-
-        <div class="proto">
-          <div class="proto-frame">
-            <div class="proto-bar"><i></i><i></i><i></i><span class="proto-url">podcastiq.app / chat</span></div>
-            <div class="proto-screen is-active" data-chat>
-              <div class="proto-chips">
-                <button class="proto-chip" type="button" data-target="piq-a1" data-q="What did experts say about AGI timelines?">AGI timelines</button>
-                <button class="proto-chip" type="button" data-target="piq-a2" data-q="Compare two speakers on AI safety">Compare on AI safety</button>
-                <button class="proto-chip" type="button" data-target="piq-a3" data-q="Fact-check: GPT-5 was released in 2024">Fact-check a claim</button>
-                <button class="proto-chip" type="button" data-target="piq-a4" data-q="How has opinion on crypto changed over time?">Opinion drift</button>
-              </div>
-              <p class="proto-q"></p>
-              <div class="proto-a"></div>
-
-              <!-- hidden answer sources -->
-              <div id="piq-a1" hidden>
-                <span class="conf">High confidence</span>
-                <p>Across 9 episodes, speakers frame AGI as a capability threshold rather than a fixed date. The Summarization agent pulled the 8 most relevant chunks and synthesized a multi-source answer, each point deep-linked to the exact YouTube timestamp.</p>
-                <div class="proto-src"><span>8 chunks retrieved</span><span>3 channels</span><span>timestamps attached</span></div>
-              </div>
-              <div id="piq-a2" hidden>
-                <span class="conf">High confidence</span>
-                <p>The Comparison agent extracts each speaker's claims on the topic, then groups them into agreements, disagreements, and unique perspectives, with the source clip behind every line.</p>
-                <div class="proto-src"><span>15 + 15 claims</span><span>grouped by speaker</span><span>graph-powered</span></div>
-              </div>
-              <div id="piq-a3" hidden>
-                <span class="conf" style="background:rgba(224,104,95,0.18);color:#d6604f;">Disputed</span>
-                <p>Stage 1 LLM pre-filter flags the claim as uncertain, so Stage 2 runs a Brave Search and Stage 3 synthesizes a verdict: disputed, with the supporting web evidence URLs returned alongside the original podcast source.</p>
-                <div class="proto-src"><span>LLM pre-filter</span><span>+ web search</span><span>3 evidence URLs</span></div>
-              </div>
-              <div id="piq-a4" hidden>
-                <span class="conf">High confidence</span>
-                <p>The Temporal agent links the earliest and latest claims on the topic, classifies the drift (here, contradicted), and narrates the change with both clips, so you see exactly when and how the view moved.</p>
-                <div class="proto-src"><span>drift: contradicted</span><span>2 linked claims</span><span>time delta shown</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Slide deck ===== -->
-    <section class="cs-section" id="deck">
-      <div class="cs-reveal">
-        <p class="cs-label">The pitch in 60 seconds</p>
-        <h2>Slide deck.</h2>
-        <div class="deck">
-          <div class="deck-stage">
-            <div class="deck-slide is-active">
-              <span class="deck-num">01 / 06</span>
-              <p class="cs-label">PodcastIQ</p>
-              <h3>Making podcast audio searchable and verifiable.</h3>
-              <p>300+ episodes, 9 agents, a temporal knowledge graph, and hybrid fact-checking.</p>
-            </div>
-            <div class="deck-slide">
-              <span class="deck-num">02 / 06</span>
-              <p class="cs-label">Problem</p>
-              <h3>Five million podcasts. None of them searchable.</h3>
-              <p>Insights stay buried, claims go unchecked, and finding one discussion means listening to whole episodes.</p>
-            </div>
-            <div class="deck-slide">
-              <span class="deck-num">03 / 06</span>
-              <p class="cs-label">Solution</p>
-              <h3>GraphRAG with a sense of time.</h3>
-              <ul>
-                <li>Vector search + graph traversal for relationship questions</li>
-                <li>Temporal layer that catches revised and contradicted claims</li>
-                <li>Hybrid fact-checking that stays cheap</li>
-              </ul>
-            </div>
-            <div class="deck-slide">
-              <span class="deck-num">04 / 06</span>
-              <p class="cs-label">System</p>
-              <h3>One router, nine specialists.</h3>
-              <ul>
-                <li>Snowflake Cortex (LLMs + embeddings) and Cortex Search</li>
-                <li>Neo4j: 10,610 nodes, 27,807 edges</li>
-                <li>LangGraph orchestration, Streamlit UI</li>
-              </ul>
-            </div>
-            <div class="deck-slide">
-              <span class="deck-num">05 / 06</span>
-              <p class="cs-label">Results</p>
-              <h3>Measured, not vibes.</h3>
-              <ul>
-                <li>95.8% router accuracy across 48 queries</li>
-                <li>BERTScore F1 0.774, 100% embedding coverage</li>
-                <li>~$0.0012 per query, under the credit cap</li>
-              </ul>
-            </div>
-            <div class="deck-slide">
-              <span class="deck-num">06 / 06</span>
-              <p class="cs-label">Takeaway</p>
-              <h3>The hard part was scope, not models.</h3>
-              <p>A strict MVP-first PRD turned an ambitious nine-agent idea into a system that actually shipped and evaluated cleanly.</p>
-            </div>
-          </div>
-          <div class="deck-controls">
-            <div class="deck-dots"></div>
-            <div class="deck-nav">
-              <button class="deck-btn" type="button" data-deck="prev" aria-label="Previous slide">‹</button>
-              <button class="deck-btn" type="button" data-deck="next" aria-label="Next slide">›</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Decisions ===== -->
-    <section class="cs-section" id="decisions">
-      <div class="cs-reveal">
-        <p class="cs-label">Key decisions &amp; tradeoffs</p>
-        <h2>What I chose, and what it cost.</h2>
-        <div class="cs-cards">
-          <div class="cs-card"><h3>Two-tier attribution over diarization</h3><p>Title parsing plus LLM inference tags claims with a speaker at zero extra cost.<span class="cs-tradeoff">Tradeoff: ~77% guest coverage, modeled with explicit confidence rather than pretending to certainty.</span></p></div>
-          <div class="cs-card"><h3>Hybrid fact-checking</h3><p>A free LLM pre-filter resolves most claims before any paid web search.<span class="cs-tradeoff">Tradeoff: some claims stay "uncertain" rather than forcing a verdict.</span></p></div>
-          <div class="cs-card"><h3>120-second time chunks</h3><p>Fixed windows keep YouTube deep-linking simple and chunk sizes consistent.<span class="cs-tradeoff">Tradeoff: a few ideas get split across a chunk boundary.</span></p></div>
-          <div class="cs-card"><h3>Neo4j as a read projection</h3><p>Snowflake stays the source of truth; the graph is a one-way, read-optimized view.<span class="cs-tradeoff">Tradeoff: a sync step, in exchange for no dual-write complexity.</span></p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Roadmap ===== -->
-    <section class="cs-section" id="roadmap">
-      <div class="cs-reveal">
-        <p class="cs-label">Roadmap</p>
-        <h2>Phased so it could actually ship.</h2>
-        <p>A nine-agent system is easy to imagine and hard to land. I sequenced the build so each phase delivered a working slice and de-risked the next. The first three phases are what shipped and was evaluated; the last two are the post-course direction I would take it.</p>
-        <div class="evo">
-          <div class="evo-step">
-            <span class="evo-year">Phase 1</span>
-            <h4>Searchable core</h4>
-            <p>Ingestion pipeline, 120-second chunking, 100% embedding coverage, and the Router, Search, and Summarize agents returning cited answers. The MVP.</p>
-          </div>
-          <div class="evo-step">
-            <span class="evo-year">Phase 2</span>
-            <h4>The graph layer</h4>
-            <p>Claim extraction and two-tier attribution, the Neo4j projection, and the Knowledge Graph agent answering relationship questions in Cypher.</p>
-          </div>
-          <div class="evo-step now">
-            <span class="evo-year">Phase 3 &middot; shipped</span>
-            <h4>Time &amp; trust</h4>
-            <p>Temporal drift detection, hybrid 3-stage fact-checking, the Compare / Recommend / Insight agents, guardrails, and the six-part evaluation suite.</p>
-          </div>
-          <div class="evo-step">
-            <span class="evo-year">Phase 4 &middot; next</span>
-            <h4>Sharper attribution</h4>
-            <p>Whisper diarization to push speaker attribution toward ground truth, plus real-time ingestion so the graph updates as new episodes drop.</p>
-          </div>
-        </div>
-        <p>A fifth direction sits beyond the roadmap line: exposing PodcastIQ search as a custom MCP server so other LLM apps can query the corpus directly. For the full feature breakdown and rollout detail, see the PRD.</p>
-        <p><a class="btn" href="podcastiq-prd.html">See the full PRD</a></p>
-      </div>
-    </section>
-
-    <!-- ===== Risks & mitigations ===== -->
-    <section class="cs-section" id="risks">
-      <div class="cs-reveal">
-        <p class="cs-label">Risks &amp; mitigations</p>
-        <h2>What could break it, and the plan.</h2>
-        <p>An ambitious AI build has more ways to fail than to succeed. I tracked the risks that could sink the project and designed a mitigation into the architecture for each, rather than hoping they would not surface.</p>
-        <div class="cs-table-wrap">
-          <table class="cs-table">
-            <thead>
-              <tr><th>Risk</th><th>Why it matters</th><th>Mitigation</th></tr>
-            </thead>
-            <tbody>
-              <tr><th>Sparse temporal data</th><td>Without a multi-year span, the temporal layer has nothing to detect and the core differentiator falls flat.</td><td>Time-stratified re-extraction, 2 to 3 top episodes per year per channel across 2022 to 2024, widening the date span.</td></tr>
-              <tr><th>Fact-check cost &amp; rate limits</th><td>Calling a paid web search on every claim would blow the budget and the free API tier.</td><td>A free LLM pre-filter resolves a large share of claims before any paid Brave Search call; the free tier was never exhausted.</td></tr>
-              <tr><th>Attribution without audio</th><td>No diarization means speaker labels could be wrong, poisoning comparison and temporal answers.</td><td>Two-tier method, title parsing then LLM inference, with explicit confidence scoring instead of false certainty.</td></tr>
-              <tr><th>Hallucination &amp; drift</th><td>A confident, unsourced answer is the category&apos;s worst failure and erodes the trust the product is built on.</td><td>Every claim deep-links to its source; a GPT-4o LLM-as-judge flags answers that drift from their sources.</td></tr>
-              <tr><th>Scope creep (9 agents)</th><td>Nine agents could become nine half-finished science projects and ship none.</td><td>A strict MVP-first PRD with a hard priority order; the Insight agent was the explicit cut line if time ran short.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Results ===== -->
     <section class="cs-section" id="results">
-      <div class="cs-reveal">
-        <p class="cs-label">Results</p>
-        <h2>It works, and the numbers say so.</h2>
-        <div class="cs-stats">
-          <div class="cs-stat"><b>9 / 9</b><span>Agents functional end-to-end</span></div>
-          <div class="cs-stat"><b>95.8%</b><span>Router intent accuracy</span></div>
-          <div class="cs-stat"><b>0.774</b><span>BERTScore F1 (generation)</span></div>
-          <div class="cs-stat"><b>10,610</b><span>Graph nodes / 27,807 edges</span></div>
-        </div>
-        <p>A six-part evaluation suite covers router accuracy, retrieval precision and MRR, generation quality, latency per agent, projected cost, and domain KPIs, so every claim on this page traces back to a measured number.</p>
-        <h3>What I would do next</h3>
-        <ul>
-          <li>Add Whisper diarization to push speaker attribution toward ground truth.</li>
-          <li>Real-time ingestion so the graph updates as new episodes drop.</li>
-          <li>Expose PodcastIQ search as a custom MCP server for other LLM apps.</li>
-        </ul>
+      <p class="cs-label">Results</p>
+      <h2>What came out</h2>
+
+      <div class="cs-stats cs-reveal">
+        <div class="cs-stat"><b>95.8%</b><span>LangGraph router accuracy</span></div>
+        <div class="cs-stat"><b>0.774</b><span>BERTScore on answer quality</span></div>
+        <div class="cs-stat"><b>$0.0012</b><span>Cost per query</span></div>
+        <div class="cs-stat"><b>10,610</b><span>Neo4j nodes</span></div>
+        <div class="cs-stat"><b>27,807</b><span>Neo4j edges</span></div>
+        <div class="cs-stat"><b>9</b><span>Specialist agents</span></div>
       </div>
     </section>
-
-    <!-- ===== Learnings / retrospective ===== -->
-    <section class="cs-section" id="learnings">
-      <div class="cs-reveal">
-        <p class="cs-label">Learnings &amp; retrospective</p>
-        <h2>What the build taught me.</h2>
-        <p>Leading the product on this taught me more about judgment than about models. A few things I would carry into the next AI build:</p>
-        <div class="cs-cards">
-          <div class="cs-card"><h3>Scope was the real risk, not the tech</h3><p>The models were the easy part. The project survived because the PRD enforced an MVP-first order and named a cut line before we started, so ambition never quietly became scope creep.</p></div>
-          <div class="cs-card"><h3>Trust has to be designed, not assumed</h3><p>An AI answer is only as useful as it is verifiable. Making every claim deep-link to its source, and labelling uncertainty instead of hiding it, did more for the product than any accuracy gain.</p></div>
-          <div class="cs-card"><h3>Diagnose the data before blaming the model</h3><p>The thin temporal layer looked like a model problem; it was a sampling problem. A date-spread query and a stratified re-extraction fixed it in minutes. Measure the input before tuning the output.</p></div>
-          <div class="cs-card"><h3>One honest metric beats a wall of them</h3><p>Naming Time-to-Trusted-Answer as the North Star, with guardrails underneath, kept every decision pointed at the same outcome instead of optimizing a dashboard.</p></div>
-        </div>
-        <p>If I ran it again, I would instrument TTTA against live queries from day one rather than reconstructing it from a test set, and invest earlier in attribution quality, since every downstream agent inherits its errors.</p>
-      </div>
-    </section>
-
-    <!-- ===== Pager ===== -->
-    <nav class="cs-pager">
-      <a href="../projects.html"><span>Back to</span><b>&larr; All projects</b></a>
-      <a href="courtvision.html"><span>Next project</span><b>CourtVision AI &rarr;</b></a>
-    </nav>
   </main>
 
-  <!-- ===== Footer ===== -->
-    <footer class="site-footer" id="contact">
+  <footer class="site-footer">
     <div class="footer-row">
       <span class="footer-name">Dhanvardini Rajendran</span>
       <nav class="footer-links" aria-label="Contact">
@@ -742,6 +223,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-  <script src="../js/project-page.js"></script>
+  <script src="../js/main.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /* =========================================================
-   Dhanvardini Rajendran - PM Portfolio
+   Dhanvardini Rajendran - DE Portfolio
    Theme toggle, Lenis smooth scroll, GSAP entrance + timeline
    ========================================================= */
 (function () {
@@ -55,19 +55,17 @@
     var el = document.getElementById('roleCycle');
     if (!el) return;
     var roles = [
-      'Product Manager',
-      'Technical Product Manager',
-      'AI Product Manager',
-      'Growth Product Manager',
-      'Platform Product Manager',
-      'Data Product Manager',
-      'Consumer Product Manager',
-      'B2B Product Manager',
-      'Mobile Product Manager',
-      'Web Product Manager',
-      'Product Operations Manager',
-      'Product Analyst',
-      'Product Owner'
+      'Data Engineer',
+      'Data Pipeline Engineer',
+      'Cloud Data Engineer',
+      'Analytics Engineer',
+      'ETL / ELT Engineer',
+      'Data Platform Engineer',
+      'ML Data Engineer',
+      'DataOps Engineer',
+      'Azure Data Engineer',
+      'Snowflake Data Engineer',
+      'Databricks Engineer'
     ];
     var i = 0;
     el.textContent = roles[0];

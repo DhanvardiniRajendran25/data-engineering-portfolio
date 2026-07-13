@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <title>Seattle Pet Licenses ETL · Dhanvardini Rajendran</title>
+  <meta name="description" content="Medallion pipeline moving 320K+ Seattle pet license records from Open Data Portal to a Snowflake star schema via Azure Data Factory." />
+  <meta property="og:title" content="Seattle Pet Licenses ETL · Case Study" />
+  <meta property="og:description" content="Medallion pipeline moving 320K+ Seattle pet license records to a Snowflake star schema via Azure Data Factory." />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css?v=2" />
+  <link rel="stylesheet" href="../css/project-page.css?v=2" />
+  <link rel="stylesheet" href="../css/anim-bg.css" />
+  <script src="../js/anim-bg.js" defer></script>
+</head>
+<body>
+  <script>
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      try { if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.classList.add('motion'); } catch (e) {}
+    })();
+  </script>
+
+  <div class="cs-progress" id="csProgress"></div>
+
+  <header class="site-header" id="top">
+    <a href="../projects.html" class="cs-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All projects
+    </a>
+    <nav class="site-nav" aria-label="Section">
+      <a href="#pipeline">Pipeline</a>
+      <a href="#stages">Stages</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#results">Results</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode">
+      <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="cs-hero has-anim-bg">
+      <div class="anim-bg" data-bg="grid" aria-hidden="true"></div>
+      <p class="eyebrow">Pipeline &amp; ETL &middot; Medallion Architecture</p>
+      <h1>Seattle Pet Licenses ETL</h1>
+      <p class="cs-lead">A full Medallion pipeline that moves 320K+ Seattle pet license records from the Open Data Portal through Bronze, Silver, and Gold layers to a Snowflake star schema — orchestrated by Azure Data Factory with idempotent MERGE logic throughout.</p>
+
+      <dl class="cs-meta">
+        <div><dt>Pattern</dt><dd>Medallion (Bronze &rarr; Silver &rarr; Gold)</dd></div>
+        <div><dt>Orchestration</dt><dd>Azure Data Factory</dd></div>
+        <div><dt>Warehouse</dt><dd>Snowflake</dd></div>
+        <div><dt>Schema</dt><dd>Star Schema — 1 fact, 4 dims</dd></div>
+      </dl>
+
+      <div class="cs-hero-actions">
+        <a class="btn btn-primary" href="https://github.com/DhanvardiniRajendran25/seattle-pet-licenses-etl" target="_blank" rel="noopener">GitHub &rarr;</a>
+      </div>
+
+      <div class="cs-chips">
+        <span>Azure Data Factory</span><span>Azure Blob Storage</span><span>Snowflake</span>
+        <span>Star Schema</span><span>SCD</span><span>Parquet</span><span>SQL</span>
+      </div>
+    </section>
+
+    <section class="cs-section" id="pipeline">
+      <p class="cs-label">Pipeline Architecture</p>
+      <h2>How the data flows</h2>
+      <p>Source → Blob → ADF Mapping Data Flows → three Medallion layers → Snowflake star schema. Every stage is named, typed, and separated so any layer can be re-run independently.</p>
+
+      <div class="arch cs-reveal">
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Source</b>
+            <span>Seattle Open Data Portal (REST API)</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Raw Ingest</b>
+            <span>Azure Blob Storage (CSV)</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Bronze</b>
+            <span>Raw Parquet — exact source copy</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Silver</b>
+            <span>ADF Mapping Data Flows — cleansed &amp; standardized</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent">
+            <b>Gold — Star Schema</b>
+            <span>PET_LICENSE_FACT · SPECIES_DIM · BREED_DIM · DATE_DIM · ZIP_DIM</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Snowflake</b>
+            <span>Analytics-ready warehouse</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" id="stages">
+      <p class="cs-label">Stage Breakdown</p>
+      <h2>What happens at each layer</h2>
+
+      <div class="cs-cards cs-reveal">
+        <div class="cs-card">
+          <h3>Ingest</h3>
+          <p>ADF pulls records from the Seattle Open Data REST API and lands them as raw CSV in Azure Blob Storage. No transformation at this stage — source fidelity is preserved exactly as received.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Bronze</h3>
+          <p>ADF Copy Activity converts the raw CSV to Parquet. Schema is inferred from source; no column is dropped or renamed. Bronze is the audit baseline — queryable for debugging at any point.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Silver</h3>
+          <p>ADF Mapping Data Flows run business-rule transformations: species codes are standardized, ZIP codes are normalized to 5-digit format, and NULL values are replaced with <strong>"Missing"</strong> sentinel dimension members to keep all foreign keys non-null.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Gold — Star Schema</h3>
+          <p>MERGE statements load <strong>PET_LICENSE_FACT</strong> and four conformed dimensions: SPECIES_DIM, BREED_DIM, DATE_DIM, and ZIP_DIM. Surrogate keys are generated in Snowflake. MERGE makes every load idempotent — safe to re-run without producing duplicates.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section narrow" id="decisions">
+      <p class="cs-label">Key Decisions</p>
+      <h2>Why it was built this way</h2>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 1</p>
+        <p><strong>Surrogate keys over natural keys.</strong> Source license IDs are not stable — they can be reassigned or reused across data refreshes. Snowflake-generated surrogate keys decouple warehouse identity from source IDs and make SCD operations safe on every dimension table.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 2</p>
+        <p><strong>"Missing" sentinel dimension members instead of NULLs.</strong> A NULL foreign key in a fact table breaks GROUP BY queries and dimension joins silently. Inserting a "Missing" row in each dimension table and pointing unknown records there keeps all joins valid and makes missing data explicit in reports.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 3</p>
+        <p><strong>MERGE over INSERT for fact and dimension loads.</strong> A straight INSERT would produce duplicates on re-runs. MERGE matches on the natural key, inserts new rows, and updates changed attributes — making the pipeline safe to replay after a failure at any stage without manual cleanup.</p>
+      </div>
+    </section>
+
+    <section class="cs-section" id="results">
+      <p class="cs-label">Results</p>
+      <h2>What came out</h2>
+
+      <div class="cs-stats cs-reveal">
+        <div class="cs-stat"><b>320K+</b><span>Records processed</span></div>
+        <div class="cs-stat"><b>1 + 4</b><span>Fact table + dimension tables</span></div>
+        <div class="cs-stat"><b>0</b><span>NULL foreign keys in star schema</span></div>
+        <div class="cs-stat"><b>3</b><span>Medallion layers (Bronze / Silver / Gold)</span></div>
+        <div class="cs-stat"><b>Idempotent</b><span>Pipeline — safe to re-run at any stage</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span class="footer-name">Dhanvardini Rajendran</span>
+      <nav class="footer-links" aria-label="Contact">
+        <a href="mailto:dhanvardini.rajendran@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/dhanvardini/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/DhanvardiniRajendran25" target="_blank" rel="noopener">GitHub</a>
+        <a href="../assets/resume.pdf" download>Resume</a>
+      </nav>
+    </div>
+    <p class="footer-fine">&copy; <span id="year"></span> Dhanvardini Rajendran.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

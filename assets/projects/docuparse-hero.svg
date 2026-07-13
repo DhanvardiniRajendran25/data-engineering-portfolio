@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+<defs>
+  <radialGradient id="a1" cx="72%" cy="22%" r="62%">
+    <stop offset="0%" stop-color="#164e63" stop-opacity="0.5"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="a2" cx="20%" cy="75%" r="38%">
+    <stop offset="0%" stop-color="#0c4a6e" stop-opacity="0.28"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="sp" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="rgba(251,191,36,0)"/>
+    <stop offset="28%" stop-color="rgba(251,191,36,0.9)"/>
+    <stop offset="72%" stop-color="rgba(251,191,36,0.9)"/>
+    <stop offset="100%" stop-color="rgba(251,191,36,0)"/>
+  </linearGradient>
+  <linearGradient id="fl" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#164e63" stop-opacity="0.07"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </linearGradient>
+  <filter id="g4"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="g10"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="g20"><feGaussianBlur stdDeviation="20" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="800" height="450" fill="#06080e"/>
+<rect width="800" height="450" fill="url(#a1)"/>
+<rect width="800" height="450" fill="url(#a2)"/>
+<rect x="0" y="355" width="800" height="95" fill="url(#fl)"/>
+<!-- Spine -->
+<rect x="399" y="0" width="2" height="450" fill="url(#sp)" filter="url(#g20)" opacity="0.75"/>
+<!-- Stacked document pages -->
+<g filter="url(#g10)" opacity="0.5">
+  <!-- Back page -->
+  <rect x="70" y="140" width="155" height="205" rx="6" fill="none" stroke="#06b6d4" stroke-width="1.2" transform="rotate(-6 148 243)" opacity="0.4"/>
+  <!-- Middle page -->
+  <rect x="80" y="132" width="155" height="205" rx="6" fill="none" stroke="#06b6d4" stroke-width="1.4" transform="rotate(-2 158 235)" opacity="0.65"/>
+  <!-- Front page (main) -->
+  <rect x="90" y="125" width="155" height="205" rx="6" fill="none" stroke="#06b6d4" stroke-width="1.6"/>
+  <!-- Text lines on front page -->
+  <line x1="108" y1="155" x2="228" y2="155" stroke="#06b6d4" stroke-width="1" opacity="0.4"/>
+  <line x1="108" y1="171" x2="215" y2="171" stroke="#06b6d4" stroke-width="1" opacity="0.35"/>
+  <!-- Bounding box (table region) -->
+  <rect x="108" y="188" width="120" height="98" rx="2" fill="none" stroke="#06b6d4" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.7"/>
+  <!-- Table grid inside bbox -->
+  <line x1="143" y1="188" x2="143" y2="286" stroke="#06b6d4" stroke-width="0.8" opacity="0.3"/>
+  <line x1="178" y1="188" x2="178" y2="286" stroke="#06b6d4" stroke-width="0.8" opacity="0.3"/>
+  <line x1="108" y1="215" x2="228" y2="215" stroke="#06b6d4" stroke-width="0.8" opacity="0.3"/>
+  <line x1="108" y1="242" x2="228" y2="242" stroke="#06b6d4" stroke-width="0.8" opacity="0.3"/>
+  <line x1="108" y1="269" x2="228" y2="269" stroke="#06b6d4" stroke-width="0.8" opacity="0.3"/>
+  <!-- Text lines below bbox -->
+  <line x1="108" y1="298" x2="225" y2="298" stroke="#06b6d4" stroke-width="1" opacity="0.3"/>
+  <line x1="108" y1="312" x2="200" y2="312" stroke="#06b6d4" stroke-width="1" opacity="0.25"/>
+</g>
+<!-- Network: detection nodes -->
+<!-- Detectron2 bbox node -->
+<g filter="url(#g10)">
+  <circle cx="480" cy="130" r="20" fill="#fbbf24"/>
+  <circle cx="480" cy="130" r="10" fill="#fef3c7"/>
+</g>
+<!-- LayoutLMv3 node -->
+<g filter="url(#g10)">
+  <circle cx="580" cy="225" r="26" fill="#fbbf24"/>
+  <circle cx="580" cy="225" r="13" fill="#fef3c7"/>
+</g>
+<!-- Docling export node -->
+<g filter="url(#g10)">
+  <circle cx="480" cy="320" r="20" fill="#fbbf24"/>
+  <circle cx="480" cy="320" r="10" fill="#fef3c7"/>
+</g>
+<!-- DVC pipeline node -->
+<g filter="url(#g10)">
+  <circle cx="680" cy="225" r="16" fill="#fbbf24" opacity="0.8"/>
+  <circle cx="680" cy="225" r="8" fill="#fef3c7"/>
+</g>
+<!-- Pipeline connections -->
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="1.8" fill="none" opacity="0.42">
+  <line x1="493" y1="148" x2="566" y2="208"/>
+  <line x1="566" y1="242" x2="493" y2="302"/>
+  <line x1="606" y1="225" x2="664" y2="225"/>
+</g>
+<!-- Outer network nodes -->
+<g filter="url(#g10)">
+  <circle cx="740" cy="145" r="11" fill="#fbbf24" opacity="0.72"/>
+  <circle cx="748" cy="300" r="10" fill="#fbbf24" opacity="0.68"/>
+  <circle cx="430" cy="75" r="9" fill="#fbbf24" opacity="0.65"/>
+  <circle cx="530" cy="55" r="8" fill="#fbbf24" opacity="0.6"/>
+  <circle cx="430" cy="375" r="9" fill="#fbbf24" opacity="0.65"/>
+  <circle cx="530" cy="395" r="8" fill="#fbbf24" opacity="0.6"/>
+</g>
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="1" fill="none" opacity="0.28">
+  <line x1="696" y1="218" x2="740" y2="145"/>
+  <line x1="696" y1="232" x2="748" y2="300"/>
+  <line x1="466" y1="112" x2="430" y2="75"/>
+  <line x1="471" y1="110" x2="530" y2="55"/>
+  <line x1="466" y1="338" x2="430" y2="375"/>
+  <line x1="471" y1="340" x2="530" y2="395"/>
+</g>
+<!-- Output format nodes (JSON, MD, CSV) -->
+<g filter="url(#g10)">
+  <circle cx="760" cy="188" r="9" fill="#06b6d4" opacity="0.8"/>
+  <circle cx="760" cy="225" r="9" fill="#06b6d4" opacity="0.8"/>
+  <circle cx="760" cy="262" r="9" fill="#06b6d4" opacity="0.8"/>
+</g>
+<g filter="url(#g4)" stroke="#06b6d4" stroke-width="1" fill="none" opacity="0.3">
+  <line x1="696" y1="220" x2="760" y2="188"/>
+  <line x1="696" y1="225" x2="751" y2="225"/>
+  <line x1="696" y1="230" x2="760" y2="262"/>
+</g>
+<!-- Red accent nodes -->
+<g filter="url(#g20)">
+  <circle cx="398" cy="155" r="12" fill="#ef4444"/>
+  <circle cx="398" cy="155" r="6" fill="#fca5a5"/>
+  <circle cx="328" cy="290" r="10" fill="#ef4444" opacity="0.9"/>
+  <circle cx="328" cy="290" r="5" fill="#fca5a5"/>
+  <circle cx="718" cy="75" r="9" fill="#ef4444" opacity="0.85"/>
+  <circle cx="718" cy="75" r="4.5" fill="#fca5a5"/>
+</g>
+<!-- Particles -->
+<g fill="#fbbf24" opacity="0.35" filter="url(#g4)">
+  <circle cx="288" cy="92" r="2.5"/>
+  <circle cx="345" cy="178" r="2"/>
+  <circle cx="765" cy="420" r="2.5"/>
+  <circle cx="258" cy="420" r="2"/>
+  <circle cx="635" cy="430" r="1.8"/>
+</g>
+<text x="400" y="436" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.18)" text-anchor="middle" letter-spacing="2.5">DETECTRON2 · LAYOUTLMV3 · DOCLING · DVC · SEC EDGAR</text>
+</svg>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <title>Mookit · Dhanvardini Rajendran</title>
+  <meta name="description" content="Four-tier e-commerce data platform: React to Node.js to SQL Server, with stored procedures on every data path, AES-256 PII encryption, RBAC, and Power BI analytics." />
+  <meta property="og:title" content="Mookit · Case Study" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css?v=2" />
+  <link rel="stylesheet" href="../css/project-page.css?v=2" />
+  <link rel="stylesheet" href="../css/anim-bg.css" />
+  <script src="../js/anim-bg.js" defer></script>
+</head>
+<body>
+  <script>
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      try { if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.classList.add('motion'); } catch (e) {}
+    })();
+  </script>
+
+  <div class="cs-progress" id="csProgress"></div>
+
+  <header class="site-header" id="top">
+    <a href="../projects.html" class="cs-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All projects
+    </a>
+    <nav class="site-nav" aria-label="Section">
+      <a href="#pipeline">Architecture</a>
+      <a href="#stages">Layers</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#results">Results</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode">
+      <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="cs-hero has-anim-bg">
+      <div class="anim-bg" data-bg="dots" aria-hidden="true"></div>
+      <p class="eyebrow">Full-Stack Data &middot; Database-Centric Architecture</p>
+      <h1>Mookit</h1>
+      <p class="cs-lead">A four-tier e-commerce data platform where the database is the security boundary. Every data operation goes through stored procedures — no ad-hoc SQL reaches SQL Server. AES-256 field-level encryption protects PII, RBAC enforces access at both API and database layers, and audit triggers capture every state change for compliance.</p>
+
+      <dl class="cs-meta">
+        <div><dt>Architecture</dt><dd>4-tier (UI &rarr; API &rarr; Connectors &rarr; DB)</dd></div>
+        <div><dt>Database</dt><dd>SQL Server (stored procs, triggers, views)</dd></div>
+        <div><dt>Security</dt><dd>AES-256 PII encryption + RBAC</dd></div>
+        <div><dt>Analytics</dt><dd>Power BI on SQL Server</dd></div>
+      </dl>
+
+      <div class="cs-hero-actions">
+        <a class="btn btn-primary" href="https://github.com/DhanvardiniRajendran25/mookit" target="_blank" rel="noopener">GitHub &rarr;</a>
+      </div>
+
+      <div class="cs-chips">
+        <span>React</span><span>Express.js</span><span>Node.js</span><span>SQL Server</span>
+        <span>AES-256</span><span>RBAC</span><span>JWT</span><span>Power BI</span>
+      </div>
+    </section>
+
+    <section class="cs-section" id="pipeline">
+      <p class="cs-label">System Architecture</p>
+      <h2>Four tiers, one security model</h2>
+      <p>Every request travels through all four tiers. No layer can bypass the next — the database rejects calls that don't come through stored procedures, and the API rejects requests that don't pass RBAC.</p>
+
+      <div class="arch cs-reveal">
+        <div class="arch-row">
+          <div class="arch-node"><b>React UI</b><span>Product catalog &middot; cart &middot; checkout &middot; order tracking · JWT auth</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Express.js API</b><span>REST endpoints &middot; RBAC middleware &middot; input validation &middot; JWT verification</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Node.js Connectors</b><span>Database connection pooling &middot; stored procedure call wrappers</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>SQL Server</b><span>Stored procedures (all data ops) &middot; audit triggers &middot; AES-256 encrypted PII columns &middot; reporting views</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Power BI</b><span>Sales trends &middot; inventory turnover &middot; customer segments</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" id="stages">
+      <p class="cs-label">Layer Breakdown</p>
+      <h2>What each tier does</h2>
+
+      <div class="cs-cards cs-reveal">
+        <div class="cs-card">
+          <h3>Frontend — React</h3>
+          <p>Product catalog with filter/sort, cart, JWT-authenticated checkout flow, and order tracking. All API calls include the JWT access token in headers. No database credentials or connection strings exist in the frontend — all data operations go through the Express API.</p>
+        </div>
+        <div class="cs-card">
+          <h3>API — Express.js + RBAC</h3>
+          <p>Every route is protected by RBAC middleware that checks the JWT role claim against a permissions matrix. Admin routes, customer routes, and reporting routes have separate permission sets. Input validation runs before any database call — malformed inputs are rejected at the API boundary, not at the database.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Database — SQL Server</h3>
+          <p>All data operations (reads, writes, updates, deletes) go through stored procedures. No ad-hoc SQL is executed against the database. Audit triggers log every INSERT, UPDATE, and DELETE to an immutable audit table with timestamp and actor. AES-256 encryption is applied at the column level on all PII fields (name, email, address, payment info).</p>
+        </div>
+        <div class="cs-card">
+          <h3>Analytics — Power BI</h3>
+          <p>Power BI connects to SQL Server read-optimized views — not directly to the base tables. Views enforce the same column-level access control as the API layer. Dashboards cover: sales trend by product category, inventory turnover rate, customer cohort segments, and order fulfillment SLAs.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section narrow" id="decisions">
+      <p class="cs-label">Key Decisions</p>
+      <h2>Why it was built this way</h2>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 1</p>
+        <p><strong>Stored procedures for all data operations.</strong> Ad-hoc SQL from application code is the most common vector for SQL injection — even with parameterized queries, the surface area is large. Stored procedures encapsulate all data operations inside the database, centralizing business logic and reducing the attack surface to a known set of named procedures. They also enable DB-level auditing that the application layer can't intercept.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 2</p>
+        <p><strong>AES-256 at the column level for PII fields.</strong> Encrypting at the application layer before writing to the database means the data is protected even if the database host is compromised — the attacker gets ciphertext, not plaintext. Field-level encryption (vs. full-disk encryption) also allows selective decryption: analytics queries on non-PII columns run without ever touching the encrypted fields.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 3</p>
+        <p><strong>RBAC at both API and database layers.</strong> A single RBAC layer at the API is insufficient — if the API is bypassed (direct database connection, compromised service), there is no secondary control. Enforcing access control at both layers means an attacker who gets past the API still hits a second enforcement point at the stored procedure level.</p>
+      </div>
+    </section>
+
+    <section class="cs-section" id="results">
+      <p class="cs-label">Results</p>
+      <h2>What came out</h2>
+
+      <div class="cs-stats cs-reveal">
+        <div class="cs-stat"><b>4-tier</b><span>Architecture with no SQL injection surface</span></div>
+        <div class="cs-stat"><b>AES-256</b><span>Field-level PII encryption</span></div>
+        <div class="cs-stat"><b>RBAC</b><span>Enforced at API + DB layers</span></div>
+        <div class="cs-stat"><b>Audit trail</b><span>Every state change logged by triggers</span></div>
+        <div class="cs-stat"><b>Power BI</b><span>Dashboards on read-optimized SQL views</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span class="footer-name">Dhanvardini Rajendran</span>
+      <nav class="footer-links" aria-label="Contact">
+        <a href="mailto:dhanvardini.rajendran@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/dhanvardini/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/DhanvardiniRajendran25" target="_blank" rel="noopener">GitHub</a>
+        <a href="../assets/resume.pdf" download>Resume</a>
+      </nav>
+    </div>
+    <p class="footer-fine">&copy; <span id="year"></span> Dhanvardini Rajendran.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

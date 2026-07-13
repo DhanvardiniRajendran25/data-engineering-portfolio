@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+<defs>
+  <radialGradient id="a1" cx="70%" cy="20%" r="65%">
+    <stop offset="0%" stop-color="#4c1d95" stop-opacity="0.5"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="a2" cx="18%" cy="75%" r="38%">
+    <stop offset="0%" stop-color="#2e1065" stop-opacity="0.3"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="sp" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="rgba(251,191,36,0)"/>
+    <stop offset="28%" stop-color="rgba(251,191,36,0.9)"/>
+    <stop offset="72%" stop-color="rgba(251,191,36,0.9)"/>
+    <stop offset="100%" stop-color="rgba(251,191,36,0)"/>
+  </linearGradient>
+  <linearGradient id="fl" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#4c1d95" stop-opacity="0.07"/>
+    <stop offset="100%" stop-color="#020509" stop-opacity="0"/>
+  </linearGradient>
+  <filter id="g4"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="g10"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="g20"><feGaussianBlur stdDeviation="20" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="800" height="450" fill="#060810"/>
+<rect width="800" height="450" fill="url(#a1)"/>
+<rect width="800" height="450" fill="url(#a2)"/>
+<rect x="0" y="355" width="800" height="95" fill="url(#fl)"/>
+<!-- Spine -->
+<rect x="399" y="0" width="2" height="450" fill="url(#sp)" filter="url(#g20)" opacity="0.75"/>
+<!-- Circuit / chip icon -->
+<g filter="url(#g10)" opacity="0.52">
+  <!-- Chip body -->
+  <rect x="90" y="165" width="130" height="130" rx="8" fill="none" stroke="#8b5cf6" stroke-width="1.6"/>
+  <!-- Inner grid -->
+  <rect x="110" y="185" width="90" height="90" rx="4" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+  <line x1="138" y1="185" x2="138" y2="275" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+  <line x1="166" y1="185" x2="166" y2="275" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+  <line x1="110" y1="213" x2="200" y2="213" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+  <line x1="110" y1="241" x2="200" y2="241" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+  <!-- Left pins -->
+  <line x1="90" y1="190" x2="62" y2="190" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="90" y1="210" x2="62" y2="210" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="90" y1="230" x2="62" y2="230" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="90" y1="250" x2="62" y2="250" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="90" y1="270" x2="62" y2="270" stroke="#8b5cf6" stroke-width="1.2"/>
+  <!-- Right pins -->
+  <line x1="220" y1="190" x2="248" y2="190" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="220" y1="210" x2="248" y2="210" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="220" y1="230" x2="248" y2="230" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="220" y1="250" x2="248" y2="250" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="220" y1="270" x2="248" y2="270" stroke="#8b5cf6" stroke-width="1.2"/>
+  <!-- Top pins -->
+  <line x1="130" y1="165" x2="130" y2="138" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="155" y1="165" x2="155" y2="138" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="180" y1="165" x2="180" y2="138" stroke="#8b5cf6" stroke-width="1.2"/>
+  <!-- Bottom pins -->
+  <line x1="130" y1="295" x2="130" y2="322" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="155" y1="295" x2="155" y2="322" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="180" y1="295" x2="180" y2="322" stroke="#8b5cf6" stroke-width="1.2"/>
+</g>
+<!-- Three agent main nodes -->
+<!-- Planner -->
+<g filter="url(#g10)">
+  <circle cx="460" cy="168" r="26" fill="#fbbf24"/>
+  <circle cx="460" cy="168" r="13" fill="#fef3c7"/>
+</g>
+<!-- Coder -->
+<g filter="url(#g10)">
+  <circle cx="570" cy="225" r="30" fill="#fbbf24"/>
+  <circle cx="570" cy="225" r="15" fill="#fef3c7"/>
+</g>
+<!-- Reviewer -->
+<g filter="url(#g10)">
+  <circle cx="460" cy="282" r="26" fill="#fbbf24"/>
+  <circle cx="460" cy="282" r="13" fill="#fef3c7"/>
+</g>
+<!-- Agent connections -->
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="2" fill="none" opacity="0.45">
+  <line x1="476" y1="185" x2="553" y2="210"/>
+  <line x1="553" y1="240" x2="476" y2="265"/>
+  <!-- Revision loop back -->
+  <path d="M443 282 Q380 225 443 168" stroke-dasharray="6,4"/>
+</g>
+<!-- Surrounding network nodes -->
+<g filter="url(#g10)">
+  <circle cx="680" cy="145" r="14" fill="#fbbf24" opacity="0.78"/>
+  <circle cx="680" cy="145" r="7" fill="#fef3c7"/>
+  <circle cx="728" cy="225" r="16" fill="#fbbf24" opacity="0.78"/>
+  <circle cx="728" cy="225" r="8" fill="#fef3c7"/>
+  <circle cx="680" cy="305" r="13" fill="#fbbf24" opacity="0.75"/>
+  <circle cx="680" cy="305" r="6.5" fill="#fef3c7"/>
+  <circle cx="420" cy="80" r="10" fill="#fbbf24" opacity="0.65"/>
+  <circle cx="500" cy="60" r="8" fill="#fbbf24" opacity="0.6"/>
+  <circle cx="420" cy="370" r="10" fill="#fbbf24" opacity="0.65"/>
+  <circle cx="500" cy="390" r="8" fill="#fbbf24" opacity="0.6"/>
+</g>
+<g filter="url(#g4)" stroke="#fbbf24" stroke-width="1" fill="none" opacity="0.32">
+  <line x1="597" y1="215" x2="680" y2="145"/>
+  <line x1="598" y1="225" x2="712" y2="225"/>
+  <line x1="597" y1="235" x2="680" y2="305"/>
+  <line x1="460" y1="142" x2="420" y2="80"/>
+  <line x1="474" y1="148" x2="500" y2="60"/>
+  <line x1="460" y1="308" x2="420" y2="370"/>
+  <line x1="474" y1="298" x2="500" y2="390"/>
+</g>
+<!-- Input node (top) -->
+<g filter="url(#g10)">
+  <circle cx="398" cy="65" r="14" fill="#fbbf24" opacity="0.72"/>
+  <circle cx="398" cy="65" r="7" fill="#fef3c7"/>
+</g>
+<!-- Output node (bottom) -->
+<g filter="url(#g10)">
+  <circle cx="635" cy="390" r="16" fill="#fbbf24" opacity="0.78"/>
+  <circle cx="635" cy="390" r="8" fill="#fef3c7"/>
+</g>
+<!-- Red accent nodes -->
+<g filter="url(#g20)">
+  <circle cx="398" cy="140" r="12" fill="#ef4444"/>
+  <circle cx="398" cy="140" r="6" fill="#fca5a5"/>
+  <circle cx="755" cy="95" r="10" fill="#ef4444" opacity="0.9"/>
+  <circle cx="755" cy="95" r="5" fill="#fca5a5"/>
+  <circle cx="318" cy="300" r="9" fill="#ef4444" opacity="0.8"/>
+  <circle cx="318" cy="300" r="4.5" fill="#fca5a5"/>
+</g>
+<!-- Particles -->
+<g fill="#fbbf24" opacity="0.35" filter="url(#g4)">
+  <circle cx="292" cy="88" r="2.5"/>
+  <circle cx="355" cy="168" r="2"/>
+  <circle cx="768" cy="160" r="2"/>
+  <circle cx="762" cy="420" r="2.5"/>
+  <circle cx="258" cy="405" r="2"/>
+  <circle cx="630" cy="430" r="1.8"/>
+</g>
+<text x="400" y="436" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.18)" text-anchor="middle" letter-spacing="2.5">LANGGRAPH · PYTHON · MULTI-AGENT · PROMPT SECURITY · EVAL HARNESS</text>
+</svg>

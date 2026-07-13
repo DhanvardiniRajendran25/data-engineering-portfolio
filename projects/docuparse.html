@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <title>DocuParse · Dhanvardini Rajendran</title>
+  <meta name="description" content="SEC EDGAR document intelligence pipeline — Detectron2 + LayoutLMv3 + Docling, orchestrated by DVC. 99.56% success rate, 187 tables extracted." />
+  <meta property="og:title" content="DocuParse · Case Study" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css?v=2" />
+  <link rel="stylesheet" href="../css/project-page.css?v=2" />
+  <link rel="stylesheet" href="../css/anim-bg.css" />
+  <script src="../js/anim-bg.js" defer></script>
+</head>
+<body>
+  <script>
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      try { if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.classList.add('motion'); } catch (e) {}
+    })();
+  </script>
+
+  <div class="cs-progress" id="csProgress"></div>
+
+  <header class="site-header" id="top">
+    <a href="../projects.html" class="cs-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All projects
+    </a>
+    <nav class="site-nav" aria-label="Section">
+      <a href="#pipeline">Pipeline</a>
+      <a href="#stages">Stages</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#results">Results</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode">
+      <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="cs-hero has-anim-bg">
+      <div class="anim-bg" data-bg="grid" aria-hidden="true"></div>
+      <p class="eyebrow">AI &amp; Data Systems &middot; Document Intelligence Pipeline</p>
+      <h1>DocuParse</h1>
+      <p class="cs-lead">An enterprise document intelligence pipeline for SEC EDGAR financial filings. Detectron2 detects table regions in document images, LayoutLMv3 parses the internal structure, and Docling exports clean JSON, Markdown, and CSV. DVC manages the full pipeline for reproducibility. 99.56% success rate across filings.</p>
+
+      <dl class="cs-meta">
+        <div><dt>Source</dt><dd>SEC EDGAR (10-K, 10-Q, 8-K)</dd></div>
+        <div><dt>Detection</dt><dd>Detectron2 + LayoutLMv3</dd></div>
+        <div><dt>Orchestration</dt><dd>DVC pipeline</dd></div>
+        <div><dt>Output</dt><dd>JSON / Markdown / CSV</dd></div>
+      </dl>
+
+      <div class="cs-hero-actions">
+        <a class="btn btn-primary" href="https://github.com/DhanvardiniRajendran25/docuparse" target="_blank" rel="noopener">GitHub &rarr;</a>
+      </div>
+
+      <div class="cs-chips">
+        <span>SEC EDGAR</span><span>Detectron2</span><span>LayoutLMv3</span>
+        <span>Docling</span><span>DVC</span><span>Python</span><span>JSON / Markdown / CSV</span>
+      </div>
+    </section>
+
+    <section class="cs-section" id="pipeline">
+      <p class="cs-label">Pipeline Architecture</p>
+      <h2>How a filing becomes structured data</h2>
+      <p>Each stage has a single responsibility: download, detect, parse, export. DVC connects them into a reproducible directed acyclic graph — change a model and only downstream stages rerun.</p>
+
+      <div class="arch cs-reveal">
+        <div class="arch-row">
+          <div class="arch-node"><b>SEC EDGAR</b><span>Bulk downloader &mdash; 10-K, 10-Q, 8-K filings</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Text Extraction</b><span>PDF text layer + OCR fallback for scanned pages</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>Table Detection</b><span>Detectron2 object detection &mdash; table region bounding boxes</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>Layout Analysis</b><span>LayoutLMv3 &mdash; joint text + layout understanding, merged cells, multi-column</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Docling</b><span>Structure &rarr; JSON / Markdown / CSV export</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>DVC</b><span>Pipeline versioning &mdash; reproducible, incremental reruns</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" id="stages">
+      <p class="cs-label">Stage Breakdown</p>
+      <h2>What happens at each step</h2>
+
+      <div class="cs-cards cs-reveal">
+        <div class="cs-card">
+          <h3>Ingest — SEC EDGAR</h3>
+          <p>SEC EDGAR bulk downloader fetches financial filings (10-K annual reports, 10-Q quarterly reports, 8-K current reports). Filing metadata is stored alongside the document for traceability. DVC tracks this stage as a pipeline input with a content hash — re-download only triggers if the source changes.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Detection — Detectron2</h3>
+          <p>Detectron2 object detection model runs on document page images to identify table region bounding boxes. It also classifies other layout regions: title, section header, body text, figure, caption. This spatial map is passed to LayoutLMv3 so it knows exactly where to find table content.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Parsing — LayoutLMv3</h3>
+          <p>LayoutLMv3 is a multimodal transformer that understands text <em>and</em> layout jointly. It handles the hardest table structures: multi-column layouts, merged cells, row/column span attributes, and nested sub-tables. Neither a pure text extractor nor a pure vision model can do this alone.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Export — Docling</h3>
+          <p>Docling converts the parsed table structure into three formats: <strong>JSON</strong> for programmatic access, <strong>Markdown</strong> for LLM consumption (tables as pipe-delimited strings), and <strong>CSV</strong> per table for analytics. Each table is exported as a separate file with its filing ID and page number as metadata.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section narrow" id="decisions">
+      <p class="cs-label">Key Decisions</p>
+      <h2>Why it was built this way</h2>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 1</p>
+        <p><strong>DVC pipeline management for reproducibility.</strong> Financial document processing is long-running and expensive. DVC tracks each stage's inputs and outputs with content hashes, so changing the LayoutLMv3 model version reruns only the parsing and export stages — not the download or detection stages. This also makes the pipeline auditable: any output can be traced to the exact model version and inputs that produced it.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 2</p>
+        <p><strong>Detectron2 + LayoutLMv3 together, not separately.</strong> Detectron2 is excellent at finding where tables are (spatial detection) but knows nothing about cell content. LayoutLMv3 understands table structure deeply but needs spatial coordinates as input. Neither alone produces an accurate parse. The two-stage approach combines spatial detection with structural understanding.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 3</p>
+        <p><strong>Three output formats instead of one.</strong> SEC EDGAR data has three primary downstream consumers: downstream Python code needs JSON, LLM summarization workflows need Markdown (pipe-delimited tables are the standard LLM format), and analyst teams need CSV. Generating all three at export time costs negligible extra compute versus the detection and parsing stages.</p>
+      </div>
+    </section>
+
+    <section class="cs-section" id="results">
+      <p class="cs-label">Results</p>
+      <h2>What came out</h2>
+
+      <div class="cs-stats cs-reveal">
+        <div class="cs-stat"><b>99.56%</b><span>Pipeline success rate across filings</span></div>
+        <div class="cs-stat"><b>187</b><span>Tables extracted and structured</span></div>
+        <div class="cs-stat"><b>$1.05</b><span>Cost per 1,000 pages</span></div>
+        <div class="cs-stat"><b>3 formats</b><span>JSON + Markdown + CSV output</span></div>
+        <div class="cs-stat"><b>DVC</b><span>Fully reproducible, versioned pipeline</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span class="footer-name">Dhanvardini Rajendran</span>
+      <nav class="footer-links" aria-label="Contact">
+        <a href="mailto:dhanvardini.rajendran@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/dhanvardini/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/DhanvardiniRajendran25" target="_blank" rel="noopener">GitHub</a>
+        <a href="../assets/resume.pdf" download>Resume</a>
+      </nav>
+    </div>
+    <p class="footer-fine">&copy; <span id="year"></span> Dhanvardini Rajendran.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

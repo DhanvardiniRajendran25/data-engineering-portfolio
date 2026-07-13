@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <title>NYPD Crime Analytics Pipeline · Dhanvardini Rajendran</title>
+  <meta name="description" content="End-to-end dimensional model for NYPD arrest data — profiling, Alteryx cleaning, SCD Type 2 in Snowflake, Power BI and Tableau dashboards." />
+  <meta property="og:title" content="NYPD Crime Analytics Pipeline · Case Study" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css?v=2" />
+  <link rel="stylesheet" href="../css/project-page.css?v=2" />
+  <link rel="stylesheet" href="../css/anim-bg.css" />
+  <script src="../js/anim-bg.js" defer></script>
+</head>
+<body>
+  <script>
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      try { if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.classList.add('motion'); } catch (e) {}
+    })();
+  </script>
+
+  <div class="cs-progress" id="csProgress"></div>
+
+  <header class="site-header" id="top">
+    <a href="../projects.html" class="cs-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All projects
+    </a>
+    <nav class="site-nav" aria-label="Section">
+      <a href="#pipeline">Pipeline</a>
+      <a href="#stages">Stages</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#results">Results</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode">
+      <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="cs-hero has-anim-bg">
+      <div class="anim-bg" data-bg="dots" aria-hidden="true"></div>
+      <p class="eyebrow">Pipeline &amp; ETL &middot; Dimensional Modeling</p>
+      <h1>NYPD Crime Analytics Pipeline</h1>
+      <p class="cs-lead">A full-cycle data engineering pipeline for NYPD arrest records — data profiling with ydata, cleaning in Alteryx, dimensional modeling in ER Studio, incremental watermark loads into Snowflake with SCD Type 2, and live Power BI and Tableau dashboards on top.</p>
+
+      <dl class="cs-meta">
+        <div><dt>Pattern</dt><dd>Dimensional Modeling + Incremental Load</dd></div>
+        <div><dt>Orchestration</dt><dd>Azure Data Factory</dd></div>
+        <div><dt>Warehouse</dt><dd>Snowflake (SCD Type 2)</dd></div>
+        <div><dt>BI</dt><dd>Power BI + Tableau</dd></div>
+      </dl>
+
+      <div class="cs-hero-actions">
+        <a class="btn btn-primary" href="https://github.com/DhanvardiniRajendran25/nypd-crime-data-pipeline" target="_blank" rel="noopener">GitHub &rarr;</a>
+      </div>
+
+      <div class="cs-chips">
+        <span>ydata-profiling</span><span>Alteryx</span><span>ER Studio</span><span>ADF</span>
+        <span>Snowflake</span><span>SCD Type 2</span><span>Power BI</span><span>Tableau</span>
+      </div>
+    </section>
+
+    <section class="cs-section" id="pipeline">
+      <p class="cs-label">Pipeline Architecture</p>
+      <h2>How the data flows</h2>
+      <p>Profile first, clean second, model third, load with a watermark, serve from the warehouse. Each stage has a clear contract with the next.</p>
+
+      <div class="arch cs-reveal">
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Source</b>
+            <span>NYPD Arrest Data (CSV)</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Profile</b>
+            <span>ydata-profiling — nulls, distributions, encoding issues</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Clean</b>
+            <span>Alteryx — standardize codes, fix dates, resolve demographics</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Model</b>
+            <span>ER Studio — Arrest Fact + Location, Perpetrator, Offense, Date dims</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent">
+            <b>Load</b>
+            <span>ADF incremental watermark &rarr; Snowflake SCD Type 2</span>
+          </div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node">
+            <b>Serve</b>
+            <span>Power BI + Tableau dashboards</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section" id="stages">
+      <p class="cs-label">Stage Breakdown</p>
+      <h2>What happens at each step</h2>
+
+      <div class="cs-cards cs-reveal">
+        <div class="cs-card">
+          <h3>Profile</h3>
+          <p>ydata-profiling generates a full statistical report on the raw CSV before any transformation: null percentages per column, value distributions, high-cardinality warnings, and encoding anomalies. No SQL was written until this report was reviewed.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Clean</h3>
+          <p>Alteryx workflows standardize borough codes (borough abbreviations → full names), fix date format inconsistencies across different arrest years, and resolve null perpetrator demographics with sentinel values — all with visual, auditable transformation steps.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Model</h3>
+          <p>ER Studio dimensional design: <strong>ARREST_FACT</strong> + four dimensions — LOCATION_DIM, PERPETRATOR_DIM, OFFENSE_DIM, DATE_DIM. SCD Type 2 applied to LOCATION_DIM (precinct boundaries change) and PERPETRATOR_DIM (case details evolve), preserving full history.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Incremental Load</h3>
+          <p>ADF pipeline uses a watermark table to track the last-processed modification date. On each run, only rows newer than the watermark are pulled and loaded — avoiding full table scans on a growing arrest dataset. Watermark is updated atomically after each successful load.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cs-section narrow" id="decisions">
+      <p class="cs-label">Key Decisions</p>
+      <h2>Why it was built this way</h2>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 1</p>
+        <p><strong>SCD Type 2 on Location and Perpetrator dimensions.</strong> NYPD precinct boundaries change, and case details (charges, dispositions) can be updated after initial entry. Type 2 creates a new row for each change with effective dates, so historical arrest records always join to the correct historical dimension row — not the current one.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 2</p>
+        <p><strong>Watermark-based incremental loads over full refreshes.</strong> The NYPD dataset grows continuously. A full reload every run would scan millions of rows unnecessarily. The watermark pattern tracks the last-processed timestamp and pulls only new or changed rows, keeping load times predictable as the dataset scales.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 3</p>
+        <p><strong>Profile before modeling.</strong> Running ydata-profiling before writing a single transformation caught three encoding issues and two columns with &gt;40% nulls that needed sentinel handling. Discovering these in profiling instead of in production saves the much more expensive fix of backfilling a live warehouse.</p>
+      </div>
+    </section>
+
+    <section class="cs-section" id="results">
+      <p class="cs-label">Results</p>
+      <h2>What came out</h2>
+
+      <div class="cs-stats cs-reveal">
+        <div class="cs-stat"><b>22,957</b><span>Peak arrests — August 2024</span></div>
+        <div class="cs-stat"><b>SCD Type 2</b><span>On 2 dimensions (Location, Perpetrator)</span></div>
+        <div class="cs-stat"><b>Watermark</b><span>Incremental loads — no full table scans</span></div>
+        <div class="cs-stat"><b>2 tools</b><span>Power BI + Tableau dashboards on Snowflake</span></div>
+        <div class="cs-stat"><b>Profile-first</b><span>Issues caught before modeling, not after</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span class="footer-name">Dhanvardini Rajendran</span>
+      <nav class="footer-links" aria-label="Contact">
+        <a href="mailto:dhanvardini.rajendran@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/dhanvardini/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/DhanvardiniRajendran25" target="_blank" rel="noopener">GitHub</a>
+        <a href="../assets/resume.pdf" download>Resume</a>
+      </nav>
+    </div>
+    <p class="footer-fine">&copy; <span id="year"></span> Dhanvardini Rajendran.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

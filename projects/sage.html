@@ -4,18 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
-  <title>SAGE · Secure AI Governance Engine · Case Study · Dhanvardini Rajendran</title>
-  <meta name="description" content="SAGE: an enterprise AI compliance assistant that interprets policy documents, answers employee questions with citations, detects policy conflicts, and blocks prompt-injection attacks. A production LLM system built across five phases." />
-
-  <meta property="og:title" content="SAGE · Secure AI Governance Engine · Case Study" />
-  <meta property="og:description" content="An enterprise AI compliance assistant: grounded answers, policy-conflict detection, and a hardened prompt-security pipeline. Built across five phases." />
+  <title>SAGE · Dhanvardini Rajendran</title>
+  <meta name="description" content="Enterprise AI compliance assistant — GPT-4o + LangGraph + hybrid RAG over policy documents, with policy-conflict detection and 100% prompt-injection block rate." />
+  <meta property="og:title" content="SAGE · Case Study" />
   <meta property="og:type" content="article" />
-  <meta property="og:image" content="https://dhanvardinirajendran25.github.io/assets/projects/sage-hero.jpeg" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
   <link rel="stylesheet" href="../css/styles.css?v=2" />
   <link rel="stylesheet" href="../css/project-page.css?v=2" />
   <link rel="stylesheet" href="../css/anim-bg.css" />
@@ -33,18 +28,15 @@
 
   <div class="cs-progress" id="csProgress"></div>
 
-  <!-- ===== Header ===== -->
   <header class="site-header" id="top">
     <a href="../projects.html" class="cs-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       All projects
     </a>
     <nav class="site-nav" aria-label="Section">
-      <a href="#problem">Problem</a>
-      <a href="#solution">Solution</a>
-      <a href="#phases">Build</a>
-      <a href="#architecture">Architecture</a>
-      <a href="#security">Security</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#stages">Stages</a>
+      <a href="#decisions">Decisions</a>
       <a href="#results">Results</a>
     </nav>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode">
@@ -54,631 +46,125 @@
   </header>
 
   <main>
-    <!-- ===== Hero ===== -->
     <section class="cs-hero has-anim-bg">
-      <div class="anim-bg" data-bg="grid" aria-hidden="true"></div>
-      <p class="eyebrow">AI Safety &amp; Governance &middot; Production LLM System</p>
+      <div class="anim-bg" data-bg="beams" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p class="eyebrow">AI &amp; Data Systems &middot; RAG Pipeline + Security</p>
       <h1>SAGE</h1>
-      <p class="cs-lead">A secure AI governance engine: an enterprise compliance assistant that reads a company&rsquo;s policy documents, answers employee questions in plain English with citations and a risk level, flags conflicting policies, and blocks prompt-injection attacks before they reach the model. Built across five phases, from a single prompt to a hardened, deployed product.</p>
+      <p class="cs-lead">A production enterprise AI compliance assistant: a hybrid RAG pipeline over policy PDFs, a LangGraph ReAct reasoning loop for cross-document conflict detection, cited answers with risk levels, and a preprocessing prompt-injection shield with 100% block rate. Deployed on Google Cloud Run.</p>
 
       <dl class="cs-meta">
-        <div><dt>My role</dt><dd>Product Manager</dd></div>
-        <div><dt>Type</dt><dd>AI product, 0 to 1</dd></div>
-        <div><dt>Team</dt><dd>Team of 3</dd></div>
-        <div><dt>Deployed</dt><dd>Hugging Face Spaces</dd></div>
+        <div><dt>Model</dt><dd>GPT-4o</dd></div>
+        <div><dt>Retrieval</dt><dd>Hybrid RAG — ChromaDB + BM25</dd></div>
+        <div><dt>Reasoning</dt><dd>LangGraph ReAct agent</dd></div>
+        <div><dt>Deployment</dt><dd>Google Cloud Run</dd></div>
       </dl>
 
       <div class="cs-hero-actions">
-        <a class="btn btn-primary" href="#solution">See how it works</a>
-        <a class="btn" href="https://sage-compliance-assistant-138449082911.us-central1.run.app/" target="_blank" rel="noopener">Try the live app</a>
-        <a class="btn" href="sage-prd.html">Read the full PRD</a>
-        <a class="btn" href="#architecture">Walk the pipeline</a>
-        <a class="btn" href="#results">See the results</a>
+        <a class="btn btn-primary" href="https://github.com/DhanvardiniRajendran25/sage-compliance-assistant" target="_blank" rel="noopener">GitHub &rarr;</a>
+        <a class="btn" href="https://sage-compliance-assistant-138449082911.us-central1.run.app/" target="_blank" rel="noopener">Live app</a>
       </div>
 
       <div class="cs-chips">
-        <span>GPT-4o</span><span>LangGraph ReAct</span><span>Hybrid RAG (ChromaDB)</span>
-        <span>Prompt security</span><span>100% attack block</span><span>5 build phases</span>
+        <span>GPT-4o</span><span>LangGraph ReAct</span><span>ChromaDB</span><span>BM25</span>
+        <span>Hybrid RAG</span><span>Python</span><span>Streamlit</span><span>Google Cloud Run</span>
       </div>
     </section>
 
-    <div class="cs-cover">
-      <img src="../assets/projects/sage-hero.jpeg" alt="SAGE compliance assistant" />
-    </div>
+    <section class="cs-section" id="pipeline">
+      <p class="cs-label">Pipeline Architecture</p>
+      <h2>From policy PDF to cited answer</h2>
+      <p>Three distinct pipeline concerns: ingest-and-index, retrieve-and-reason, and output-with-guardrails. Each is independently replaceable — swap the vector store, change the LLM, or add a new guard layer without touching the others.</p>
 
-    <!-- ===== Overview ===== -->
-    <section class="cs-section" id="overview">
-      <div class="cs-reveal">
-        <p class="cs-label">Overview</p>
-        <h2>An enterprise compliance assistant you can actually trust.</h2>
-        <p>SAGE is an enterprise AI compliance assistant that reads a company&rsquo;s own policy documents and answers employee questions with grounded, cited answers, a risk level, and a confidence score. It detects conflicts between policies, refuses to be talked out of the rules, and blocks prompt-injection attacks before they reach the model. I led it as product manager on a 3-person team, scoping the product, owning the metrics, and driving it from a single prompt to a hardened, deployed system on Hugging Face Spaces.</p>
-        <p>The technical core is a <strong>LangGraph ReAct agent on GPT-4o</strong> reasoning over a <strong>ChromaDB hybrid-RAG</strong> index, fronted by an 8-layer prompt-security pipeline. It was built across five measured phases, reaching <strong>&ge;91% risk-classification accuracy</strong> and a <strong>100% prompt-attack block rate</strong>.</p>
-        <div class="cs-stats">
-          <div class="cs-stat"><b>&ge;91%</b><span>Risk-classification accuracy</span></div>
-          <div class="cs-stat"><b>100%</b><span>Prompt attacks blocked</span></div>
-          <div class="cs-stat"><b>5</b><span>Build phases, prompt to product</span></div>
-          <div class="cs-stat"><b>4</b><span>Agent tools, all grounded</span></div>
+      <div class="arch cs-reveal">
+        <div class="arch-row">
+          <div class="arch-node"><b>Policy PDF Documents</b><span>Company policies, HR handbooks, compliance frameworks</span></div>
         </div>
-        <p style="margin-top:0.8rem;"><a class="btn" href="sage-prd.html">See the full PRD</a></p>
-      </div>
-    </section>
-
-    <!-- ===== Problem ===== -->
-    <section class="cs-section narrow" id="problem">
-      <div class="cs-reveal">
-        <p class="cs-label">The problem</p>
-        <h2>Policy is dense, and getting it wrong is expensive.</h2>
-        <p>Employees misread long policy documents, rely on informal verbal guidance, and create real regulatory exposure. The existing options are both bad: route every question to the legal team (slow and expensive), or use a generic chatbot that confidently hallucinates policy details (dangerous).</p>
-        <p>SAGE sits in between: <strong>grounded in the actual policy text, automated, auditable, and secure.</strong> It answers a question like &ldquo;I saved customer data to my personal laptop, is that a violation?&rdquo; with a citation-backed answer a non-lawyer can act on.</p>
-      </div>
-    </section>
-
-    <!-- ===== Problem evidence ===== -->
-    <section class="cs-section" id="problem-evidence">
-      <div class="cs-reveal">
-        <p class="cs-label">Problem evidence</p>
-        <h2>The failure mode is a confident wrong answer.</h2>
-        <p>Across the build, the evidence kept pointing at the same thing: the dangerous case is not a missing answer, it is an authoritative-sounding wrong one. I treated that as the central design constraint, and the evaluation work bore it out.</p>
-        <div class="cs-cards">
-          <div class="cs-card">
-            <h3>Generic models guess</h3>
-            <p>A zero-shot generic model answered the evaluation set at only 52% accuracy. Half the time it produced a plausible but ungrounded policy reading, which reads as authoritative and is worse than abstaining.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Scenarios trigger many policies</h3>
-            <p>A single real situation often touches several policies at once. Conflicts between them go unnoticed until an incident, so an answer drawn from one section in isolation is quietly unsafe.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Adversarial input is real</h3>
-            <p>A large slice of the evaluation corpus was deliberately adversarial, false-fact injections and jailbreaks, because anyone who can talk a compliance bot out of its rules can manufacture a defensible-looking excuse.</p>
-          </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Chunk + Embed</b><span>512-token chunks · 64-token overlap · OpenAI text-embedding-ada-002</span></div>
         </div>
-        <div class="cs-callout">
-          <p class="cs-label">What the evidence demanded</p>
-          <p>If the core risk is a confident hallucination, then grounding, mandatory citations, conflict surfacing, and refusal are not features, they are the product. Every later design decision was measured against whether it closed the gap between a 52% guessing baseline and a sourced, auditable ruling.</p>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>Hybrid Retrieval</b><span>ChromaDB (dense vector) + BM25 (sparse keyword) &rarr; reranking</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>LangGraph ReAct Agent</b><span>Iterative retrieve-then-reason &middot; cross-document conflict detection</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Prompt Injection Shield</b><span>Preprocessing guard &mdash; 100% attack block rate</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node accent"><b>GPT-4o</b><span>Cited answer + risk level (Low / Medium / High)</span></div>
+        </div>
+        <div class="arch-row"><div class="arch-arrow">↓</div></div>
+        <div class="arch-row">
+          <div class="arch-node"><b>Streamlit UI</b><span>Answer with policy citations and source documents</span></div>
         </div>
       </div>
     </section>
 
-    <!-- ===== Target users & personas + JTBD ===== -->
-    <section class="cs-section" id="users">
-      <div class="cs-reveal">
-        <p class="cs-label">Target users, personas &amp; jobs to be done</p>
-        <h2>Three users, one trusted answer.</h2>
-        <p>SAGE serves three people around a single policy question. I wrote each persona to its job to be done, so the product is judged by whether it does that job, not by how clever the agent is.</p>
-        <div class="cs-cards">
-          <div class="cs-card">
-            <h3>The Compliance Reviewer</h3>
-            <p>Fields the same policy questions over and over and is the escalation point when an answer is unclear. Needs an auditable, citation-backed trail for every ruling.<span class="cs-tradeoff">JTBD: &ldquo;When an employee asks a policy question, help me resolve it correctly and defensibly without re-reading the whole manual.&rdquo;</span></p>
-          </div>
-          <div class="cs-card">
-            <h3>The Policy Owner</h3>
-            <p>Owns and maintains the policy documents, and cares that they are interpreted as written and that conflicts between policies surface early.<span class="cs-tradeoff">JTBD: &ldquo;When my policies are queried, make sure answers are grounded in the real text and tell me where two policies collide.&rdquo;</span></p>
-          </div>
-          <div class="cs-card">
-            <h3>The Employee</h3>
-            <p>Has a real situation and a yes-or-no question, and wants a safe answer in plain English without flagging themselves to legal for routine queries.<span class="cs-tradeoff">JTBD: &ldquo;When I&rsquo;m unsure if something is allowed, give me the actual rule, the risk level, and where it came from, so I can act.&rdquo;</span></p>
-          </div>
+    <section class="cs-section" id="stages">
+      <p class="cs-label">Stage Breakdown</p>
+      <h2>What happens at each step</h2>
+
+      <div class="cs-cards cs-reveal">
+        <div class="cs-card">
+          <h3>Ingest &amp; Index</h3>
+          <p>Policy PDFs are chunked at 512 tokens with 64-token overlap — overlap ensures no sentence is split across a chunk boundary. Each chunk is embedded with <strong>text-embedding-ada-002</strong> and stored in ChromaDB. A parallel BM25 index is built for sparse keyword retrieval. Both indexes are built once and updated incrementally when policies change.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Hybrid Retrieval</h3>
+          <p>User query triggers both retrieval paths: ChromaDB dense search (semantic similarity) and BM25 sparse search (keyword match). Results are merged and reranked using a cross-encoder before the top-k chunks are passed to the reasoning agent. Dense search misses exact policy numbers; BM25 catches them — the union beats either alone.</p>
+        </div>
+        <div class="cs-card">
+          <h3>LangGraph ReAct Reasoning</h3>
+          <p>A ReAct (Reason + Act) agent loop: the agent retrieves chunks, reasons about them, identifies if additional retrieval is needed (e.g., detecting a cross-referenced section), and iterates until it can synthesize a complete answer. This loop is what enables policy-conflict detection — a single-shot prompt can't compare multiple documents iteratively.</p>
+        </div>
+        <div class="cs-card">
+          <h3>Guardrails &amp; Output</h3>
+          <p>A preprocessing prompt-injection shield analyzes each user query before it reaches the retrieval stage. Injection attempts are detected and blocked with a 100% block rate on the test set. GPT-4o generates the final answer with explicit policy citations, a confidence level, and a risk label (Low/Medium/High) based on the retrieved policy language.</p>
         </div>
       </div>
     </section>
 
-    <!-- ===== Current user journey ===== -->
-    <section class="cs-section" id="current-journey">
-      <div class="cs-reveal">
-        <p class="cs-label">Current user journey</p>
-        <h2>How a policy question gets answered today.</h2>
-        <p>Before SAGE, an employee with a compliance question has two paths, and both are bad. I mapped the journey to find where trust and time leak out.</p>
-        <div class="agent-grid">
-          <div class="agent-card"><span class="agent-no">01</span><h3>Hits a question</h3><span class="agent-model">Real scenario</span><p>An employee runs into a real situation: remote-work eligibility, handling customer data, an expense edge case.</p></div>
-          <div class="agent-card"><span class="agent-no">02</span><h3>Searches the manual</h3><span class="agent-model">Dense text</span><p>They skim a long policy PDF, miss the relevant section, or misread how two rules interact.</p></div>
-          <div class="agent-card"><span class="agent-no">03</span><h3>Asks around</h3><span class="agent-model">Informal</span><p>They rely on a colleague&rsquo;s verbal interpretation, which spreads guidance nobody can audit later.</p></div>
-          <div class="agent-card"><span class="agent-no">04</span><h3>Escalates or guesses</h3><span class="agent-model">Slow or risky</span><p>They route the question to a slow, expensive legal team, or they guess and create regulatory exposure.</p></div>
-        </div>
-        <div class="cs-callout">
-          <p class="cs-label">The gap</p>
-          <p>There is no fast, safe, sourced middle option. Legal is accurate but slow and expensive; self-service is fast but ungrounded. SAGE is designed to occupy exactly that empty middle: a sourced answer in seconds that a non-lawyer can act on.</p>
-        </div>
+    <section class="cs-section narrow" id="decisions">
+      <p class="cs-label">Key Decisions</p>
+      <h2>Why it was built this way</h2>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 1</p>
+        <p><strong>Hybrid RAG (dense + sparse) over vector-only retrieval.</strong> Pure vector search is excellent for semantic similarity but fails on exact policy identifiers — a question about "Policy HR-204" won't match the policy document semantically if the embedding doesn't weight exact strings. BM25 catches these exact matches. The hybrid approach, with reranking, consistently outperforms either retrieval method in isolation on policy QA tasks.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 2</p>
+        <p><strong>LangGraph ReAct over single-shot prompting.</strong> Policy conflict detection requires comparing multiple documents iteratively — a single prompt with all retrieved chunks can't do this reliably. The ReAct loop lets the agent retrieve from one policy, identify a potential conflict, retrieve from a second policy, compare them explicitly, and then synthesize a final answer. This iterative structure produces measurably better accuracy on conflict-detection queries.</p>
+      </div>
+
+      <div class="cs-callout cs-reveal">
+        <p class="cs-label">Decision 3</p>
+        <p><strong>Prompt injection shield at preprocessing, not at the LLM layer.</strong> Relying on GPT-4o to refuse injection attempts is slower and more expensive than detecting them before the query reaches retrieval. Preprocessing detection runs a lightweight classifier on the raw user input — blocked queries never touch the vector index or the LLM, reducing cost and eliminating the risk of jailbreaks that bypass LLM-level refusals.</p>
       </div>
     </section>
 
-    <!-- ===== Competitive / market analysis ===== -->
-    <section class="cs-section" id="competitive">
-      <div class="cs-reveal">
-        <p class="cs-label">Competitive &amp; market analysis</p>
-        <h2>The alternatives all fail the trust test.</h2>
-        <p>The status quo for &ldquo;is this allowed?&rdquo; is a generic LLM chat, a manual legal review, or a keyword search of the policy file. Each is strong on one axis and broken on another. SAGE&rsquo;s position is the one that holds all three at once: grounded, fast, and auditable.</p>
-        <div class="cs-table-wrap">
-          <table class="cs-table">
-            <thead><tr><th>Approach</th><th>Speed</th><th>Grounded in real policy</th><th>Cited &amp; auditable</th><th>Resists manipulation</th><th>Where it breaks</th></tr></thead>
-            <tbody>
-              <tr><td>Generic LLM chat</td><td class="ok">Fast</td><td>No</td><td>No</td><td>No</td><td>Confidently hallucinates policy detail; no citations; talked out of rules easily</td></tr>
-              <tr><td>Manual compliance / legal review</td><td>Slow</td><td class="ok">Yes</td><td class="ok">Yes</td><td class="ok">Yes</td><td>Expensive and does not scale; every routine question consumes expert time</td></tr>
-              <tr><td>Keyword search of the policy file</td><td class="ok">Fast</td><td>Partial</td><td>Partial</td><td>n/a</td><td>Returns documents, not answers; misses conflicts and risk; user still interprets</td></tr>
-              <tr><td><strong>SAGE</strong></td><td class="ok">Fast</td><td class="ok">Yes</td><td class="ok">Yes</td><td class="ok">Yes</td><td>Depends on the quality of the uploaded corpus</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="chart-foot">The market gap is not &ldquo;an LLM that answers compliance questions.&rdquo; Generic chat already does that, badly. The gap is an assistant whose answers are grounded in the company&rsquo;s real text, cited, auditable, and hard to manipulate, which is the one combination none of the alternatives delivers.</p>
-      </div>
-    </section>
-
-    <!-- ===== Product vision ===== -->
-    <section class="cs-section" id="vision">
-      <div class="cs-reveal">
-        <p class="cs-label">Product vision</p>
-        <h2>Every employee, a sourced answer.</h2>
-        <div class="cs-callout">
-          <p class="cs-label">Vision</p>
-          <p>Any employee, at any company, can ask a plain-English compliance question and get back a correct, cited, risk-rated answer they can act on in seconds, while every ruling leaves a defensible audit trail and no attacker can talk the system out of its own rules.</p>
-        </div>
-        <p>The vision is portability and trust together. SAGE should never depend on a single hard-coded corpus: drop in any company&rsquo;s policies and a dynamic system prompt specializes the reasoning per organization type, so the same agent serves any policy set without code changes. Trust is the non-negotiable: the day SAGE confidently invents a policy is the day it is worse than no tool at all.</p>
-      </div>
-    </section>
-
-    <!-- ===== Product strategy & positioning ===== -->
-    <section class="cs-section" id="strategy">
-      <div class="cs-reveal">
-        <p class="cs-label">Product strategy &amp; positioning</p>
-        <h2>Win on trust, not on cleverness.</h2>
-        <p>The strategic bet is that in compliance, trust beats fluency. A more eloquent answer that might be wrong is a liability; a plainer answer that is grounded, cited, and refusable is the product. So I positioned SAGE deliberately against the alternatives rather than against other chatbots.</p>
-        <div class="cs-cards">
-          <div class="cs-card">
-            <h3>Positioning</h3>
-            <p>For compliance reviewers, policy owners, and employees who need a fast, safe answer, SAGE is the grounded compliance assistant that answers only from the company&rsquo;s real policy text, cites every claim, and refuses to be manipulated, unlike a generic chatbot that guesses or a legal review that does not scale.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Wedge</h3>
-            <p>Start where the pain is sharpest and the answer is checkable: routine, repeat policy questions that today bounce to legal. Grounding plus citations makes correctness verifiable, which is what earns the trust to expand scope.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Moat</h3>
-            <p>The defensible asset is the evaluation and security harness: a labelled golden set, deterministic graders, and a versioned 52-pattern defense. Anyone can wire an LLM to a PDF; the hard part is proving it is right and hard to fool.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Value proposition ===== -->
-    <section class="cs-section" id="value">
-      <div class="cs-reveal">
-        <p class="cs-label">Value proposition</p>
-        <h2>What each user gets.</h2>
-        <div class="cs-table-wrap">
-          <table class="cs-table">
-            <thead><tr><th>User</th><th>Pain today</th><th>What SAGE delivers</th></tr></thead>
-            <tbody>
-              <tr><td>Employee</td><td>Misreads dense policy, or waits on legal for a routine question</td><td>A plain-English answer with the actual rule, the cited section, a risk level, and a confidence score, in seconds</td></tr>
-              <tr><td>Compliance reviewer</td><td>Re-answers the same questions and cannot easily defend a past ruling</td><td>Routine questions deflected, and a logged, citation-backed trail for every answer</td></tr>
-              <tr><td>Policy owner</td><td>Documents are misread and policy conflicts surface only after an incident</td><td>Answers grounded in the real text and conflicts flagged before they cause harm</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="cs-callout">
-          <p class="cs-label">The one-line promise</p>
-          <p>A correct, cited, risk-rated answer a non-lawyer can act on, that abstains rather than guess and refuses to be talked out of the rules.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Goal & metrics ===== -->
-    <section class="cs-section" id="goal">
-      <div class="cs-reveal">
-        <p class="cs-label">Goal &amp; success metrics</p>
-        <h2>A trusted answer, not just an answer.</h2>
-        <div class="cs-callout">
-          <p class="cs-label">North Star metric &middot; TRR</p>
-          <p><strong>Trusted Resolution Rate (TRR)</strong>, the share of compliance questions SAGE resolves with a <em>correct, citation-grounded</em> answer the employee can act on without escalating to legal. It only counts if the answer is right, sourced to real policy text, and safe.</p>
-        </div>
-
-        <p>For a system whose whole value is trust, one number isn&rsquo;t enough, so TRR sits on a layered metric tree.</p>
-
-        <div class="metric-tree">
-          <div class="metric-col">
-            <p class="cs-label">North Star &amp; primary</p>
-            <ul>
-              <li><b>Risk-classification accuracy</b> <span>did it call the risk correctly</span></li>
-              <li><b>Citation groundedness</b> <span>every cited section is real</span></li>
-              <li><b>LLM-as-judge quality</b> <span>accuracy, clarity, completeness</span></li>
-              <li><b>Self-serve resolution</b> <span>answered without legal escalation</span></li>
-            </ul>
-          </div>
-          <div class="metric-col counter">
-            <p class="cs-label">Counter &middot; guardrail</p>
-            <ul>
-              <li><b>Hallucinated citations</b> a fabricated section destroys trust</li>
-              <li><b>Attack bypass rate</b> any injection that slips through</li>
-              <li><b>False-positive blocks</b> refusing a legitimate question</li>
-              <li><b>Vague fallback rate</b> &ldquo;consult your policy&rdquo; non-answers</li>
-            </ul>
-          </div>
-          <div class="metric-col qual">
-            <p class="cs-label">Qualitative &middot; signals</p>
-            <ul>
-              <li><b>Confidence</b> employees trust the answer enough to act</li>
-              <li><b>Auditability</b> every answer leaves a defensible trail</li>
-              <li><b>Transparency</b> reasoning and tensions are shown, not hidden</li>
-              <li><b>Portability</b> works on any company&rsquo;s uploaded policies</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Solution ===== -->
-    <section class="cs-section" id="solution">
-      <div class="cs-reveal">
-        <p class="cs-label">The solution</p>
-        <h2>Ask in plain English, get a grounded ruling.</h2>
-        <p>The same product in two voices: what the employee experiences, and how it actually works.</p>
-
-        <div class="dual-voice">
-          <div class="dv-card">
-            <p class="dv-tag">In plain language</p>
-            <h3>A compliance expert that has read every policy.</h3>
-            <p>An employee asks a normal question: &ldquo;I just started 45 days ago, am I eligible for remote work?&rdquo; SAGE reads the company&rsquo;s own uploaded policies and answers with the actual rule, the section it came from, a risk level, and a confidence score, plus any policy tension it spotted.</p>
-            <p>It remembers the conversation so follow-ups work, it refuses to be talked out of the rules, and it never invents a policy. Drop in any company&rsquo;s PDF or text policies and it adapts.</p>
-          </div>
-          <div class="dv-card tech">
-            <p class="dv-tag">Under the hood</p>
-            <h3>A hardened RAG agent with structured output.</h3>
-            <p>A <strong>LangGraph ReAct agent</strong> on <strong>GPT-4o</strong> reasons over a <strong>ChromaDB hybrid-RAG</strong> index (semantic plus keyword, re-ranked) of section-chunked policy text. Every query first passes a multi-layer <strong>prompt-security pipeline</strong>; only grounded, in-scope queries reach the model.</p>
-            <p>The agent calls tools to retrieve, cross-reference, detect conflicts, and assess risk, then returns structured output: <strong>Answer, Citations, Risk Level, Reasoning, Confidence</strong>. A dynamic system prompt specializes reasoning per organization type.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Build phases ===== -->
-    <section class="cs-section" id="phases">
-      <div class="cs-reveal">
-        <p class="cs-label">How it was built</p>
-        <h2>Five phases, from a prompt to a product.</h2>
-        <p>SAGE was built as the full lifecycle of an LLM application: prompting, then retrieval, then an agent, then production hardening, then adversarial security. Accuracy climbed at every phase.</p>
-        <div class="evo">
-          <div class="evo-step"><span class="evo-year">Phase 1</span><h4>System prompt design</h4><p>13 prompting techniques tested head to head; the best synthesized into a structured-output prompt. 52% to 85%.</p></div>
-          <div class="evo-step"><span class="evo-year">Phase 2</span><h4>Hardening + RAG</h4><p>Sensitivity analysis, a 57-case eval set, and a ChromaDB hybrid-retrieval pipeline. 87%.</p></div>
-          <div class="evo-step"><span class="evo-year">Phase 3</span><h4>Agent architecture</h4><p>A LangGraph ReAct agent with tools replaces the static prompt; LLM-as-judge scoring. 91%+ on hard cases.</p></div>
-          <div class="evo-step"><span class="evo-year">Phase 4</span><h4>Production</h4><p>Conversation memory, conflict detection, confidence scoring, audit logging, and a Streamlit app for 5 org types.</p></div>
-          <div class="evo-step now"><span class="evo-year">Phase 5</span><h4>Prompt security</h4><p>A 52-pattern, 8-layer defense across 9 attack families. 100% of attacks blocked.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Architecture ===== -->
-    <section class="cs-section" id="architecture">
-      <div class="cs-reveal">
-        <p class="cs-label">Architecture</p>
-        <h2>Every query runs a gauntlet before it reaches the model.</h2>
-        <p>An 8-layer pipeline sanitizes, screens, and grounds each query, then a tool-using agent reasons, and the response is verified and logged. Free-form generation never happens.</p>
-        <div class="arch">
-          <div class="arch-row">
-            <div class="arch-node"><b>L0 &middot; Sanitize</b><span>strip role tokens, cap length</span></div>
-            <div class="arch-node accent"><b>L1 &middot; Injection check</b><span>52 patterns, 9 families</span></div>
-            <div class="arch-node"><b>L2 &middot; Scope gate</b><span>reject non-policy topics</span></div>
-          </div>
-          <div class="arch-arrow">&darr;</div>
-          <div class="arch-row">
-            <div class="arch-node"><b>L3 &middot; Grounding</b><span>no-context fallback guard</span></div>
-            <div class="arch-node"><b>Query expansion</b><span>57 compliance synonyms</span></div>
-            <div class="arch-node accent"><b>Hybrid retrieval</b><span>0.6 semantic + 0.4 keyword</span></div>
-          </div>
-          <div class="arch-arrow">&darr;</div>
-          <div class="arch-row">
-            <div class="arch-node accent"><b>L4 &middot; ReAct agent</b><span>tool-grounded reasoning, GPT-4o</span></div>
-            <div class="arch-node"><b>L5 &middot; System prompt</b><span>identity lock in every call</span></div>
-          </div>
-          <div class="arch-arrow">&darr;</div>
-          <div class="arch-row">
-            <div class="arch-node"><b>L6 &middot; Citation verify</b><span>cross-check every section</span></div>
-            <div class="arch-node"><b>L7 &middot; Audit log</b><span>full query / risk / cite trail</span></div>
-            <div class="arch-node accent"><b>Structured response</b><span>answer, risk, confidence</span></div>
-          </div>
-        </div>
-
-        <h3>The agent reasons with four tools</h3>
-        <div class="agent-grid">
-          <div class="agent-card"><span class="agent-no">01</span><h3>search_policy</h3><span class="agent-model">Hybrid RAG</span><p>Retrieves the top re-ranked policy chunks for the scenario from ChromaDB.</p></div>
-          <div class="agent-card"><span class="agent-no">02</span><h3>check_cross_references</h3><span class="agent-model">Coverage</span><p>Identifies which policies a single scenario triggers, so nothing is answered in isolation.</p></div>
-          <div class="agent-card"><span class="agent-no">03</span><h3>detect_policy_conflicts</h3><span class="agent-model">Tension</span><p>Surfaces conflicting requirements (CF-001 to CF-005) before the final answer is written.</p></div>
-          <div class="agent-card"><span class="agent-no">04</span><h3>assess_risk</h3><span class="agent-model">Classify</span><p>Returns a High / Medium / Low risk level with a weighted severity score.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Prompt engineering & evaluation ===== -->
-    <section class="cs-section" id="evaluation">
-      <div class="cs-reveal">
-        <p class="cs-label">Prompt engineering &amp; evaluation</p>
-        <h2>Measured at every step, not assumed.</h2>
-        <p>Phase 1 ran <strong>13 prompting techniques</strong> on the same query so results were directly comparable, from zero-shot and chain-of-thought to ensembling, self-consistency, self-criticism, and meta-prompting. The winners were synthesized into the production prompt, then stress-tested against a structured evaluation set.</p>
-
-        <div class="chart-grid">
-          <div class="chart-card">
-            <h3>Accuracy climbed every phase</h3>
-            <p class="chart-sub">From a zero-shot baseline to a tool-using agent.</p>
-            <div class="barchart" style="--max:100;">
-              <div class="bar-row"><span class="bar-label">Zero-shot</span><span class="bar-track"><span class="bar-fill" style="width:52%"></span></span><span class="bar-val">52%</span></div>
-              <div class="bar-row"><span class="bar-label">P1 prompt</span><span class="bar-track"><span class="bar-fill" style="width:85%"></span></span><span class="bar-val">85%</span></div>
-              <div class="bar-row"><span class="bar-label">P2 + RAG</span><span class="bar-track"><span class="bar-fill" style="width:87%"></span></span><span class="bar-val">87%</span></div>
-              <div class="bar-row"><span class="bar-label">P3 agent</span><span class="bar-track"><span class="bar-fill" style="width:91%"></span></span><span class="bar-val">91%+</span></div>
-            </div>
-          </div>
-          <div class="chart-card">
-            <h3>A 57-case evaluation set</h3>
-            <p class="chart-sub">Each case has an expected risk level, triggered policies, and relevant sections.</p>
-            <div class="stackbar">
-              <div class="seg" style="width:14%;background:var(--accent);">8</div>
-              <div class="seg" style="width:14%;background:#6fbf73;">8</div>
-              <div class="seg" style="width:21%;background:#e0685f;">12</div>
-              <div class="seg c-other" style="width:51%;">29</div>
-            </div>
-            <div class="stack-legend">
-              <span><i style="background:var(--accent);"></i>Typical, single-policy lookups (8)</span>
-              <span><i style="background:#6fbf73;"></i>Edge, boundary conditions (8)</span>
-              <span><i style="background:#e0685f;"></i>Adversarial, false facts &amp; jailbreaks (12)</span>
-              <span><i class="c-other"></i>Extended, multi-policy &amp; data transfer (29)</span>
-            </div>
-          </div>
-        </div>
-        <p class="chart-foot">Phase 2 added hybrid retrieval (semantic plus keyword, re-ranked 0.6 / 0.4) and query expansion across 57 compliance synonyms, cutting prompt tokens by roughly 80% versus injecting the full corpus. A fine-tuning pass added about 30 percentage points of citation accuracy on held-out cases.</p>
-      </div>
-    </section>
-
-    <!-- ===== Feature prioritization ===== -->
-    <section class="cs-section" id="prioritization">
-      <div class="cs-reveal">
-        <p class="cs-label">Feature prioritization</p>
-        <h2>Trust before polish.</h2>
-        <p>I prioritized with one rule: anything that protects correctness ships before anything that makes the product nicer. A compliance assistant that is occasionally wrong but always confident is a liability, so grounding, citations, and refusal were treated as the floor, not as features to add later. The full requirement set and MoSCoW breakdown live in the PRD.</p>
-        <div class="cs-table-wrap">
-          <table class="cs-table">
-            <thead><tr><th>Priority</th><th>Capabilities</th><th>Why here</th></tr></thead>
-            <tbody>
-              <tr><td>Must (MVP)</td><td>Grounded QA over uploaded policy, citations on every answer, risk level + confidence, prompt-injection screening, abstain on no evidence</td><td>These are the trust floor; without them the product is unsafe at any accuracy</td></tr>
-              <tr><td>Should</td><td>Hybrid re-ranked retrieval, policy-conflict detection, LangGraph ReAct agent + tools, conversation memory, audit logging</td><td>Lift accuracy and auditability once the floor holds</td></tr>
-              <tr><td>Could</td><td>Dynamic per-org system prompt, 5 demo org types, LLM-as-judge scoring, confidence calibration</td><td>Reach and polish that depend on the core being correct first</td></tr>
-              <tr><td>Won&rsquo;t (v1)</td><td>Legal advice or binding decisions, editing the corpus, SSO or per-user accounts, multi-language answers</td><td>Out of scope for a trust-first v1</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p style="margin-top:0.8rem;"><a class="btn" href="sage-prd.html">See the full prioritization &amp; requirements in the PRD</a></p>
-      </div>
-    </section>
-
-    <!-- ===== MVP ===== -->
-    <section class="cs-section" id="mvp">
-      <div class="cs-reveal">
-        <p class="cs-label">MVP</p>
-        <h2>The smallest thing that earns trust.</h2>
-        <p>The MVP was not &ldquo;an LLM connected to a policy file.&rdquo; That is the easy 80% that fails the moment it hallucinates. The MVP was the smallest system that could answer a real scenario question and prove the answer was safe.</p>
-        <div class="cs-cards">
-          <div class="cs-card">
-            <h3>In the MVP</h3>
-            <p>Plain-English query, grounded answer from retrieved policy text, a real citation on every claim, a High/Medium/Low risk level with confidence, injection screening on every query, and a grounded abstain when no policy supports an answer.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Deliberately deferred</h3>
-            <p>Conflict detection, conversation memory, the full agent and tool set, dynamic per-org prompting, and the five demo organizations all came after the trust floor was shipping and evaluating cleanly.</p>
-          </div>
-        </div>
-        <div class="cs-callout">
-          <p class="cs-label">MVP success bar</p>
-          <p>The MVP had to clear measurable gates before anything else was added: citations resolve to real policy text, the system abstains on no-evidence cases, and injection attempts are screened out, all scored against a labelled evaluation set rather than asserted.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Roadmap ===== -->
-    <section class="cs-section" id="roadmap">
-      <div class="cs-reveal">
-        <p class="cs-label">Roadmap</p>
-        <h2>From a prompt to a hardened product, and beyond.</h2>
-        <p>The roadmap was the five build phases: each one shipped a measurable jump in capability or safety, and each was gated on the previous one holding. The forward-looking row is what I would do next in production.</p>
-        <div class="cs-table-wrap">
-          <table class="cs-table">
-            <thead><tr><th>Stage</th><th>Focus</th><th>Outcome</th></tr></thead>
-            <tbody>
-              <tr><td>Phase 1</td><td>System-prompt design; 13 techniques compared</td><td class="ok">52% to 85% accuracy</td></tr>
-              <tr><td>Phase 2</td><td>Hardening + ChromaDB hybrid RAG; a labelled eval set</td><td class="ok">87% accuracy</td></tr>
-              <tr><td>Phase 3</td><td>LangGraph ReAct agent with four tools; LLM-as-judge</td><td class="ok">91%+ on hard cases</td></tr>
-              <tr><td>Phase 4</td><td>Production: memory, conflict detection, confidence, audit log, 5 org types</td><td>Shipped on Hugging Face Spaces</td></tr>
-              <tr><td>Phase 5</td><td>Prompt security: 8-layer, 52-pattern defense across 9 attack families</td><td class="ok">100% attacks blocked</td></tr>
-              <tr><td>Next</td><td>TRR instrumentation, feedback-to-fine-tune loop, expanded org and defense libraries</td><td>Planned for production</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Key user flows ===== -->
-    <section class="cs-section" id="flows">
-      <div class="cs-reveal">
-        <p class="cs-label">Key user flows</p>
-        <h2>From a worried question to a grounded ruling.</h2>
-        <p>The core flow is the same for every user: ask, get screened, get grounded, get a ruling. The reviewer and policy owner read the same structured output from a different angle, the citations and the surfaced conflict.</p>
-        <div class="agent-grid">
-          <div class="agent-card"><span class="agent-no">01</span><h3>Ask</h3><span class="agent-model">Plain English</span><p>The employee asks a normal scenario question. No knowledge of policy section numbers required.</p></div>
-          <div class="agent-card"><span class="agent-no">02</span><h3>Screen</h3><span class="agent-model">Security gauntlet</span><p>The query is sanitized, injection-checked, and scope-gated before any model call.</p></div>
-          <div class="agent-card"><span class="agent-no">03</span><h3>Ground</h3><span class="agent-model">Hybrid retrieval</span><p>Relevant policy sections are retrieved and cross-referenced, and conflicts are detected.</p></div>
-          <div class="agent-card"><span class="agent-no">04</span><h3>Rule</h3><span class="agent-model">Structured output</span><p>The agent returns Answer, Citations, Risk Level, Reasoning, and Confidence, logged for audit.</p></div>
-        </div>
-        <h3>Representative flows</h3>
-        <ul>
-          <li><strong>Single-policy lookup:</strong> &ldquo;I started 45 days ago, am I eligible for remote work?&rdquo; resolves to the rule, the cited section, a risk level, and a confidence score.</li>
-          <li><strong>Multi-policy scenario:</strong> &ldquo;I saved customer data to my personal laptop, is that a violation?&rdquo; cross-references every triggered policy into one ruling with a High/Medium/Low risk level.</li>
-          <li><strong>Conflict surfacing:</strong> when remote-work and data-security rules collide, the tension is flagged and both sections cited before the answer is written.</li>
-          <li><strong>Follow-up conversation:</strong> memory lets the employee refine the scenario without restating it.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ===== Wireframes / prototype reference ===== -->
-    <section class="cs-section" id="prototype">
-      <div class="cs-reveal">
-        <p class="cs-label">Wireframes &amp; prototype reference</p>
-        <h2>The interface is the answer card.</h2>
-        <p>The product is intentionally one screen: a single question box and a structured answer card that shows its receipts. The design rule was that nothing the user needs to trust the answer is hidden behind a click.</p>
-        <div class="cs-cards">
-          <div class="cs-card">
-            <h3>The answer card</h3>
-            <p>The answer, the cited sections, a High/Medium/Low risk badge, the reasoning, and a confidence score are all visible at once. Verifiable citations are shown so the user can check the source, not just read the verdict.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Honest states</h3>
-            <p>A low-confidence answer is labelled as such, a policy conflict is surfaced rather than silently resolved, and an unsupported question returns a clear abstain instead of a confident guess.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Live prototype</h3>
-            <p>The working prototype is deployed on Hugging Face Spaces: load one of five demo organizations or upload your own policy set and ask. It is the interactive reference for these flows.</p>
-          </div>
-        </div>
-        <div class="cs-callout">
-          <p class="cs-label">Prototype reference</p>
-          <p>The deployed Hugging Face Space is the canonical prototype for SAGE. The full UX requirement set, the structured answer card, verifiable citations, surfaced tension, and honest uncertainty, is specified in the PRD. <a href="sage-prd.html">See the full PRD</a>.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Security ===== -->
-    <section class="cs-section" id="security">
-      <div class="cs-reveal">
-        <p class="cs-label">Adversarial robustness</p>
-        <h2>Built to be attacked, then proven against it.</h2>
-        <p>Phase 5 hardened SAGE against every known prompt-injection technique: persona overrides, instruction smuggling, prompt exfiltration, false attribution, hypothetical framing, and social-engineering authority pretexts. The defense expanded from 10 to <strong>52 patterns across 9 attack families</strong>, plus authority-claim resistance and org-mismatch detection baked into the prompts.</p>
-
-        <div class="chart-grid">
-          <div class="chart-card">
-            <h3>The security gauntlet</h3>
-            <p class="chart-sub">Attacks are caught early; legitimate queries pass through.</p>
-            <div class="funnel">
-              <div class="funnel-row"><span class="funnel-label">Injection patterns watched</span><div class="funnel-bar" style="width:100%;">52 patterns</div></div>
-              <div class="funnel-row"><span class="funnel-label">Attack vectors tested</span><div class="funnel-bar" style="width:72%;">37 attacks</div></div>
-              <div class="funnel-row"><span class="funnel-label">Attacks blocked</span><div class="funnel-bar mid" style="width:72%;">37 / 37</div></div>
-              <div class="funnel-row"><span class="funnel-label">Attacks that got through</span><div class="funnel-bar end" style="width:16%;">0</div></div>
-            </div>
-          </div>
-          <div class="chart-card">
-            <h3>Verified results</h3>
-            <p class="chart-sub">62-case security suite plus live adversarial rounds.</p>
-            <div class="scorecard">
-              <div class="score-item"><b>100%</b><span>attacks blocked (37 / 37)</span></div>
-              <div class="score-item"><b>100%</b><span>legit queries passed (25 / 25)</span></div>
-              <div class="score-item"><b>0</b><span>false negatives</span></div>
-              <div class="score-item"><b>9 / 9</b><span>live adversarial rounds passed</span></div>
-              <div class="score-item"><b>8</b><span>defense layers (L0 to L7)</span></div>
-              <div class="score-item"><b>9</b><span>attack families covered</span></div>
-            </div>
-          </div>
-        </div>
-        <p class="chart-foot">The one false positive (an injection flag on &ldquo;what are your system rules for remote employees?&rdquo;) was found and fixed with a word-boundary lookahead, so legitimate questions about policy rules pass while exfiltration attempts do not.</p>
-      </div>
-    </section>
-
-    <!-- ===== Results / outcome ===== -->
     <section class="cs-section" id="results">
-      <div class="cs-reveal">
-        <p class="cs-label">Outcome &amp; what&rsquo;s next</p>
-        <h2>A deployed, auditable, hard-to-fool compliance agent.</h2>
-        <p>SAGE shipped as a working product on Hugging Face Spaces: load one of five demo organizations or upload your own policies, and ask. It is the full arc of an AI product, from prompt experiment to a measurable, secured, deployed system.</p>
-        <div class="cs-stats">
-          <div class="cs-stat"><b>&ge;91%</b><span>Risk-classification accuracy</span></div>
-          <div class="cs-stat"><b>100%</b><span>Citation groundedness</span></div>
-          <div class="cs-stat"><b>82/100</b><span>Average confidence score</span></div>
-          <div class="cs-stat"><b>&ge;8.5/10</b><span>LLM-as-judge quality</span></div>
-        </div>
-        <div class="cs-stats" style="margin-top:0.8rem;">
-          <div class="cs-stat"><b>13</b><span>Prompting techniques compared</span></div>
-          <div class="cs-stat"><b>5</b><span>Org types supported</span></div>
-          <div class="cs-stat"><b>5/5</b><span>Policy-conflict rules</span></div>
-          <div class="cs-stat"><b>28</b><span>Unit tests passing</span></div>
-        </div>
-        <h3>What I would do next</h3>
-        <ul>
-          <li>Instrument TRR in production: track self-serve resolution and legal-escalation rate against live employee questions.</li>
-          <li>Add a feedback-to-fine-tune loop so low-confidence answers become new evaluation cases.</li>
-          <li>Expand the org-type library and run a red-team program on every new policy corpus before launch.</li>
-        </ul>
+      <p class="cs-label">Results</p>
+      <h2>What came out</h2>
+
+      <div class="cs-stats cs-reveal">
+        <div class="cs-stat"><b>&ge;91%</b><span>Answer accuracy on policy QA</span></div>
+        <div class="cs-stat"><b>100%</b><span>Prompt injection block rate</span></div>
+        <div class="cs-stat"><b>Hybrid RAG</b><span>Dense + sparse + reranking</span></div>
+        <div class="cs-stat"><b>ReAct loop</b><span>Cross-document conflict detection</span></div>
+        <div class="cs-stat"><b>Cloud Run</b><span>Deployed, publicly accessible</span></div>
       </div>
     </section>
-
-    <!-- ===== Risks & mitigations ===== -->
-    <section class="cs-section" id="risks">
-      <div class="cs-reveal">
-        <p class="cs-label">Risks &amp; mitigations</p>
-        <h2>What could go wrong, and how I held it.</h2>
-        <p>For a trust product, the risks are the design. Each one has a mitigation that is a real, evaluated part of the system, not a promise.</p>
-        <div class="cs-table-wrap">
-          <table class="cs-table">
-            <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
-            <tbody>
-              <tr><td>Hallucinated policy or citations</td><td>Answer only from retrieved text, verify every cited section against the corpus, and abstain on no evidence; citations are mandatory on every claim.</td></tr>
-              <tr><td>Prompt-injection bypass</td><td>An 8-layer, 52-pattern defense across 9 attack families, with identity lock and authority-claim resistance; measured at a 100% block rate.</td></tr>
-              <tr><td>Over-blocking legitimate queries</td><td>Track false-positive blocks; the word-boundary fix on the &ldquo;system rules&rdquo; case is the pattern for tightening rules without rejecting valid questions.</td></tr>
-              <tr><td>Missed policy conflicts</td><td>A dedicated conflict-detection tool runs before the final answer, and cross-referencing covers multi-policy scenarios.</td></tr>
-              <tr><td>Poor retrieval on a new corpus</td><td>Hybrid retrieval plus query expansion; recall@k and precision@k measured against expected sections before launch.</td></tr>
-              <tr><td>Over-reliance on the answer</td><td>The human stays in control; confidence and reasoning are shown and no decision is binding.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Learnings / retrospective ===== -->
-    <section class="cs-section" id="learnings">
-      <div class="cs-reveal">
-        <p class="cs-label">Learnings &amp; retrospective</p>
-        <h2>What I would carry into the next AI product.</h2>
-        <div class="cs-cards">
-          <div class="cs-card">
-            <h3>Evaluation is the product spec</h3>
-            <p>The labelled golden set, with expected risk, triggered policies, and sections, did more to shape SAGE than any feature decision. Writing the eval first turned vague goals like &ldquo;be trustworthy&rdquo; into release gates I could enforce.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Abstain is a feature</h3>
-            <p>The most important thing the system does is sometimes refuse to answer. Treating a grounded abstain as a first-class, scored behavior, not a failure, was the decision that made SAGE safe to ship.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Security is a standing job</h3>
-            <p>The defense grew from 10 to 52 patterns because adversaries adapt. Red-teaming as a repeated, versioned part of evaluation, rather than a one-off check, is the only way the 100% block rate stays meaningful.</p>
-          </div>
-          <div class="cs-card">
-            <h3>Prompts are product artifacts</h3>
-            <p>Treating each prompt and defense version as a tracked, re-scored artifact caught changes that helped one case but hurt overall accuracy. I would version prompts like code from day one on any future LLM product.</p>
-          </div>
-        </div>
-        <div class="cs-callout">
-          <p class="cs-label">If I started over</p>
-          <p>I would instrument the North Star, Trusted Resolution Rate, against live questions from the very first phase rather than at the end, so the in-production signal could steer prioritization instead of offline accuracy alone. The build proved the system is correct and hard to fool; the next frontier is proving it resolves real questions for real employees.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== PRD download ===== -->
-    <section class="cs-section" id="prd">
-      <div class="cs-reveal">
-        <p class="cs-label">Product requirements</p>
-        <h2>The PRD, the way I actually wrote it.</h2>
-        <p>The complete AI-product requirement set behind SAGE: problem and evidence, personas and jobs to be done, goals and success metrics, functional requirements, AI behavior, the data and retrieval contract, model and prompt strategy, the evaluation framework, and the prompt-injection security work that hit a 100% block rate.</p>
-        <div class="prd-download">
-          <div>
-            <b>SAGE, End-to-End Product Requirements</b>
-            <span>The full AI-PM document: metrics, personas, requirements, AI behavior, data &amp; retrieval, evaluation rubric, security, risks, and rollout.</span>
-          </div>
-          <a class="btn btn-primary" href="sage-prd.html">Read / download the PRD (PDF)</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Pager ===== -->
-    <nav class="cs-pager">
-      <a href="inclusived.html"><span>Previous project</span><b>&larr; InclusivEd</b></a>
-      <a href="student-housing.html"><span>Next project</span><b>Student Housing Platform &rarr;</b></a>
-    </nav>
   </main>
 
-  <!-- ===== Footer ===== -->
-    <footer class="site-footer" id="contact">
+  <footer class="site-footer">
     <div class="footer-row">
       <span class="footer-name">Dhanvardini Rajendran</span>
       <nav class="footer-links" aria-label="Contact">
@@ -694,6 +180,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-  <script src="../js/project-page.js"></script>
+  <script src="../js/main.js"></script>
 </body>
 </html>

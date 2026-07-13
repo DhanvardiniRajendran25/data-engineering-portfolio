@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <title>Projects · Dhanvardini Rajendran</title>
-  <meta name="description" content="Thirty product case studies spanning the full PM lifecycle: AI builds, UX, growth, supply chain, operations, and org design." />
+  <meta name="description" content="Ten data engineering projects spanning Medallion pipelines, cloud warehousing, AI systems, and full-stack data platforms." />
   <meta property="og:title" content="Projects · Dhanvardini Rajendran" />
-  <meta property="og:description" content="Thirty product case studies spanning the full PM lifecycle: AI builds, UX, growth, supply chain, operations, and org design." />
+  <meta property="og:description" content="Ten data engineering projects spanning Medallion pipelines, cloud warehousing, AI systems, and full-stack data platforms." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://dhanvardinirajendran25.github.io/assets/headshot.webp" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -52,378 +52,224 @@
   </header>
 
   <main>
-<section class="projects has-anim-bg" id="projects">
+    <section class="projects has-anim-bg" id="projects">
       <div class="anim-bg" data-bg="nodes" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
       <div class="section-head reveal">
         <p class="eyebrow">Projects</p>
-        <h1>Evidence I can solve hard problems.</h1>
-        <p class="lede">Five flagships that together span the product lifecycle, from discovery and strategy through design, build, evaluation, and governance. Then everything else below, grouped so you can find what matters to you.</p>
+        <h1>Built on real data, at real scale.</h1>
+        <p class="lede">Ten end-to-end data engineering projects — Medallion pipelines, cloud warehouses, AI data systems, and full-stack data platforms. Each one has a pipeline diagram and architecture breakdown.</p>
       </div>
 
-      <!-- Featured -->
-      <div class="featured-projects">
-        <article class="fproject-card reveal clickable" data-proj="podcastiq">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/podcastiq-hero.jpeg" alt="PodcastIQ" loading="lazy"></div>
-          <div class="fproject-content">
-            <span class="fproject-tag">Build &amp; Evaluation</span>
-            <h3><a class="card-title-link" href="projects/podcastiq.html">PodcastIQ</a></h3>
-            <p class="fproject-desc">Agentic semantic search over 500 podcasts: a 9-agent LangGraph and Snowflake Cortex system with a temporal knowledge graph and hybrid fact-checking.</p>
-            <div class="fproject-metrics"><span>95.8% router accuracy</span><span>BERTScore 0.774</span><span>$0.0012 / query</span><span>9 agents</span></div>
-            <div class="fproject-links"><a href="https://github.com/Aadarsh-Ravi31/PodcastIQ" target="_blank" rel="noopener">GitHub</a></div>
-            <span class="fproject-cue">View case study &rarr;</span>
-          </div>
-        </article>
-
-        <article class="fproject-card reveal clickable" data-proj="courtvision">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/courtvision-hero.jpeg" alt="CourtVision AI" loading="lazy"></div>
-          <div class="fproject-content">
-            <span class="fproject-tag">Discovery &amp; 0 to 1</span>
-            <h3><a class="card-title-link" href="projects/courtvision.html">CourtVision AI</a></h3>
-            <p class="fproject-desc">Natural-language basketball scouting and real-time game simulation. A 3-agent system on Gemini 2.5 Flash, built at the Google Frontiers Hackathon.</p>
-            <div class="fproject-metrics"><span>3 agents</span><span>Gemini 2.5</span><span>Google Search grounding</span><span>Cloud Run</span></div>
-            <div class="fproject-links"><a href="https://github.com/DhanvardiniRajendran25/CourtVisionAI" target="_blank" rel="noopener">GitHub</a></div>
-            <span class="fproject-cue">View case study &rarr;</span>
-          </div>
-        </article>
-
-        <article class="fproject-card reveal clickable" data-proj="apple-heart-id">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/apple-heart-id-hero.jpeg" alt="Apple Heart ID" loading="lazy"></div>
-          <div class="fproject-content">
-            <span class="fproject-tag">Vision &amp; Strategy</span>
-            <h3><a class="card-title-link" href="projects/apple-heart-id.html">Apple Heart ID</a></h3>
-            <p class="fproject-desc">Product strategy for continuous ECG heart-signature authentication on Apple Watch, designed for accessibility and security.</p>
-            <div class="fproject-metrics"><span>$178.9M TAM</span><span>FAR / FRR requirements</span><span>MoSCoW MVP</span></div>
-            <span class="fproject-cue">View case study &rarr;</span>
-          </div>
-        </article>
-
-        <article class="fproject-card reveal clickable" data-proj="inclusived">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/inclusived-hero.jpeg" alt="InclusivEd" loading="lazy"></div>
-          <div class="fproject-content">
-            <span class="fproject-tag">Research &amp; UX</span>
-            <h3><a class="card-title-link" href="projects/inclusived.html">InclusivEd</a></h3>
-            <p class="fproject-desc">A cognitive-accessibility redesign for Coursera, built for the 20% of learners who are neurodivergent and the 88% who never finish.</p>
-            <div class="fproject-metrics"><span>3 personas</span><span>Empathy &amp; affinity mapping</span><span>Function-based IA</span><span>SWOT + MoSCoW</span></div>
-            <span class="fproject-cue">View case study &rarr;</span>
-          </div>
-        </article>
-
-        <article class="fproject-card reveal clickable" data-proj="sage">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/sage-hero.jpeg" alt="SAGE" loading="lazy"></div>
-          <div class="fproject-content">
-            <span class="fproject-tag">Delivery &amp; Governance</span>
-            <h3><a class="card-title-link" href="projects/sage.html">SAGE</a></h3>
-            <p class="fproject-desc">An enterprise AI compliance assistant: grounded, cited answers over company policy, with policy-conflict detection and a hardened prompt-security pipeline.</p>
-            <div class="fproject-metrics"><span>GPT-4o + LangGraph</span><span>100% attack block</span><span>&ge;91% accuracy</span><span>5 build phases</span></div>
-            <div class="fproject-links"><a href="https://sage-compliance-assistant-138449082911.us-central1.run.app/" target="_blank" rel="noopener">Live app</a></div>
-            <span class="fproject-cue">View case study &rarr;</span>
-          </div>
-        </article>
-      </div>
-
-      <!-- All projects -->
-      <h3 class="proj-all-label reveal">All projects</h3>
       <div class="proj-filters reveal" id="projFilters">
-        <button class="pfilter is-active" data-filter="all" type="button">All <span class="pf-count">30</span></button>
-        <button class="pfilter" data-filter="ai" type="button">AI &amp; Agentic <span class="pf-count">4</span></button>
-        <button class="pfilter" data-filter="ux" type="button">UX Design &amp; Testing <span class="pf-count">4</span></button>
-        <button class="pfilter" data-filter="build" type="button">Product Builds &amp; Community <span class="pf-count">4</span></button>
-        <button class="pfilter" data-filter="growth" type="button">Growth &amp; Measurement <span class="pf-count">5</span></button>
-        <button class="pfilter" data-filter="compete" type="button">Competitive Strategy <span class="pf-count">2</span></button>
-        <button class="pfilter" data-filter="supply" type="button">Supply Chain &amp; Resilience <span class="pf-count">4</span></button>
-        <button class="pfilter" data-filter="ops" type="button">Operations &amp; Manufacturing <span class="pf-count">4</span></button>
-        <button class="pfilter" data-filter="org" type="button">Org Design &amp; Agile <span class="pf-count">3</span></button>
+        <button class="pfilter is-active" data-filter="all" type="button">All <span class="pf-count">10</span></button>
+        <button class="pfilter" data-filter="pipeline" type="button">Pipeline &amp; ETL <span class="pf-count">4</span></button>
+        <button class="pfilter" data-filter="ai" type="button">AI &amp; Data Systems <span class="pf-count">4</span></button>
+        <button class="pfilter" data-filter="ml" type="button">Analytics &amp; ML <span class="pf-count">1</span></button>
+        <button class="pfilter" data-filter="fullstack" type="button">Full-Stack Data <span class="pf-count">1</span></button>
       </div>
 
       <div class="proj-grid" id="projGrid">
-        <!-- AI & Agentic (4) -->
-        <article class="proj-card clickable" data-cat="ai" data-proj="podcastiq">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/podcastiq-hero.jpeg" alt="PodcastIQ" loading="lazy"></div>
+
+        <!-- Pipeline & ETL (4) -->
+        <article class="proj-card reveal" data-cat="pipeline">
+          <a href="projects/seattle-pet-etl.html" class="proj-thumb" aria-label="Seattle Pet Licenses ETL case study">
+            <img src="assets/projects/seattle-pet-etl-hero.jpg" alt="Seattle Pet Licenses ETL pipeline" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">AI &amp; Agentic</span>
-            <h4><a class="card-title-link" href="projects/podcastiq.html">PodcastIQ</a></h4>
-            <p>9-agent semantic search over 500 podcasts with a temporal knowledge graph and fact-checking.</p>
-            <a href="https://github.com/Aadarsh-Ravi31/PodcastIQ" target="_blank" rel="noopener">GitHub</a>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ai" data-proj="courtvision">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/courtvision-hero.jpeg" alt="CourtVision AI" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">AI &amp; Agentic</span>
-            <h4><a class="card-title-link" href="projects/courtvision.html">CourtVision AI</a></h4>
-            <p>3-agent basketball scouting and live game simulation on Gemini 2.5 Flash.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ai" data-proj="apple-heart-id">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/apple-heart-id-hero.jpeg" alt="Apple Heart ID" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">AI &amp; Agentic</span>
-            <h4><a class="card-title-link" href="projects/apple-heart-id.html">Apple Heart ID</a></h4>
-            <p>Product strategy for ECG heart-signature authentication on Apple Watch.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ai" data-proj="sage">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/sage-hero.jpeg" alt="SAGE" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">AI &amp; Agentic</span>
-            <h4><a class="card-title-link" href="projects/sage.html">SAGE</a></h4>
-            <p>An enterprise AI compliance assistant with grounded answers, conflict detection, and a hardened prompt-security pipeline.</p>
+            <span class="proj-cat">Pipeline &amp; ETL</span>
+            <h4>Seattle Pet Licenses ETL</h4>
+            <p>Medallion pipeline moving 320K+ pet records from Seattle Open Data to a Snowflake star schema via Azure Data Factory. Bronze → Silver → Gold with idempotent MERGE logic and surrogate keys.</p>
+            <div class="chips">
+              <span>Azure Data Factory</span><span>Azure Blob</span><span>Snowflake</span><span>Star Schema</span><span>SCD</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/seattle-pet-etl.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/DhanvardiniRajendran25/Seattle_Pet_Licenses_ETL_Pipeline" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
 
-        <!-- Product Builds & Community (4) -->
-        <article class="proj-card clickable" data-cat="build" data-proj="student-housing">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/student_housing_platform_card_hero.webp" alt="Student Housing Platform" loading="lazy"></div>
+        <article class="proj-card reveal" data-cat="pipeline">
+          <a href="projects/nypd-crime.html" class="proj-thumb" aria-label="NYPD Crime Analytics Pipeline case study">
+            <img src="assets/projects/nypd-crime-hero.jpg" alt="NYC Crime Data Analytics Pipeline" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">Product Builds</span>
-            <h4><a class="card-title-link" href="projects/student-housing.html">Student Housing Platform</a></h4>
-            <p>Full product cycle fixing the student housing search; 75% faster search across 7 shipped features.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="build" data-proj="husky-happs">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/husky_happs_card_hero.webp" alt="Husky Happs" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Product Builds</span>
-            <h4><a class="card-title-link" href="projects/husky-happs.html">Husky Happs</a></h4>
-            <p>Campus events app aggregating every university and club event for undergrad and grad students.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="build" data-proj="recruiter-app">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/recruiter_outreach_pipeline_card_hero.webp" alt="Recruiter Outreach App" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Product Builds</span>
-            <h4><a class="card-title-link" href="projects/recruiter-app.html">Recruiter Outreach App</a></h4>
-            <p>A local app that runs an entire recruiter email outreach pipeline end to end.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="build" data-proj="inclusived">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/inclusived-hero.jpeg" alt="InclusivEd" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Product Builds</span>
-            <h4><a class="card-title-link" href="projects/inclusived.html">InclusivEd</a></h4>
-            <p>A cognitive-accessibility redesign for Coursera, built for neurodivergent learners.</p>
+            <span class="proj-cat">Pipeline &amp; ETL</span>
+            <h4>NYPD Crime Analytics Pipeline</h4>
+            <p>End-to-end dimensional model for NYPD arrest data — profiling with ydata, cleaning in Alteryx, SCD Type 2 in Snowflake, and dashboards in Power BI and Tableau.</p>
+            <div class="chips">
+              <span>Alteryx</span><span>ADF</span><span>Snowflake</span><span>SCD Type 2</span><span>Power BI</span><span>Tableau</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/nypd-crime.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/DhanvardiniRajendran25/End_to_End_NYPD_Crime_Arrest_Data_Engineering_Pipeline" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
 
-        <!-- UX Design & Testing (4) -->
-        <article class="proj-card clickable" data-cat="ux" data-proj="lyft">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/lyft_redesign_card_hero.webp" alt="Lyft Redesign" loading="lazy"></div>
+        <article class="proj-card reveal" data-cat="pipeline">
+          <a href="projects/imdb-analytics.html" class="proj-thumb" aria-label="IMDb Film Analytics Pipeline case study">
+            <img src="assets/projects/imdb-analytics-hero.jpg" alt="IMDb Film Analytics Pipeline" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">UX Design</span>
-            <h4><a class="card-title-link" href="projects/lyft.html">Lyft Rider Redesign</a></h4>
-            <p>Rebuilding the rider app on a pyramid of needs: upfront fares, visible safety, and proactive support.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ux" data-proj="hm">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/hm_ecommerce_flowmap_card_hero.webp" alt="H&amp;M" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">UX Design</span>
-            <h4><a class="card-title-link" href="projects/hm.html">H&amp;M Shopping App</a></h4>
-            <p>An end-to-end mobile commerce flow: shopping, checkout, auth, order tracking, and every error state.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ux" data-proj="evenza">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/evenza_portfolio_card_hero_teal.webp" alt="Evenza" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">UX Design</span>
-            <h4><a class="card-title-link" href="projects/evenza.html">Evenza</a></h4>
-            <p>A hyperlocal event discovery and ticketing app: what is happening near me, tonight, and walkable.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ux" data-proj="tripmate">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/tripmate_portfolio_card_hero.webp" alt="TripMate" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">UX Design</span>
-            <h4><a class="card-title-link" href="projects/tripmate.html">TripMate</a></h4>
-            <p>One travel super-app unifying transport, stays, dining, and activities so groups plan less and experience more.</p>
+            <span class="proj-cat">Pipeline &amp; ETL</span>
+            <h4>IMDb Film Analytics Pipeline</h4>
+            <p>ADF-orchestrated ingestion of 7 IMDb TSV datasets (91M+ rows in title.principals) into a Snowflake analytics layer, with parallel dataset loads and Power BI dashboards.</p>
+            <div class="chips">
+              <span>Azure Data Factory</span><span>Snowflake</span><span>Python</span><span>Alteryx</span><span>Power BI</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/imdb-analytics.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/DhanvardiniRajendran25/IMDb_Analytics_FullStack_Data_Pipeline_And_Dashboarding" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
 
-        <!-- Growth & Measurement (5) -->
-        <article class="proj-card clickable" data-cat="growth" data-proj="netflix">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/netflix_gaming_gambit_portfolio_card_hero.webp" alt="Netflix Gaming Gambit" loading="lazy"></div>
+        <article class="proj-card reveal" data-cat="pipeline">
+          <a href="projects/food-inspection.html" class="proj-thumb" aria-label="Multi-City Food Inspection Platform case study">
+            <img src="assets/projects/food-inspection-hero.jpg" alt="Multi-City Food Inspection Platform" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">Growth &amp; Measurement</span>
-            <h4><a class="card-title-link" href="projects/netflix.html">Netflix's Gaming Gambit</a></h4>
-            <p>Visionary expansion or strategic misalignment? Diagnosing Netflix's 2021 move into gaming to fight churn.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="growth" data-proj="spotify">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/spotify_pivot_portfolio_card_hero.webp" alt="Spotify Podcast Pivot" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Growth &amp; Measurement</span>
-            <h4><a class="card-title-link" href="projects/spotify.html">Spotify's Podcast Pivot</a></h4>
-            <p>A billion-dollar bet to escape the 70% label margin trap, judged on a Weekly Intentional Listening north star.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="growth" data-proj="mbta">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/mbta_student_pass_portfolio_card_hero_detailed.webp" alt="MBTA Student Pass" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Growth &amp; Measurement</span>
-            <h4><a class="card-title-link" href="projects/mbta.html">MBTA Student Pass</a></h4>
-            <p>A flexible transit pass for 250k+ Boston students, built around co-op pauses and pay-as-you-ride capping.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="growth" data-proj="salesforce">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/salesforce_activity_value_card.webp" alt="Salesforce CRM Metrics" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Growth &amp; Measurement</span>
-            <h4><a class="card-title-link" href="projects/salesforce.html">Salesforce CRM Metrics</a></h4>
-            <p>Do CRM activity metrics measure value or just visible effort? A diagnosis and a redesigned measurement framework.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="growth" data-proj="twitter">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/twitter_activity_value_gap_portfolio_card.webp" alt="Twitter activity vs value" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Growth &amp; Measurement</span>
-            <h4><a class="card-title-link" href="projects/twitter.html">Twitter's Engagement Trap</a></h4>
-            <p>When engagement is not enough: how vanity metrics and a uniform Agile model crowded out trust and safety.</p>
+            <span class="proj-cat">Pipeline &amp; ETL</span>
+            <h4>Multi-City Food Inspection Platform</h4>
+            <p>Lakehouse pipeline unifying Chicago and Dallas inspection records. PySpark on Databricks for city-specific transformations, Snowflake Dynamic Tables for auto-refreshing Gold, Tableau for BI.</p>
+            <div class="chips">
+              <span>Azure Databricks</span><span>PySpark</span><span>Snowflake Dynamic Tables</span><span>Azure Data Lake</span><span>Tableau</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/food-inspection.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/DhanvardiniRajendran25/Public_Health_Compliance_Food_Inspection_Analytics_Platform" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
 
-        <!-- Competitive Strategy & Disruption (2) -->
-        <article class="proj-card clickable" data-cat="compete" data-proj="adobe-figma">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/adobe_figma_crisis_portfolio_card_hero.webp" alt="Adobe and Figma" loading="lazy"></div>
+        <!-- AI & Data Systems (4) -->
+        <article class="proj-card reveal" data-cat="ai">
+          <a href="projects/podcastiq.html" class="proj-thumb" aria-label="PodcastIQ case study">
+            <img src="assets/projects/podcastiq-hero.jpeg" alt="PodcastIQ cinematic AI knowledge graph visualization" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">Competitive Strategy</span>
-            <h4><a class="card-title-link" href="projects/adobe-figma.html">Adobe &times; Figma</a></h4>
-            <p>After the failed $20B acquisition and $1B breakup fee, how Adobe wins back collaboration-first design.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="compete" data-proj="zara">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/zara_inditex_speed_vs_circularity_portfolio_card_hero.webp" alt="Zara speed versus circularity" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Competitive Strategy</span>
-            <h4><a class="card-title-link" href="projects/zara.html">Zara: Speed vs Circularity</a></h4>
-            <p>The 2-week supply chain that makes Zara fast (85% full-price) is now hostile to the circular flows it must adopt.</p>
-          </div>
-        </article>
-
-        <!-- Supply Chain & Resilience (4) -->
-        <article class="proj-card clickable" data-cat="supply" data-proj="toyota">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/toyota_semiconductor_resilience_portfolio_card_hero.webp" alt="Toyota Semiconductor Resilience" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Supply Chain &amp; Resilience</span>
-            <h4><a class="card-title-link" href="projects/toyota.html">Toyota Semiconductor Resilience</a></h4>
-            <p>How Toyota evolved JIT into predictive resilience and held ~90% of production through the chip shortage.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="supply" data-proj="ikea">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/ikea_red_sea_disruption_portfolio_card_hero.webp" alt="IKEA Red Sea Disruption" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Supply Chain &amp; Resilience</span>
-            <h4><a class="card-title-link" href="projects/ikea.html">IKEA Red Sea Disruption</a></h4>
-            <p>Price as a promise, disruption as a test: why holding prices through a 3-4x freight spike was luck, not resilience.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="supply" data-proj="target">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/target_inventory_collapse_portfolio_card_hero.webp" alt="Target Inventory Collapse" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Supply Chain &amp; Resilience</span>
-            <h4><a class="card-title-link" href="projects/target.html">Target Inventory Collapse</a></h4>
-            <p>Why the 2022 collapse (op margin to 1.2%) was structurally inevitable, not a forecasting miss.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="supply" data-proj="glp1">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/glp1_demand_supply_gap_portfolio_card.webp" alt="GLP-1 demand-supply gap" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Supply Chain &amp; Resilience</span>
-            <h4><a class="card-title-link" href="projects/glp1.html">GLP-1: When Supply Is the Product</a></h4>
-            <p>Ozempic and Wegovy as continuity products: a 442% demand surge against a supply chain built for steady state.</p>
+            <span class="proj-cat">AI &amp; Data Systems</span>
+            <h4>PodcastIQ</h4>
+            <p>9-agent LangGraph system with a 4-layer Snowflake knowledge base and a Neo4j temporal graph (10,610 nodes, 27,807 edges) for semantic search over 500 podcasts with hybrid fact-checking.</p>
+            <div class="chips">
+              <span>Snowflake Cortex</span><span>LangGraph</span><span>Neo4j</span><span>Python</span><span>Streamlit</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/podcastiq.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/Aadarsh-Ravi31/PodcastIQ" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
 
-        <!-- Operations & Manufacturing (4) -->
-        <article class="proj-card clickable" data-cat="ops" data-proj="tsmc">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/tsmc_geographic_expansion_portfolio_card_hero.webp" alt="TSMC Geographic Expansion" loading="lazy"></div>
+        <article class="proj-card reveal" data-cat="ai">
+          <a href="projects/sage.html" class="proj-thumb" aria-label="SAGE case study">
+            <img src="assets/projects/sage-hero.jpeg" alt="SAGE enterprise AI compliance assistant" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">Operations &amp; Manufacturing</span>
-            <h4><a class="card-title-link" href="projects/tsmc.html">TSMC Geographic Expansion</a></h4>
-            <p>A $165B global expansion through the SCOR lens, and the supply-concentration paradox it cannot escape.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ops" data-proj="boeing">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/boeing_737max_portfolio_card_hero.webp" alt="Boeing 737 MAX" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Operations &amp; Manufacturing</span>
-            <h4><a class="card-title-link" href="projects/boeing.html">Boeing 737 MAX</a></h4>
-            <p>When delivery reliability meets distributed manufacturing: a product-supply-chain integration failure.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ops" data-proj="resmail">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/resmail_pm_case_study_card_hero.webp" alt="ResMail Package Crisis" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Operations &amp; Manufacturing</span>
-            <h4><a class="card-title-link" href="projects/resmail.html">ResMail Package Crisis</a></h4>
-            <p>Redesigning Northeastern's last-mile package system from 30-45 min lines to under 5 with smart lockers.</p>
-          </div>
-        </article>
-        <article class="proj-card clickable" data-cat="ops" data-proj="move-in">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/move_in_os_card.webp" alt="Move-In OS" loading="lazy"></div>
-          <div class="proj-card-body">
-            <span class="proj-cat">Operations &amp; Manufacturing</span>
-            <h4><a class="card-title-link" href="projects/move-in.html">Move-In OS</a></h4>
-            <p>A connected operating system for move-in: 4,500+ students arriving across 40+ residence halls in 72 hours.</p>
+            <span class="proj-cat">AI &amp; Data Systems</span>
+            <h4>SAGE</h4>
+            <p>Enterprise AI compliance assistant — GPT-4o + LangGraph + hybrid RAG (ChromaDB) over policy documents, with policy-conflict detection, citation grounding, and 100% prompt-injection block rate.</p>
+            <div class="chips">
+              <span>GPT-4o</span><span>LangGraph</span><span>ChromaDB</span><span>Hybrid RAG</span><span>Cloud Run</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/sage.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/DhanvardiniRajendran25/SAGE-SecureAIGovernanceEngine" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
 
-        <!-- Org Design & Agile Transformation (3) -->
-        <article class="proj-card clickable" data-cat="org" data-proj="amazon">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/amazon_two_pizza_team_portfolio_card_hero_v2_pm.webp" alt="Amazon Two-Pizza Teams" loading="lazy"></div>
+        <article class="proj-card reveal" data-cat="ai">
+          <a href="projects/multiagent-codegen.html" class="proj-thumb" aria-label="Multiagent CodeGen AI Platform case study">
+            <img src="assets/projects/multiagent-codegen-hero.svg" alt="Three-agent pipeline: Planner, Coder, Reviewer" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">Org Design &amp; Agile</span>
-            <h4><a class="card-title-link" href="projects/amazon.html">Amazon Two-Pizza Teams</a></h4>
-            <p>Agile as organizational architecture: small teams, an API mandate, and customer-backwards filtration at scale.</p>
+            <span class="proj-cat">AI &amp; Data Systems</span>
+            <h4>Multiagent CodeGen AI Platform</h4>
+            <p>Planning-first multi-agent code generation system: Planner decomposes tasks, Coder generates implementations, Reviewer checks quality and security — with prompt-injection hardening and an evaluation harness.</p>
+            <div class="chips">
+              <span>LangGraph</span><span>Python</span><span>Multi-Agent</span><span>Prompt Security</span><span>Eval Harness</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/multiagent-codegen.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/Effyrt/multiagent-codegen-ai-platform" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
-        <article class="proj-card clickable" data-cat="org" data-proj="ing">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/ing_squads_card.webp" alt="ING Agile Banking" loading="lazy"></div>
+
+        <article class="proj-card reveal" data-cat="ai">
+          <a href="projects/docuparse.html" class="proj-thumb" aria-label="DocuParse case study">
+            <img src="assets/projects/docuparse-hero.svg" alt="Document to structured table pipeline" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">Org Design &amp; Agile</span>
-            <h4><a class="card-title-link" href="projects/ing.html">ING Agile Banking</a></h4>
-            <p>From silos to squads: borrowing Spotify's tribes-and-chapters model across 3,500 staff in a regulated bank.</p>
+            <span class="proj-cat">AI &amp; Data Systems</span>
+            <h4>DocuParse</h4>
+            <p>SEC EDGAR document intelligence pipeline — Detectron2 finds table regions, LayoutLMv3 parses structure, Docling exports to JSON/Markdown/CSV. DVC manages the reproducible pipeline. 99.56% success rate.</p>
+            <div class="chips">
+              <span>Detectron2</span><span>LayoutLMv3</span><span>Docling</span><span>DVC</span><span>SEC EDGAR</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/docuparse.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/DhanvardiniRajendran25/Docuparse" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
-        <article class="proj-card clickable" data-cat="org" data-proj="spacex">
-          <div class="proj-thumb thumb-img"><img src="assets/projects/spacex_failing_forward_card.webp" alt="SpaceX Hardware Development" loading="lazy"></div>
+
+        <!-- Analytics & ML (1) -->
+        <article class="proj-card reveal" data-cat="ml">
+          <a href="projects/meta-tradepulse.html" class="proj-thumb" aria-label="META TradePulse case study">
+            <img src="assets/projects/meta-tradepulse-hero.svg" alt="Candlestick chart with gold trend line overlay" loading="lazy">
+          </a>
           <div class="proj-card-body">
-            <span class="proj-cat">Org Design &amp; Agile</span>
-            <h4><a class="card-title-link" href="projects/spacex.html">SpaceX Hardware Development</a></h4>
-            <p>Failing forward: how rapid build-test-fail cycles redefined value, risk, and org design in aerospace.</p>
+            <span class="proj-cat">Analytics &amp; ML</span>
+            <h4>META TradePulse</h4>
+            <p>70+ feature financial signal pipeline for META stock across 4 live API sources (price, macro, search trends, news sentiment) and 5 modeling layers from OLS to GARCH, with walk-forward backtesting.</p>
+            <div class="chips">
+              <span>Python</span><span>yFinance</span><span>FRED</span><span>scikit-learn</span><span>statsmodels</span><span>GARCH</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/meta-tradepulse.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/DhanvardiniRajendran25/Quantitative_Trading_Analysis_on_META_Stock" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
         </article>
+
+        <!-- Full-Stack Data (1) -->
+        <article class="proj-card reveal" data-cat="fullstack">
+          <a href="projects/mookit.html" class="proj-thumb" aria-label="Mookit case study">
+            <img src="assets/projects/mookit-hero.svg" alt="Four-tier architecture: React, Express, Node, SQL Server" loading="lazy">
+          </a>
+          <div class="proj-card-body">
+            <span class="proj-cat">Full-Stack Data</span>
+            <h4>Mookit</h4>
+            <p>Four-tier e-commerce data platform: React UI to Express.js API to SQL Server with stored procedures on every data path, AES-256 PII encryption, RBAC, audit triggers, and Power BI analytics.</p>
+            <div class="chips">
+              <span>React</span><span>Node.js</span><span>SQL Server</span><span>AES-256</span><span>Power BI</span><span>RBAC</span>
+            </div>
+            <div class="proj-card-actions">
+              <a href="projects/mookit.html" class="btn btn-primary btn-sm">Case study &rarr;</a>
+              <a href="https://github.com/DhanvardiniRajendran25/Mookit_Inventory_Management" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </article>
+
       </div>
 
       <div class="proj-more-wrap">
-        <button class="btn" id="projMore" type="button">Show more projects</button>
+        <button class="btn" id="projMore" type="button">Show all projects</button>
       </div>
     </section>
   </main>
 
-<div class="proj-modal" id="projModal" aria-hidden="true">
-    <div class="proj-modal-backdrop" data-close></div>
-    <div class="proj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
-      <button class="proj-modal-close" data-close type="button" aria-label="Close">&times;</button>
-      <div class="pm-cover"><img id="pmCover" src="" alt=""></div>
-      <div class="pm-body">
-        <span class="pm-cat" id="pmCat"></span>
-        <h2 id="pmTitle"></h2>
-        <p class="pm-meta" id="pmMeta"></p>
-        <p class="pm-summary" id="pmSummary"></p>
-        <div class="pm-metrics" id="pmMetrics"></div>
-        <div class="pm-links" id="pmLinks"></div>
-        <div class="pm-sections" id="pmSections"></div>
-      </div>
-    </div>
-
-    <footer class="site-footer" id="contact">
+  <footer class="site-footer" id="contact">
     <div class="footer-row">
       <span class="footer-name">Dhanvardini Rajendran</span>
       <nav class="footer-links" aria-label="Contact">
         <a href="mailto:dhanvardini.rajendran@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/dhanvardini/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/DhanvardiniRajendran25" target="_blank" rel="noopener">GitHub</a>
-        <a href="../assets/resume.pdf" download>Resume</a>
+        <a href="assets/resume.pdf" download>Resume</a>
       </nav>
     </div>
     <p class="footer-fine">&copy; <span id="year"></span> Dhanvardini Rajendran.</p>
@@ -432,7 +278,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-  <script src="js/project-details.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
