@@ -1,6 +1,6 @@
 # Migration Plan — Static HTML/CSS/JS → Full-Stack Next.js Portfolio
 
-Status: **DRAFT — awaiting approval to begin Phase 1.** Nothing in this document has been built yet. Each phase below is a separate go/no-go checkpoint; nothing in a later phase starts until the current one is reviewed and approved.
+Status: **Phase 1 done, on branch `rewrite/nextjs`. Awaiting approval for Phase 2.** Each phase below is a separate go/no-go checkpoint; nothing in a later phase starts until the current one is reviewed and approved.
 
 ## Decisions already made (2026-07-27)
 
@@ -37,11 +37,14 @@ One thing worth flagging given this new direction: two of the pages deleted in t
 ### Phase 0 — Cleanup (✅ done)
 Deleted the 34 unlinked PM/UX pages (32 removed, 2 PRDs kept and linked), removed 68 orphaned assets. See [CLEANUP_LOG.md](./CLEANUP_LOG.md). Committed as `f61c4b7`.
 
-### Phase 1 — Scaffolding (no visible content changes)
-- New Next.js 15 + TypeScript + Tailwind project, in a new branch (current static site untouched until cutover).
-- Port design tokens (colors, spacing, fonts, radii, shadows) from `css/styles.css` into `tailwind.config`.
-- ESLint/Prettier, GitHub Actions CI (lint + typecheck + build on every push), Vercel preview deployments per PR.
-- Deliverable to review: a blank-but-styled shell (header/footer/theme toggle) deployed to a Vercel preview URL.
+### Phase 1 — Scaffolding (✅ done, on branch `rewrite/nextjs`)
+- Next.js 16 + TypeScript + Tailwind CSS 4 in `web/`, current static site at the repo root untouched.
+- Design tokens (colors, fonts, radii, shadow, light/dark theme) ported from `css/styles.css` into `web/src/app/globals.css` via Tailwind's `@theme inline`.
+- Working `SiteHeader`/`SiteFooter`/`ThemeToggle`, one stub page per nav route so the whole nav is clickable, `GET /api/health`.
+- Drizzle ORM + Neon driver wired (unused until Phase 5, safe with no `DATABASE_URL` set), Python `pipeline/ingest.py` skeleton + a manually-triggered GitHub Actions workflow.
+- CI (`.github/workflows/web-ci.yml`): lint + typecheck + build, verified green locally.
+- Not done yet, needs you: creating the actual Neon + Vercel accounts and connecting them (I can't create third-party accounts) — see [SETUP.md](./SETUP.md). Not blocking further phases.
+- Full detail: [SETUP.md](./SETUP.md).
 
 ### Phase 2 — Static page migration + role-lens hero
 - Port Home, About, Story, Experience, Education, Skills, Awards, Contact, Gallery 1:1 into React components/pages (parity first, no redesign yet, to de-risk the migration).

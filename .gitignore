@@ -15,3 +15,7 @@ Thumbs.db
 CLAUDE.md
 TASKS.md
 .claude/
+
+# python pipeline
+pipeline/__pycache__/
+pipeline/.env
