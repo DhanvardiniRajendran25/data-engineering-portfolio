@@ -32,7 +32,7 @@ export function RoleRotator() {
           <motion.span
             key={ROLES[index]}
             aria-hidden="true"
-            className="font-display inline-block font-semibold text-accent"
+            className="font-display inline-block font-medium text-accent"
             initial={prefersReducedMotion ? false : { y: 12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={prefersReducedMotion ? undefined : { y: -12, opacity: 0 }}

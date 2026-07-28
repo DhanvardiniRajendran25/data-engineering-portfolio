@@ -52,7 +52,7 @@ export function Hero() {
   };
 
   return (
-    <section className="mx-auto grid max-w-page items-center gap-12 px-gutter py-20 md:grid-cols-[1.1fr_0.9fr]">
+    <section className="mx-auto grid max-w-page items-center gap-16 px-gutter py-28 md:grid-cols-[1.1fr_0.9fr]">
       <motion.div initial="hidden" animate="show" variants={container}>
         <motion.h1 variants={item} className="text-5xl sm:text-6xl">
           Dhanvardini
@@ -65,11 +65,11 @@ export function Hero() {
           ship to production.
         </motion.p>
 
-        <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3">
+        <motion.div variants={item} className="mt-10 flex flex-wrap items-center gap-4">
           <a
             href="/resume.pdf"
             download="Dhanvardini_Rajendran_Resume.pdf"
-            className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            className="rounded-full border border-ink px-6 py-3 text-xs font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg"
           >
             Download Resume
           </a>
@@ -82,7 +82,7 @@ export function Hero() {
                 aria-label={label}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener" : undefined}
-                className="grid h-10 w-10 place-items-center rounded-full border border-line text-ink-soft transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+                className="grid h-10 w-10 place-items-center rounded-full border border-line text-ink-soft transition-colors hover:border-ink hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
               >
                 <Icon className="h-[18px] w-[18px]" />
               </a>

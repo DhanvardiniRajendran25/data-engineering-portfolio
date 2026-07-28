@@ -80,10 +80,10 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 700;
-    line-height: 1.04;
+    font-weight: 500;
+    line-height: 1.08;
     margin: 0;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.01em;
   }
 
   a {

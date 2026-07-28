@@ -41,7 +41,7 @@ export function SiteHeader() {
 
   return (
     <div className="sticky top-4 z-50 px-gutter pt-4">
-      <div className="mx-auto flex max-w-page items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4">
         <Link href="/" className="font-display text-lg font-bold text-ink">
           DR
         </Link>
@@ -62,13 +62,13 @@ export function SiteHeader() {
                 {isActive && (
                   <motion.span
                     layoutId="nav-active-pill"
-                    className="absolute inset-0 rounded-full bg-accent-soft"
+                    className="absolute inset-0 rounded-full bg-ink/[0.06]"
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                   />
                 )}
                 <span
                   className={`relative z-10 transition-colors ${
-                    isActive ? "text-accent" : "text-ink-soft hover:text-ink"
+                    isActive ? "text-ink" : "text-ink-soft hover:text-ink"
                   }`}
                 >
                   {link.label}
@@ -152,7 +152,7 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   aria-current={isActive ? "page" : undefined}
                   className={`font-display text-4xl transition-colors sm:text-5xl ${
-                    isActive ? "text-accent" : "text-ink hover:text-accent"
+                    isActive ? "text-ink underline" : "text-ink-soft hover:text-ink"
                   }`}
                 >
                   {link.label}
