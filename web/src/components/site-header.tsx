@@ -39,35 +39,60 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-line bg-bg/85 px-gutter py-4 backdrop-blur">
-      <Link href="/" className="font-display text-lg font-semibold text-ink">
-        Dhanvardini Rajendran
-      </Link>
+    <div className="sticky top-4 z-50 px-gutter pt-4">
+      <header className="mx-auto flex max-w-page items-center justify-between gap-4 rounded-full border border-line bg-bg-elev/90 px-5 py-2.5 shadow-brand backdrop-blur">
+        <Link href="/" className="font-display text-lg font-bold text-ink">
+          DR
+        </Link>
 
-      <div className="flex items-center gap-3">
-        <ThemeToggle />
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
-          aria-expanded={open}
-          aria-controls="site-menu"
-          className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+        <nav
+          aria-label="Primary"
+          className="hidden items-center gap-1 text-sm font-medium md:flex"
         >
-          <svg
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            aria-hidden="true"
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={isActive ? "page" : undefined}
+                className={`rounded-full px-3 py-1.5 transition-colors ${
+                  isActive
+                    ? "bg-accent-soft text-accent"
+                    : "text-ink-soft hover:text-ink"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={open}
+            aria-controls="site-menu"
+            className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent md:hidden"
           >
-            <path d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </header>
 
       {open && (
         <div
@@ -78,7 +103,7 @@ export function SiteHeader() {
           className="fixed inset-0 z-[60] flex flex-col bg-bg"
         >
           <div className="flex items-center justify-between px-gutter py-4">
-            <span className="font-display text-lg font-semibold text-ink">
+            <span className="font-display text-lg font-bold text-ink">
               Menu
             </span>
             <button
@@ -127,6 +152,6 @@ export function SiteHeader() {
           </nav>
         </div>
       )}
-    </header>
+    </div>
   );
 }
