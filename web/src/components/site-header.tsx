@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/story", label: "Story" },
   { href: "/experience", label: "Experience" },
   { href: "/education", label: "Education" },
   { href: "/skills", label: "Skills" },
@@ -19,35 +18,115 @@ const NAV_LINKS = [
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-4 border-b border-line bg-bg/85 px-gutter py-4 backdrop-blur">
+    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-line bg-bg/85 px-gutter py-4 backdrop-blur">
       <Link href="/" className="font-display text-lg font-semibold text-ink">
         Dhanvardini Rajendran
       </Link>
-      <nav
-        aria-label="Primary"
-        className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-ink-soft"
-      >
-        {NAV_LINKS.map((link) => {
-          const isActive = pathname === link.href;
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              aria-current={isActive ? "page" : undefined}
-              className={
-                isActive
-                  ? "text-accent"
-                  : "transition-colors hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
-              }
+
+      <div className="flex items-center gap-3">
+        <ThemeToggle />
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+          aria-expanded={open}
+          aria-controls="site-menu"
+          className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      {open && (
+        <div
+          id="site-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          className="fixed inset-0 z-[60] flex flex-col bg-bg"
+        >
+          <div className="flex items-center justify-between px-gutter py-4">
+            <span className="font-display text-lg font-semibold text-ink">
+              Menu
+            </span>
+            <button
+              ref={closeButtonRef}
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
             >
-              {link.label}
-            </Link>
-          );
-        })}
-      </nav>
-      <ThemeToggle />
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          </div>
+
+          <nav
+            aria-label="Primary"
+            className="flex flex-1 flex-col items-start justify-center gap-3 px-gutter"
+          >
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`font-display text-4xl transition-colors sm:text-5xl ${
+                    isActive ? "text-accent" : "text-ink hover:text-accent"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
   weight: "variable",
 });
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s · Dhanvardini Rajendran",
   },
   description:
-    "Dhanvardini Rajendran — Data Engineer, AI Systems Builder, and Software Engineer designing scalable pipelines, cloud data platforms, and AI-ready data products.",
+    "Dhanvardini Rajendran builds data pipelines, backend systems, and AI features that ship to production.",
 };
 
 // Runs before first paint (see Next.js guide: preventing-flash-before-hydration).
@@ -42,7 +42,7 @@ export default function RootLayout({
       lang="en"
       data-theme="light"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${inter.variable}`}
+      className={`${spaceGrotesk.variable} ${inter.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />

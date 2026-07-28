@@ -46,10 +46,15 @@ Deleted the 34 unlinked PM/UX pages (32 removed, 2 PRDs kept and linked), remove
 - Not done yet, needs you: creating the actual Neon + Vercel accounts and connecting them (I can't create third-party accounts) — see [SETUP.md](./SETUP.md). Not blocking further phases.
 - Full detail: [SETUP.md](./SETUP.md).
 
-### Phase 2 — Static page migration + role-lens hero
-- Port Home, About, Story, Experience, Education, Skills, Awards, Contact, Gallery 1:1 into React components/pages (parity first, no redesign yet, to de-risk the migration).
-- Extend the role-rotator copy (versatility move #2 above) since it's a trivial content change while porting the hero anyway.
-- Deliverable to review: full site navigable on Vercel preview, comparable to the current live site.
+### Phase 2 — Home page rebuilt, in progress
+Decided while reviewing the Phase 1 shell against the live site's hero:
+- **About and Story pages removed entirely** (not just deprioritized) — judged not to add value for SDE/DE/AI Engineer readers. Nav trimmed from 10 to 8 links.
+- **Font changed completely**: dropped Fraunces (decorative serif) for Space Grotesk (display) + Inter (body) — reads more professional/technical, still a distinct display/body pairing rather than one flat font.
+- **Hero rebuilt**: no more "DATA ENGINEER" eyebrow tag; one-liner tagline broadened to "I engineer data pipelines, backend systems, and AI features that ship to production."; role-rotator expanded to Software Engineer / Data Engineer / AI Engineer / Forward Deployed Engineer / Analytics Engineer, rotating slowly (3.2s); LinkedIn/GitHub/Email/Call collapsed from labeled buttons into a small icon row (LinkedIn and GitHub use their actual logo marks), leaving "Download Resume" as the one primary button.
+- **Top bar redesigned**: minimal wordmark + hamburger opening a full-screen slide-out panel with large nav links, instead of a horizontal link row. Keyboard-accessible (Escape closes, focus moves to the close button, body scroll locked while open).
+- **Impact section rebuilt** as a role-relevant metric grid: same six real numbers as the live site, relabeled so they read as evidence across all three lenses (e.g. "DE tools mastered" → "Engineering tools mastered") rather than DE-only framing. No new/invented metrics — only honest relabeling of existing, resume-backed numbers.
+- **Whole-site copy rule adopted**: no em dashes anywhere in site-facing text, written dash-free from the start rather than edited after.
+- Still to port: Experience, Education, Skills, Awards, Projects, Gallery, Contact (currently placeholders).
 
 ### Phase 3 — Case-study content model + role tagging + skills restructuring
 - Build one shared `<CaseStudy>` template and move the 10 flagship DE projects + `sage-prd`/`podcastiq-prd` into typed content files, each with a `roles[]` field (versatility move #1) and a "Skills demonstrated" chip row (move #5).

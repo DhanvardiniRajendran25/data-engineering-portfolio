@@ -43,7 +43,7 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
 
-  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-display: var(--font-space-grotesk), system-ui, -apple-system, sans-serif;
   --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
 
   --radius-brand: 16px;
