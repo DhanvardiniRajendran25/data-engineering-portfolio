@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { EmailIcon, GithubIcon, LinkedinIcon, PhoneIcon } from "./icons";
 import { RoleRotator } from "./role-rotator";
 
@@ -30,21 +33,39 @@ const SOCIAL_LINKS = [
 ];
 
 export function Hero() {
+  const prefersReducedMotion = useReducedMotion();
+
+  const container: Variants = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: prefersReducedMotion ? 0 : 0.12 },
+    },
+  };
+
+  const item: Variants = {
+    hidden: prefersReducedMotion ? {} : { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
   return (
     <section className="mx-auto grid max-w-page items-center gap-12 px-gutter py-20 md:grid-cols-[1.1fr_0.9fr]">
-      <div>
-        <h1 className="text-5xl sm:text-6xl">
+      <motion.div initial="hidden" animate="show" variants={container}>
+        <motion.h1 variants={item} className="text-5xl sm:text-6xl">
           Dhanvardini
           <br />
           Rajendran
-        </h1>
+        </motion.h1>
 
-        <p className="mt-6 max-w-prose text-lg text-ink-soft">
+        <motion.p variants={item} className="mt-6 max-w-prose text-lg text-ink-soft">
           I engineer data pipelines, backend systems, and AI features that
           ship to production.
-        </p>
+        </motion.p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
+        <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3">
           <a
             href="/resume.pdf"
             download="Dhanvardini_Rajendran_Resume.pdf"
@@ -67,14 +88,19 @@ export function Hero() {
               </a>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <p className="mt-8 text-sm text-ink-soft">
+        <motion.p variants={item} className="mt-8 text-lg text-ink-soft">
           Open to roles as <RoleRotator />
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
-      <div className="relative mx-auto w-full max-w-sm">
+      <motion.div
+        initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.94 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        className="relative mx-auto w-full max-w-sm"
+      >
         <div className="overflow-hidden rounded-brand border border-line shadow-brand">
           <Image
             src="/headshot.webp"
@@ -89,7 +115,7 @@ export function Hero() {
           <p className="font-display text-lg text-ink">3+ yrs</p>
           <p className="text-xs text-ink-soft">building production systems</p>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { ThemeToggle } from "./theme-toggle";
 
 const NAV_LINKS = [
@@ -40,14 +41,14 @@ export function SiteHeader() {
 
   return (
     <div className="sticky top-4 z-50 px-gutter pt-4">
-      <header className="mx-auto flex max-w-page items-center justify-between gap-4 rounded-full border border-line bg-bg-elev/90 px-5 py-2.5 shadow-brand backdrop-blur">
+      <div className="mx-auto flex max-w-page items-center justify-between gap-4">
         <Link href="/" className="font-display text-lg font-bold text-ink">
           DR
         </Link>
 
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-1 text-sm font-medium md:flex"
+          className="hidden items-center gap-1 rounded-full border border-line bg-bg-elev/90 px-2 py-2 text-sm font-medium shadow-brand backdrop-blur md:flex"
         >
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
@@ -56,13 +57,22 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`rounded-full px-3 py-1.5 transition-colors ${
-                  isActive
-                    ? "bg-accent-soft text-accent"
-                    : "text-ink-soft hover:text-ink"
-                }`}
+                className="relative rounded-full px-3 py-1.5"
               >
-                {link.label}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active-pill"
+                    className="absolute inset-0 rounded-full bg-accent-soft"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                )}
+                <span
+                  className={`relative z-10 transition-colors ${
+                    isActive ? "text-accent" : "text-ink-soft hover:text-ink"
+                  }`}
+                >
+                  {link.label}
+                </span>
               </Link>
             );
           })}
@@ -76,7 +86,7 @@ export function SiteHeader() {
             aria-label="Open menu"
             aria-expanded={open}
             aria-controls="site-menu"
-            className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent md:hidden"
+            className="grid h-9 w-9 place-items-center rounded-full border border-line bg-bg-elev/90 text-ink shadow-brand backdrop-blur transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent md:hidden"
           >
             <svg
               viewBox="0 0 24 24"
@@ -92,7 +102,7 @@ export function SiteHeader() {
             </svg>
           </button>
         </div>
-      </header>
+      </div>
 
       {open && (
         <div
