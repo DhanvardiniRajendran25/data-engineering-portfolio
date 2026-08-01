@@ -1,41 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 
-// Lazy initializer reads the DOM attribute the bootstrap script in
-// layout.tsx already set before hydration, so this matches on first
-// client render instead of flashing the wrong icon after an effect fires
-// (see Next.js guide: preventing-flash-before-hydration).
-function readInitialTheme(): Theme {
-  if (typeof document === "undefined") return "light";
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+// The bootstrap script in layout.tsx already applies the real theme to the
+// DOM before paint; this just reads it back so React's state agrees with it.
+function getSnapshot(): Theme {
   return document.documentElement.getAttribute("data-theme") === "dark"
     ? "dark"
     : "light";
 }
 
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(readInitialTheme);
+// The server has no access to localStorage/OS preference, and the <html>
+// tag's hardcoded default is "light", so this must match that exactly to
+// avoid a hydration mismatch.
+function getServerSnapshot(): Theme {
+  return "light";
+}
 
-  function toggle() {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem("theme", next);
-    } catch {
-      // localStorage unavailable (e.g. private browsing) — theme still
-      // applies for this session, it just won't persist across visits.
-    }
+function applyTheme(next: Theme) {
+  document.documentElement.setAttribute("data-theme", next);
+  try {
+    localStorage.setItem("theme", next);
+  } catch {
+    // localStorage unavailable (e.g. private browsing) — theme still
+    // applies for this session, it just won't persist across visits.
   }
+  listeners.forEach((listener) => listener());
+}
+
+export function ThemeToggle() {
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={() => applyTheme(theme === "dark" ? "light" : "dark")}
       aria-label="Toggle light and dark mode"
-      suppressHydrationWarning
       className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
     >
       {theme === "dark" ? (

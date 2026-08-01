@@ -96,15 +96,19 @@
   .ambient-blob {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(90px);
+    filter: blur(70px);
   }
 
   .motion .ambient-blob-a {
-    animation: drift-a 30s ease-in-out infinite;
+    animation: drift-a 26s ease-in-out infinite;
   }
 
   .motion .ambient-blob-b {
-    animation: drift-b 38s ease-in-out infinite;
+    animation: drift-b 34s ease-in-out infinite;
+  }
+
+  .motion .ambient-blob-c {
+    animation: drift-c 40s ease-in-out infinite;
   }
 
   @keyframes drift-a {
@@ -113,7 +117,7 @@
       transform: translate(0, 0) scale(1);
     }
     50% {
-      transform: translate(3vw, -2vw) scale(1.06);
+      transform: translate(4vw, -3vw) scale(1.08);
     }
   }
 
@@ -123,7 +127,17 @@
       transform: translate(0, 0) scale(1);
     }
     50% {
-      transform: translate(-3vw, 2.5vw) scale(1.04);
+      transform: translate(-4vw, 3.5vw) scale(1.05);
+    }
+  }
+
+  @keyframes drift-c {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(2.5vw, -4vw) scale(1.06);
     }
   }
 

@@ -12,7 +12,7 @@ const ROLES = [
 ];
 
 // Deliberately slow: this is ambient, not attention-grabbing.
-const ROTATE_MS = 3200;
+const ROTATE_MS = 5500;
 
 export function RoleRotator() {
   const [index, setIndex] = useState(0);
@@ -32,7 +32,7 @@ export function RoleRotator() {
           <motion.span
             key={ROLES[index]}
             aria-hidden="true"
-            className="font-display inline-block font-medium text-accent"
+            className="font-display inline-block text-2xl font-medium text-accent sm:text-3xl"
             initial={prefersReducedMotion ? false : { y: 12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={prefersReducedMotion ? undefined : { y: -12, opacity: 0 }}
