@@ -23,8 +23,6 @@
   --accent: #c2453d;
   --accent-soft: rgba(194, 69, 61, 0.1);
   --shadow: 0 18px 50px -20px rgba(26, 34, 48, 0.3);
-  --beam-1: rgba(255, 255, 255, 0.65);
-  --beam-2: rgba(26, 34, 48, 0.05);
 }
 
 [data-theme="dark"] {
@@ -37,8 +35,6 @@
   --accent: #e0685f;
   --accent-soft: rgba(224, 104, 95, 0.14);
   --shadow: 0 22px 60px -22px rgba(0, 0, 0, 0.65);
-  --beam-1: rgba(255, 255, 255, 0.09);
-  --beam-2: rgba(255, 255, 255, 0.05);
 }
 
 @theme inline {
@@ -96,60 +92,6 @@
 
   a {
     color: inherit;
-  }
-
-  /* Sweeping light-beam background (see components/ambient-background.tsx).
-     Each beam is a tall, blurred, softly-faded strip that sweeps diagonally
-     across the viewport on its own long loop. Blend mode flips per theme:
-     soft-light reads as a warm sheen on the light background, screen reads
-     as a glowing light shaft on the dark background. Static unless
-     `.motion` is present on <html>, so it never moves for visitors who
-     asked for reduced motion. */
-  .light-beam {
-    position: absolute;
-    top: -30%;
-    height: 160%;
-    width: 220px;
-    filter: blur(75px);
-    mix-blend-mode: soft-light;
-  }
-
-  [data-theme="dark"] .light-beam {
-    mix-blend-mode: screen;
-  }
-
-  .light-beam-1 {
-    background: linear-gradient(180deg, transparent 0%, var(--beam-1) 50%, transparent 100%);
-  }
-
-  .light-beam-2 {
-    background: linear-gradient(180deg, transparent 0%, var(--beam-2) 50%, transparent 100%);
-  }
-
-  .motion .beam-sweep-a {
-    animation: beam-sweep-a 40s linear infinite;
-  }
-
-  .motion .beam-sweep-b {
-    animation: beam-sweep-b 55s linear infinite;
-  }
-
-  @keyframes beam-sweep-a {
-    0% {
-      transform: translateX(-30vw) rotate(-20deg);
-    }
-    100% {
-      transform: translateX(130vw) rotate(-20deg);
-    }
-  }
-
-  @keyframes beam-sweep-b {
-    0% {
-      transform: translateX(140vw) rotate(16deg);
-    }
-    100% {
-      transform: translateX(-40vw) rotate(16deg);
-    }
   }
 
   /* prefers-reduced-motion is respected globally; the `.motion` class is only
