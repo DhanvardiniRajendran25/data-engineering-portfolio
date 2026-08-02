@@ -12,6 +12,16 @@ Status: **Phase 1 done, on branch `rewrite/nextjs`. Awaiting approval for Phase 
 | Content cleanup | Done (see [CLEANUP_LOG.md](./CLEANUP_LOG.md)) |
 | Positioning | **One portfolio, three role lenses** — Software Engineer (SDE), Data Engineer, AI Engineer. Not three separate sites; one codebase that reads as strong evidence for all three depending on what a visitor is scanning for. |
 
+## Structural decisions (2026-08-02)
+
+| Decision | Choice |
+|---|---|
+| Role handling | **One site, role-filterable projects.** Single unified narrative; the Work page filters by All / Software / Data / AI and every case study carries role tags. No duplicated per-role content, no separate tracks. |
+| Page set | **Lean four pages: Home, Work, About, Contact.** Experience, Education, Skills, and Awards fold into one rich About page; Gallery is dropped. Fewer, denser pages read as more senior than eight thin ones. |
+| Signature element | **All three, phased:** (1) editorial typographic Work index, (2) interactive architecture diagrams inside case studies, (3) the live data element (real pipeline surfaced on the homepage) as the finale. |
+
+See [DESIGN_PLAN.md](./DESIGN_PLAN.md) for the full design/IA plan built on these decisions.
+
 ## Why this stack
 
 - **Next.js + TypeScript**: the most recognized full-stack React framework in the current job market; App Router gives static generation for case-study pages (fast, SEO-friendly) *and* API route handlers for the live-demo backend in one codebase — no separate backend repo to stand up for a portfolio.
