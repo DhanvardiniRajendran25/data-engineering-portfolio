@@ -19,6 +19,39 @@ For each featured project, the case study needs details only you know. See [PROJ
 - [ ] **Confirm the homepage impact numbers** are still accurate: 8+ pipelines, 5B+ records, 3+ cloud platforms, 10+ tools, 3+ years, 70+ students.
 - [ ] **About page**: your own voice for the opening paragraph.
 
+## Images — exact specs
+
+You said you will supply real images. Two separate kinds, both supported in code already.
+
+### A. Cover images (one per project, shows on `/work` and at the top of the project page)
+
+| | |
+|---|---|
+| **Still needed** | 6 of 9 — `imdb-analytics`, `nypd-crime`, `food-inspection`, `reflexai`, `docuparse`, `meta-tradepulse` |
+| **Already in** | `podcastiq`, `sage`, `courtvision` |
+| **Aspect** | **3:2** (matches the three already supplied, so the layout is set to 3:2) |
+| **Min width** | 1600px |
+| **Format** | PNG, JPG, or WebP |
+| **Name** | `<slug>.png` |
+| **Drop into** | `web/public/projects/` |
+
+### B. In-page images (multiple per project, shown inside the project page)
+
+Dashboards, schemas, architecture diagrams, app screenshots. This is where real artefacts matter most.
+
+| | |
+|---|---|
+| **Aspect** | Any; they render full width at natural ratio |
+| **Min width** | 1600px |
+| **Drop into** | `web/public/projects/<slug>/` |
+| **Also send** | A one-line caption for each. An uncaptioned screenshot makes the reader guess what they are looking at. |
+
+Just drop files in and tell me they are there. I will wire up the paths and captions.
+
+### Note on consistency
+
+Whatever the final mix, all 9 covers should read as one visual language. Three AI-generated concept covers plus six dashboard screenshots will look like two different sites. If most end up as real screenshots, the three existing covers may be worth regenerating to match, or swapping for real artefacts.
+
 ## Quick data fixes
 
 - [ ] **Project years.** Only NYPD Crime had a date in the old source (2024). The other 8 are `null` and render as a placeholder in the Work table. Deliberately not guessed, since an invented date on a portfolio is worse than a blank one. Set them in `web/src/content/work/meta.ts`.

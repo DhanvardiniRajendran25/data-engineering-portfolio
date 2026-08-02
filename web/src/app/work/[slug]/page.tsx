@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { PROJECTS, PROJECT_BODIES, ROLE_LABELS, getProject } from "@/content/work";
 import { ProjectCover } from "@/components/project-cover";
 
@@ -116,6 +117,27 @@ export default async function ProjectPage({
           </p>
         )}
       </div>
+
+      {project.gallery && project.gallery.length > 0 && (
+        <section aria-label="Project images" className="mt-16 space-y-10">
+          {project.gallery.map((item) => (
+            <figure key={item.src}>
+              <div className="overflow-hidden rounded-brand border border-line">
+                <Image
+                  src={item.src}
+                  alt={item.caption}
+                  width={1600}
+                  height={1000}
+                  className="h-auto w-full"
+                />
+              </div>
+              <figcaption className="mt-3 max-w-measure font-mono text-xs text-ink-faint">
+                {item.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </section>
+      )}
 
       <nav
         aria-label="Project navigation"
