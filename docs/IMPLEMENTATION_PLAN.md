@@ -92,15 +92,18 @@ The current **live static site** has real URLs that must not 404 after cutover. 
 ### B4. Migrate the featured projects as data
 Set and rationale in [PROJECT_INVENTORY.md](./PROJECT_INVENTORY.md). Source for existing copy: the old static pages on `main` (`projects/*.html`).
 
-- [ ] imdb-analytics · nypd-crime · food-inspection · seattle-pet-etl (Data)
-- [ ] sage (AI · Systems, live deployment)
-- [ ] courtvision (AI) — recover copy from `git show 7549fa4:projects/courtvision.html`
-- [ ] reflexai (AI · Data) — no existing page, needs writing from scratch in Phase E
-- [ ] podcastiq — decide: eighth featured, or archive row. Must be labeled a team project.
-- [ ] **Attach the repo URL to every record** (the old site linked almost none; this is the biggest easy win)
+Featured set of 9, in display order:
+- [ ] 1. podcastiq (AI · Data) — leads the set. Repo link pending, see inventory open item.
+- [ ] 2. imdb-analytics · 3. nypd-crime · 4. food-inspection (Data)
+- [ ] 5. sage (AI · Systems, live deployment)
+- [ ] 6. courtvision (AI) — recover copy from `git show 7549fa4:projects/courtvision.html`
+- [ ] 7. reflexai (AI · Data) — no existing page, written from scratch in Phase E
+- [ ] 8. docuparse (AI · Systems)
+- [ ] 9. meta-tradepulse (Data) — repo is `Quantitative_Trading_Analysis_on_META_Stock`
+- [ ] **Attach the repo URL to every record** (the old site linked almost none; biggest easy win)
 - [ ] Carry over `sage-prd`, `podcastiq-prd`, `courtvision-prd` as linked documents
 - [ ] Migrate hero images into `public/`, referenced by slug
-- [ ] Decide the fate of `multiagent-codegen`, `docuparse`, `meta-tradepulse`, `mookit` — no repo, no live link, so no verifiable artifact
+- [ ] Decide archive-row treatment for `seattle-pet-etl` and `mookit` (both have repos, neither is featured); `multiagent-codegen` has no repo at all
 
 **Migration note:** this phase moves *existing* copy across verbatim. Rewriting to the new structure is Phase E. Keeping those separate avoids doing structural and writing work in the same pass.
 
@@ -178,7 +181,6 @@ Target revised down from 600-1200: with the repo linked, the repo carries the "w
 - [ ] 1-2 surgical code snippets
 - [ ] Concrete outcome metrics
 - [ ] Short retrospective
-- [ ] PodcastIQ specifically: state the team context and the role played
 
 ### E2. About page
 - [ ] Opening in first-person voice
@@ -261,9 +263,9 @@ Driven by [QUALITY_CHECKLIST.md](./QUALITY_CHECKLIST.md).
 
 ## Scope — resolved (2026-08-02)
 
-- **5-7 featured projects**, each end-to-end with a verifiable artifact. Recommended set of 7 in [PROJECT_INVENTORY.md](./PROJECT_INVENTORY.md).
+- **9 featured projects**, listed in display order in [PROJECT_INVENTORY.md](./PROJECT_INVENTORY.md).
 - **300-500 words each**, not 600-1200. The repo carries the "what"; the prose carries the "why."
-- **Every featured project links its repo.** The old site linked almost none, which left the work unverifiable.
-- Projects with no repo and no live deployment (`multiagent-codegen`, `docuparse`, `meta-tradepulse`, `mookit`) are not featured. Their fate is decided in B4.
+- **Every featured project links its repo** where one exists. The old site linked almost none, which left the work unverifiable.
+- Not featured: `seattle-pet-etl` and `mookit` (repos exist, available as archive rows), `multiagent-codegen` (no repo).
 
-Total writing load: roughly 2,500-3,500 words across seven projects, plus the About page.
+Total writing load: roughly 2,700-4,500 words across nine projects, plus the About page.
