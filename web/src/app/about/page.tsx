@@ -125,7 +125,7 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section id="awards" index={3} label="Recognition">
+      <Section id="awards" index={3} label="Recognition" wide>
         {AWARDS.map((group) => (
           <div key={group.group} className="mb-14 last:mb-0">
             <h3 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
