@@ -55,7 +55,16 @@
   --radius-brand-sm: 10px;
   --shadow-brand: var(--shadow);
   --ease-brand: var(--ease);
+
+  /* Two-tier width system.
+     `page`    = outer rail. Nav, tables, diagrams, stat grids, image bleed.
+     `measure` = reading measure. ALL body prose, so line length stays
+                 comfortable no matter how wide the display is.
+     Using one width for both is what made the layout read as a narrow
+     centered island on large monitors. Keep them distinct. */
   --container-page: 1600px;
+  --container-measure: 68ch;
+
   --spacing-gutter: clamp(1.25rem, 4vw, 4rem);
 }
 
@@ -92,6 +101,38 @@
 
   a {
     color: inherit;
+  }
+}
+
+@layer components {
+  /* The single shared shell. Every top-level section uses this so their
+     left/right edges align at every viewport. Previously each component
+     repeated `mx-auto max-w-page px-gutter` by hand, and the header drifted
+     out of sync with the body, which is what produced the misaligned
+     narrow-island layout. */
+  .shell {
+    margin-inline: auto;
+    max-width: var(--container-page);
+    padding-inline: var(--gutter);
+    width: 100%;
+  }
+
+  /* Standard vertical rhythm for page sections. Use instead of per-component
+     py-* values so spacing stays consistent as pages are added. */
+  .section-y {
+    padding-block: 3rem;
+  }
+
+  @media (min-width: 640px) {
+    .section-y {
+      padding-block: 4rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section-y {
+      padding-block: 5rem;
+    }
   }
 
   /* prefers-reduced-motion is respected globally; the `.motion` class is only

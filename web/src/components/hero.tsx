@@ -52,7 +52,7 @@ export function Hero() {
   };
 
   return (
-    <section className="mx-auto grid max-w-page items-center gap-10 px-gutter py-10 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:py-16">
+    <section className="shell grid items-center gap-10 py-10 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:py-16">
       <motion.div initial="hidden" animate="show" variants={container}>
         <motion.h1 variants={item} className="text-4xl sm:text-5xl lg:text-6xl">
           Dhanvardini
@@ -60,7 +60,7 @@ export function Hero() {
           Rajendran
         </motion.h1>
 
-        <motion.p variants={item} className="mt-6 max-w-prose text-base text-ink-soft sm:text-lg">
+        <motion.p variants={item} className="mt-6 max-w-measure text-base text-ink-soft sm:text-lg">
           I engineer data pipelines, backend systems, and AI features that
           ship to production.
         </motion.p>

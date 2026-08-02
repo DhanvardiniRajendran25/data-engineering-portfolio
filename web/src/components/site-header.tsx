@@ -37,7 +37,7 @@ export function SiteHeader() {
 
   return (
     <div className="sticky top-4 z-50 px-gutter pt-4">
-      <div className="mx-auto flex max-w-page items-center justify-between gap-4">
+      <div className="mx-auto flex w-full max-w-page items-center justify-between gap-4">
         <Link href="/" className="font-display text-lg font-bold text-ink">
           DR
         </Link>

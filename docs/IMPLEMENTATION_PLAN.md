@@ -64,52 +64,67 @@ The current **live static site** has real URLs that must not 404 after cutover. 
 
 ---
 
-## Phase B — Foundations: width system + content model
+## Phase B — Foundations: width system + content model ✅ DONE
 
 **Goal:** the two-tier width system, and case studies as typed data instead of hand-written pages.
 **Why before the Work page:** the index in Phase C reads from this model. Building it first prevents a rewrite.
 
 ### B1. Two-tier width tokens
-- [ ] Add `--measure: 68ch` (prose) alongside the existing `--container-page: 1600px` (outer rail)
-- [ ] Expose as Tailwind utilities (`max-w-measure`, existing `max-w-page`)
-- [ ] Apply `max-w-measure` to all body prose; keep `max-w-page` for nav, tables, diagrams, proof strip
-- [ ] Document the rule in `globals.css` so it does not drift
+- [x] Add `--measure: 68ch` (prose) alongside the existing `--container-page: 1600px` (outer rail)
+- [x] Expose as Tailwind utilities (`max-w-measure`, existing `max-w-page`)
+- [x] Apply `max-w-measure` to all body prose; keep `max-w-page` for nav, tables, diagrams, proof strip
+- [x] Document the rule in `globals.css` so it does not drift
 
 ### B2. Spacing scale
-- [ ] Define standard section padding tokens rather than per-component `py-*` values
-- [ ] Apply to Hero, Impact, and the new placeholders
+- [x] Define standard section padding tokens rather than per-component `py-*` values
+- [x] Apply to Hero, Impact, and the new placeholders
 
 ### B3. Content model
-- [ ] Define the `CaseStudy` TypeScript type:
+- [x] Define the `CaseStudyMeta` type in `src/content/work/types.ts`:
   ```ts
-  slug, title, year, context, oneLiner, roles[], stack[],
-  abstract, problem, constraints[], architecture, decisions[],
-  codeSnippets[], outcome[], retrospective, links{github?, live?, prd?}
+  slug, title, year (nullable), context, oneLiner,
+  roles[], stack[], repo?, live?, hasWriteUp
   ```
-- [x] **Decided: MDX with typed frontmatter.** Structured data in the frontmatter, prose below it. Chosen because the content is prose plus code blocks, which is exactly what markdown is for; TS string literals would make it painful to write and easy to break.
-- [ ] Build the loader with runtime validation, so a malformed/missing field is a **build-time error**, not a silent broken page
+  Narrower than originally sketched. The narrative fields (abstract, problem,
+  constraints, decisions, code, outcome, retrospective) are **prose**, so they
+  live in the MDX body rather than as string fields in a type.
+- [x] **Storage decided, but not as originally written.** The plan said "MDX with
+  typed frontmatter"; the bundled Next.js docs confirm `@next/mdx` does *not*
+  support YAML frontmatter by default. More importantly, `tsc` does not
+  typecheck values inside `.mdx`, so frontmatter would have had no real type
+  safety. Final design: **metadata in typed `.ts` (`meta.ts`), prose in `.mdx`
+  (`bodies/<slug>.mdx`)**, joined by slug. Metadata is genuinely validated by
+  the compiler; prose stays comfortable to write.
+- [x] Build-time validation in `src/content/work/index.ts`: duplicate slugs,
+  empty required fields, and meta↔body mismatches in either direction all
+  throw during static generation
+- [x] `next.config.ts` + `mdx-components.tsx` wired up; MDX elements map onto
+  the site's type system so `.mdx` files carry no Tailwind classes
 
 ### B4. Migrate the featured projects as data
 Set and rationale in [PROJECT_INVENTORY.md](./PROJECT_INVENTORY.md). Source for existing copy: the old static pages on `main` (`projects/*.html`).
 
 Featured set of 9, in display order:
-- [ ] 1. podcastiq (AI · Data) — leads the set. Repo link pending, see inventory open item.
-- [ ] 2. imdb-analytics · 3. nypd-crime · 4. food-inspection (Data)
-- [ ] 5. sage (AI · Systems, live deployment)
-- [ ] 6. courtvision (AI) — recover copy from `git show 7549fa4:projects/courtvision.html`
-- [ ] 7. reflexai (AI · Data) — no existing page, written from scratch in Phase E
-- [ ] 8. docuparse (AI · Systems)
-- [ ] 9. meta-tradepulse (Data) — repo is `Quantitative_Trading_Analysis_on_META_Stock`
-- [ ] **Attach the repo URL to every record** (the old site linked almost none; biggest easy win)
-- [ ] Carry over `sage-prd`, `podcastiq-prd`, `courtvision-prd` as linked documents
-- [ ] Migrate hero images into `public/`, referenced by slug
-- [ ] Decide archive-row treatment for `seattle-pet-etl` and `mookit` (both have repos, neither is featured); `multiagent-codegen` has no repo at all
+- [x] 1. podcastiq (AI · Data) — leads the set. Repo link pending, see inventory open item.
+- [x] 2. imdb-analytics · 3. nypd-crime · 4. food-inspection (Data)
+- [x] 5. sage (AI · Systems, live deployment)
+- [x] 6. courtvision (AI) — recover copy from `git show 7549fa4:projects/courtvision.html`
+- [x] 7. reflexai (AI · Data) — no existing page, written from scratch in Phase E
+- [x] 8. docuparse (AI · Systems)
+- [x] 9. meta-tradepulse (Data) — repo is `Quantitative_Trading_Analysis_on_META_Stock`
+- [x] **Repo URL attached to every record that has one** — 7 of 9. Sage has no repo (it is live instead); PodcastIQ's is omitted pending your own, per [YOUR_TODOS.md](./YOUR_TODOS.md).
+- [x] MDX body skeletons generated for all 9, pre-structured with the Phase D section order so Phase E is fill-in-the-blank
+- [ ] **Not done:** carry over `sage-prd`, `podcastiq-prd`, `courtvision-prd` as linked documents
+- [ ] **Not done:** migrate hero images into `public/`, referenced by slug
+- [ ] **Not done:** decide archive-row treatment for `seattle-pet-etl` and `mookit`; `multiagent-codegen` has no repo at all. Listed in [YOUR_TODOS.md](./YOUR_TODOS.md).
+- [ ] **Not done:** `year` is `null` for 8 of 9 (only nypd-crime had a date in the old source). Deliberately not guessed. Renders as a placeholder until confirmed.
 
-**Migration note:** this phase moves *existing* copy across verbatim. Rewriting to the new structure is Phase E. Keeping those separate avoids doing structural and writing work in the same pass.
+**Migration note:** `oneLiner` values are carried over verbatim from the old meta descriptions. Rewriting to the new structure is Phase E.
 
 ### B5. Verify
-- [ ] Build fails loudly if a case study is missing a required field or references a missing image
-- [ ] All 10 records load and typecheck
+- [x] Build fails loudly on a missing required field, duplicate slug, or meta↔body mismatch — **proven**, not assumed: deliberately broke a slug link and confirmed the build failed with both error directions reported, then restored
+- [x] All **9** records load, typecheck, and render on `/work` in the intended order with PodcastIQ leading
+- [x] All 7 repo links and the Sage live link render correctly
 
 ---
 

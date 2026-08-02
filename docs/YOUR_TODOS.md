@@ -1,0 +1,39 @@
+# Your To-Dos — items only you can provide
+
+Things blocked on information, credentials, or decisions that are yours. Everything here is deliberately *not* blocking the build; the site is being built so these can be dropped in later.
+
+## Links and artifacts
+
+- [ ] **PodcastIQ repo link.** Currently omitted. Either publish your own repository, or supply the URL you want used. *(Removed 2026-08-02 at your request; the only known repo was on a collaborator's account.)*
+- [ ] **Sage repo.** Sage is live on Cloud Run but has no public repository. A repo would strengthen it, even a cleaned-up one.
+- [ ] **CourtVisionAI / ReflexAI live demos**, if either is deployed anywhere.
+- [ ] **Dashboard screenshots** for the Data projects (IMDb, NYPD, Food Inspection, Meta TradePulse). Since those pipelines run on paid cloud resources and cannot be made publicly live, screenshots are the visual proof.
+
+## Content you need to write or confirm
+
+For each featured project, the case study needs details only you know. See [PROJECT_INVENTORY.md](./PROJECT_INVENTORY.md) for the set of 9.
+
+- [ ] **Constraints** per project: SLA, data volume, budget, deadline, team size, org constraints.
+- [ ] **2-4 real decisions** per project: what you considered, what you chose, why, and what it cost you. This is the highest-signal content on the whole site.
+- [ ] **Outcome metrics** per project: runtime, records processed, cost, error rate, time saved. Real numbers only.
+- [ ] **Confirm the homepage impact numbers** are still accurate: 8+ pipelines, 5B+ records, 3+ cloud platforms, 10+ tools, 3+ years, 70+ students.
+- [ ] **About page**: your own voice for the opening paragraph.
+
+## Quick data fixes
+
+- [ ] **Project years.** Only NYPD Crime had a date in the old source (2024). The other 8 are `null` and render as a placeholder in the Work table. Deliberately not guessed, since an invented date on a portfolio is worse than a blank one. Set them in `web/src/content/work/meta.ts`.
+- [ ] **Context field.** Currently set to "Northeastern" for most and "Personal" for ReflexAI, inferred rather than confirmed. Correct any that are wrong.
+- [ ] **Hero images.** Not yet migrated from the old site into the new app.
+
+## Decisions still open
+
+- [ ] **Phase F dataset**: NYC food inspections, NYPD crime, or Seattle pet licenses for the live pipeline. Picking one that echoes an existing case study makes the two reinforce each other.
+- [ ] **Domain**: keep `dhanvardinirajendran25.github.io`, or move to a custom domain. A custom domain is worth it if this is going on a resume.
+- [ ] **Archive rows**: whether `seattle-pet-etl` and `mookit` appear as unwritten rows in the Work table (both have repos) or are left out entirely.
+- [ ] **`multiagent-codegen`**: no repo, no live link. Drop it, or is there code somewhere?
+
+## Accounts and credentials (Phase F, later)
+
+- [ ] Neon Postgres account (free tier)
+- [ ] Vercel account for deployment
+- [ ] Confirm GitHub Actions is enabled on the repo for the scheduled ingestion job
