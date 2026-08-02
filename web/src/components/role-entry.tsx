@@ -52,7 +52,7 @@ export function RoleEntry({ role }: { role: Role }) {
       {/* Expands on hover, on keyboard focus within, and when pinned open */}
       <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:grid-rows-[1fr] group-focus-within:grid-rows-[1fr] group-data-[open=true]:grid-rows-[1fr] motion-reduce:transition-none">
         <div className="overflow-hidden">
-          <ul className="grid gap-3 pb-8 pl-[4.75rem] sm:pl-[5.5rem] lg:grid-cols-2 lg:gap-x-10">
+          <ul className="grid gap-3 pb-8 pl-[4.75rem] sm:pl-[5.5rem]">
             {role.points.map((point) => (
               <li
                 key={point}

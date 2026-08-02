@@ -7,9 +7,9 @@ import {
   LEADERSHIP,
   PROFESSIONAL,
   PUBLICATIONS,
-  SKILL_GROUPS,
 } from "@/content/about";
 import { RoleEntry } from "@/components/role-entry";
+import { SkillMatrix } from "@/components/skill-matrix";
 
 export const metadata: Metadata = {
   title: "About",
@@ -27,14 +27,20 @@ function Section({
   index,
   label,
   children,
+  wide = false,
 }: {
   id: string;
   index: number;
   label: string;
   children: React.ReactNode;
+  /** Use the full 1600px rail instead of the narrower reading column. */
+  wide?: boolean;
 }) {
   return (
-    <section id={id} className="scroll-mt-28 pt-20 lg:pt-28">
+    <section
+      id={id}
+      className={`${wide ? "shell" : "shell-content"} scroll-mt-28 pt-20 lg:pt-28`}
+    >
       <div className="flex items-baseline gap-4 sm:gap-6">
         <span className="font-mono text-xs text-accent">
           {String(index).padStart(2, "0")}
@@ -49,7 +55,7 @@ function Section({
 
 export default function AboutPage() {
   return (
-    <div className="shell-content pb-24">
+    <div className="pb-24">
       <Section id="experience" index={1} label="Experience">
         <div className="border-t border-line">
           {PROFESSIONAL.map((role) => (
@@ -226,7 +232,7 @@ export default function AboutPage() {
         </ul>
       </Section>
 
-      <Section id="skills" index={5} label="Certifications and skills">
+      <Section id="skills" index={5} label="Certifications and skills" wide>
         <div className="flex flex-wrap gap-3">
           {CERTIFICATIONS.map((cert) => (
             <span
@@ -245,28 +251,10 @@ export default function AboutPage() {
           ))}
         </div>
 
-        <div className="mt-10 grid gap-px overflow-hidden rounded-brand border border-line bg-line sm:grid-cols-2">
-          {SKILL_GROUPS.map((group) => (
-            <div key={group.label} className="bg-bg p-6">
-              <div className="flex items-baseline justify-between gap-4">
-                <h3 className="text-lg">{group.label}</h3>
-                <span className="font-mono text-[11px] text-ink-faint">
-                  {String(group.items.length).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-line px-3 py-1 font-mono text-[11px] text-ink-soft transition-colors hover:border-ink hover:text-ink"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+        <div className="mt-12">
+          <SkillMatrix />
         </div>
+
       </Section>
     </div>
   );
