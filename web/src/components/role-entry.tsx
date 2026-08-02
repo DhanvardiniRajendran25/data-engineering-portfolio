@@ -26,7 +26,7 @@ export function RoleEntry({ role }: { role: Role }) {
         aria-expanded={pinned}
         className="grid w-full grid-cols-[auto_1fr] items-center gap-5 py-7 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:gap-6"
       >
-        <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-brand-sm border border-line bg-bg-elev p-2 sm:h-16 sm:w-16">
+        <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden logo-plate rounded-brand-sm border border-line p-2 sm:h-16 sm:w-16">
           <Image
             src={role.logo}
             alt=""

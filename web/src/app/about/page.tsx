@@ -77,7 +77,7 @@ export default function AboutPage() {
             >
               <div className="flex flex-wrap items-start justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-brand-sm border border-line bg-bg p-2">
+                  <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden logo-plate rounded-brand-sm border border-line p-2">
                     <Image
                       src={entry.logo}
                       alt=""
@@ -152,7 +152,7 @@ export default function AboutPage() {
                     </div>
                     <div className="flex flex-1 flex-col p-5">
                       <div className="flex items-start gap-3">
-                        <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full border border-line bg-bg p-1">
+                        <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden logo-plate rounded-full border border-line p-1">
                           <Image
                             src={award.logo}
                             alt=""
@@ -211,7 +211,7 @@ export default function AboutPage() {
                 rel="noopener"
                 className="group/pub grid grid-cols-[auto_1fr] items-start gap-5 border-b border-line py-6 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
-                <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-brand-sm border border-line bg-bg-elev p-1.5">
+                <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden logo-plate rounded-brand-sm border border-line p-1.5">
                   <Image
                     src={pub.logo}
                     alt={pub.publisher}
@@ -245,13 +245,15 @@ export default function AboutPage() {
               key={cert.title}
               className="flex items-center gap-3 rounded-brand-sm border border-line bg-bg-elev px-4 py-3"
             >
-              <Image
-                src={cert.logo}
-                alt=""
-                width={28}
-                height={28}
-                className="h-7 w-7 object-contain"
-              />
+              <span className="logo-plate grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line p-1.5">
+                <Image
+                  src={cert.logo}
+                  alt=""
+                  width={28}
+                  height={28}
+                  className="h-full w-full object-contain"
+                />
+              </span>
               <span className="text-sm">
                 {cert.title}
                 {cert.code && (

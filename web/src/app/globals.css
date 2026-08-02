@@ -121,6 +121,20 @@
     width: 100%;
   }
 
+  /*
+   * Constant light plate behind third-party logos.
+   *
+   * Most brand marks (AWS, Springer, IEEE, university seals) are dark ink
+   * drawn for white backgrounds, so on the dark theme they disappear into
+   * it. Inverting is not an option either, since several are colour-bearing.
+   * Keeping the plate light in both themes is what the brands expect and is
+   * legible either way. Warm white rather than pure white so it does not
+   * glare against the light theme's ivory background.
+   */
+  .logo-plate {
+    background: #fffdf8;
+  }
+
   /* Narrower shell for reading/scanning pages. */
   .shell-content {
     margin-inline: auto;
