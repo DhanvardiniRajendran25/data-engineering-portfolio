@@ -1,151 +1,185 @@
 # Design Plan — Clean, Minimal, Distinctive Engineering Portfolio
 
-Built on the structural decisions recorded in [MIGRATION_PLAN.md](./MIGRATION_PLAN.md): one site with role-filterable projects, a lean four-page set, and three phased signature elements.
+Built on the structural decisions in [MIGRATION_PLAN.md](./MIGRATION_PLAN.md), then revised against a competitive research pass (§12 for sources). Where research contradicted the first draft, the research wins and the change is called out.
 
-Status: **draft for review.** Nothing here is built yet beyond the current homepage hero/impact section.
+Status: **draft for review.** Only the homepage hero/impact section is built.
 
 ---
 
-## 1. The core positioning problem
+## 0. The finding that matters most
 
-A portfolio aimed at three role types usually fails one of two ways: it either becomes generic ("full-stack engineer who does everything," which reads as nothing), or it splinters into three half-built sections. The resolution is a single claim broad enough to cover all three, with the *evidence* underneath tagged by role.
+The dominant complaint from engineers reviewing engineer portfolios is **absence of text and judgment**, not absence of polish. From the most-cited HN thread on the subject: *"for many developers, their personal website is the one place where they get to explore their personal taste in web design… This probably explains why the sites are graphic heavy. Putting up text is after all not very challenging to do."*
 
-**The claim:** you build systems that move and use data in production. SDE, DE, and AI Engineer are three angles on that one competence, not three different people.
+And on the hiring side: *"Associated blog posts that explain how your code works and why though? I'd put your name to the top of the pile."*
 
-**The mechanism:** every project carries `roles[]` tags. The visitor filters. The narrative stays singular; the proof reorders itself to whoever is reading.
+**Applied to this session honestly:** we have spent many rounds on typefaces and background animation and zero rounds on written substance. That is exactly the trap the research describes. The remaining work should be weighted heavily toward *writing* — constraints, tradeoffs, decisions — and lightly toward visual iteration. The design is already good enough; the content is the differentiator.
+
+---
+
+## 1. Positioning
+
+State the **intersection in one sentence**, not three job titles. Research is explicit that role-segmented sites are a mistake: no source supports separate tracks, and splitting forces a recruiter to self-select and halves the evidence they see.
+
+The current hero line already does this correctly: *"I engineer data pipelines, backend systems, and AI features that ship to production."*
+
+**Revision to the earlier decision:** role tags are **evidence labels first, filter second**. On the homepage, tags are quiet monospace labels on each curated project. Filtering UI appears only on the full Work index, where there are enough rows for it to earn its place. This is a refinement of the "role-filterable projects" decision, not a reversal.
 
 ---
 
 ## 2. Information architecture
 
-Four pages. The nav goes from eight items to four, which alone makes the site read more senior.
+Four pages, as decided.
 
 | Page | Purpose | Absorbs |
 |---|---|---|
-| **Home** | Claim, proof, and a fast route into the work | (current homepage) |
-| **Work** | The editorial index of case studies, filterable by role | Projects |
-| **About** | Story, experience timeline, skills, education, awards, in one dense narrative page | Experience, Education, Skills, Awards |
-| **Contact** | Direct, low-friction contact + resume | Contact |
+| **Home** | Bio, proof, 4-5 curated case studies | (current homepage) |
+| **Work** | Dense archive index of all ~10 case studies | Projects |
+| **About** | Story, experience, skills, education, awards | Experience, Education, Skills, Awards |
+| **Contact** | Email with copy-to-clipboard, resume, GitHub | Contact |
 
-**Dropped:** Gallery. It dilutes a technical portfolio and competes for attention with the case studies.
-
-**Why one About page instead of four:** four thin pages each holding a single list reads as padding. One page that moves from "who I am" to "where I've worked" to "what I use" to "what I've won" reads as a story with substance and is faster to scan than four navigations.
+**Dropped:** Gallery.
 
 ---
 
 ## 3. Homepage structure
 
-Five sections, in this order. The logic is: **claim → proof → work → credibility → action.**
-
-1. **Hero** (exists, refined). Name, one-line claim, role rotator, resume + social icons, photo.
-2. **Impact metrics** (exists). Six numbers spanning all three role lenses.
-3. **Selected work** (new). Three or four hand-picked case studies, not all ten. A curated selection reads as confident; a full dump reads as a database. Links through to Work.
-4. **Live system panel** (new, Phase 5 signature). A small real component fed by the actual running pipeline: last refresh timestamp, rows processed, a compact chart. This is the single strongest differentiator on the site, because it is the only element that *demonstrates* rather than *claims*.
-5. **Closing CTA** (new). One clear line and a contact link. Not a giant footer wall.
-
-**Homepage principle:** it should be fully readable in about 30 seconds of scrolling, and every section should either make a claim or prove one.
+1. **Hero** (exists) — the intersection sentence, resume + socials, photo.
+2. **Proof strip** (exists as Impact) — real numbers. Research is emphatic that these must be *outcome* numbers (scale, cost, latency, time saved), never skill levels.
+3. **Selected work** (new) — **4-5** curated case studies with role tags as labels. Not all ten. leerob.com carries an entire homepage on curation alone with no project grid at all.
+4. **Live system panel** (new, Phase F) — one small, honest widget fed by a real endpoint. Research ranks this highly *provided it is real*: "not fake charts."
+5. **Closing CTA** — email with copy-to-clipboard, resume, GitHub.
 
 ---
 
-## 4. Work page — signature element #1 (editorial index)
+## 4. Work page — REVISED
 
-Not a card grid. Card grids are the single most generic pattern in developer portfolios.
+**Draft said:** numbered editorial index with hover-reveal image previews.
 
-Instead: a **numbered editorial index**. Each row is a full-width line with a large serif title, a one-line outcome, and small mono role tags. Hovering a row reveals its hero image, either inline or as a floating preview that follows the cursor. Clicking opens the case study.
+**Research says:** the strongest and safest signature for an engineer is a **dense archive table** (the brittanychiang.com `/archive` pattern), ranked #1 of five candidate signature devices. Hover-reveal image previews are a designer-portfolio device; a table is engineer-flavored, scannable, and scales to 10+ rows without becoming a scroll.
+
+**Revised design** — a real table, monospace metadata columns, full outer-rail width:
 
 ```
-FILTER   [ All ]  Software   Data   AI
+FILTER   [ All ]  Systems   Data   AI
 
-01 ── Seattle Pet ETL                      DATA · SOFTWARE
-      Nightly pipeline, 1.2M records, zero manual touch
-
-02 ── PodcastIQ                            AI · DATA
-      Multi-agent knowledge graph over 40k episodes
-
-03 ── Sage                                 AI · SOFTWARE
-      RAG compliance assistant with prompt-injection defense
+YEAR   PROJECT              CONTEXT              STACK                    ROLE
+2025   Seattle Pet ETL      Personal             Airflow · dbt · Postgres  DATA
+2025   PodcastIQ            Personal             Neo4j · LangGraph         AI · DATA
+2024   Sage                 Northeastern         RAG · Guardrails          AI · SYSTEMS
 ```
 
-Why this works: it is scannable like a table of contents (which is what a hiring manager actually wants), it is distinctive without being decorative, and it scales cleanly from 4 projects to 40. The filter is a real function of the role tags, not a UI toy.
+Dense, sortable, unmistakably an engineer's index. This is signature element #1.
 
 ---
 
-## 5. Case study template — signature element #2 (interactive diagrams)
+## 5. Case study template — REVISED
 
-One consistent structure for every case study. This consistency is itself a signal of engineering discipline, and it fixes the exact bug class the original site audit found (34 hand-copied pages that drifted apart).
+Research refinements: lead with an abstract *above the fold*, put the architecture diagram immediately after context, and include short code.
 
-1. **Header** — title, one-line outcome, role tags, stack chips, timeframe.
-2. **The problem** — what was broken or needed, and the constraints. Constraints are what separate real engineering from a tutorial.
-3. **Architecture** — the interactive diagram. Steppable stage by stage: ingest → transform → store → serve. This is where a technical reader decides whether you actually know what you're doing.
-4. **Key decisions** — 2-4 real tradeoffs, each stated as *option chosen vs. option rejected, and why*. This section matters more than any other for senior-level credibility.
-5. **Outcome** — concrete numbers. Runtime, volume, cost, error rate, whatever is honest and real.
-6. **What I'd do differently** — short. Signals maturity and self-awareness; almost nobody includes it, which makes it memorable.
+1. **One-paragraph abstract** — problem + outcome + numbers, above the fold. Skimmers read only this.
+2. **Context & constraints** — business context, users, SLA, budget, data volume, org constraints.
+3. **Architecture diagram** — immediately after context. Data-engineering sources are unanimous that the diagram should lead, showing flow source → destination.
+4. **Key decisions & tradeoffs** — 2-4 named decisions, each *options considered → chosen → why → what it cost*. Research calls this "the highest-signal section and the most commonly missing."
+5. **Selected code** (added) — short surgical snippets: a tricky DAG, a windowing query, a retry/idempotency guard. Not files.
+6. **Outcome** — plain metrics.
+7. **What I'd do differently.**
 
-**Length target:** readable in 3-4 minutes. Long enough to show depth, short enough to actually get read.
+**Length: 600-1200 words.** A 30-second skim must still yield the narrative.
+
+Signature element #2 is the **explorable diagram**: hovering a node reveals its throughput, tech, and failure mode. Restrained, framer-motion-friendly, directly on-message for a data engineer.
 
 ---
 
 ## 6. About page
 
-A single narrative page in four movements, not four separate lists:
+Four movements in one page: opening in actual first-person voice → experience timeline with outcomes → skills bucketed by discipline → education and recognition.
 
-1. **Opening** — two or three sentences of actual voice. Who you are as an engineer and what you care about building.
-2. **Experience timeline** — Optum roles, Northeastern, teaching. Vertical, restrained, with outcomes rather than responsibilities.
-3. **Skills, bucketed by role lens** — Languages & Fundamentals · Data Engineering · Cloud & Infra · AI/ML & LLM Systems · Software Engineering. Plain grouped text.
-   **No proficiency bars.** "Python 90%" is meaningless, universally mocked by engineers, and actively damages credibility.
-4. **Education & recognition** — compact, factual, at the end.
+**No proficiency bars.** From a review of 40+ portfolios: *"percentages or progress bars do not add any value, no one knows what it actually means."* Use years or project counts.
+
+Research note: About is *the one place personality is allowed*. Prose, not bullets.
 
 ---
 
-## 7. Contact page
+## 7. Contact
 
-Deliberately minimal: one line of invitation, direct email, LinkedIn, GitHub, resume download. A form is optional; if added it needs validation, spam protection, and rate limiting (tracked in [QUALITY_CHECKLIST.md](./QUALITY_CHECKLIST.md) §10). A plain mailto is more honest than a form that might silently fail.
-
----
-
-## 8. Design system refinements
-
-Carrying forward the quiet-luxury direction already established, with these specific changes:
-
-- **Shell width** — resolved to 1600px shared across header, hero, impact, and footer so all edges align. (Fixed; previously the header was full-bleed while the body sat in a 1180px island.)
-- **Vertical rhythm** — standardize on a spacing scale (section padding, heading margins) rather than per-component values, so pages feel like one system.
-- **Type scale** — Playfair Display for display only; Geist Sans for all body/UI; Geist Mono reserved for data (metrics, tags, timestamps, code). The mono-as-data rule is a small thing that makes a technical site feel intentional.
-- **Accent discipline** — coral stays reserved for the role rotator, active states, and links. Never for large fills.
-- **Motion** — entrance reveals and the nav pill only. The background stays monochrome and subtle. Motion should never be the thing you notice.
+Email with **copy-to-clipboard** (the rauno.me pattern — small, genuinely useful), resume PDF, GitHub, LinkedIn. A plain mailto beats a form that might silently fail.
 
 ---
 
-## 9. What to deliberately avoid
+## 8. Layout — REVISED (two-tier width)
 
-These are the patterns that make engineering portfolios read as junior:
+**Draft said:** one 1600px shell everywhere. **Research says that is the wrong *model*, not the wrong number.**
 
-- Skill proficiency bars or percentages
-- Walls of technology logos
+Premium sites use **two tiers**:
+
+- **Outer rail 1400-1600px** — nav, work index, tables, diagrams, proof strip, image bleed
+- **Prose measure 65-72ch (≈680-720px)** — all body text
+
+Observed values: mxstbr.com **1600 shell / 65ch prose**; maggieappleton.com 1420-1512 / 1100-1200; nan.fyi 1450 / 964; paco.me 1072 / 640; rauchg.com 1280 / 600.
+
+The 1600px rail just implemented matches mxstbr exactly and is correct. **What is missing is the narrow measure for text.** The "narrow column, huge margins" problem is solved by letting *wide* elements (work table, diagrams, proof strip) occupy the full rail while text stays narrow — and by putting left-aligned metadata gutters (dates, role tags) in the rail so it carries information rather than emptiness.
+
+**Action:** add a `--measure` token (~68ch) and apply it to prose; keep 1600 for structural elements. Nav aligns to the outer rail (already done).
+
+---
+
+## 9. The background animation — needs a decision
+
+Research lists, under *avoid as signature*: **"ambient background motion, 3D, cursor effects, terminal simulators."**
+
+That is the sweeping light-beam background we just built over several rounds. It is currently monochrome and subtle, so it is not offensive — but per this research it contributes nothing to the signal a technical reader is looking for, and the effort is better spent on the archive table and case-study writing.
+
+Three options, your call (§13):
+- **Keep as-is** — it is subtle enough to be harmless.
+- **Reduce to static** — keep a faint gradient, drop the motion.
+- **Remove entirely** — let the typography and content carry the page.
+
+I am not deleting it unilaterally given the effort already invested.
+
+---
+
+## 10. What to deliberately avoid
+
+Each of these is sourced:
+
+- Skill percentage bars *("no one knows what it actually means")*
+- Tech-logo grids — they compress your differentiator (judgment) into the thing everyone shares (tool exposure)
+- Tutorial-clone projects; 10+ shallow projects (3-5 deep, deep-linked to GitHub)
+- Case studies with no constraints, no pivot, no tradeoff — the single most-named failure mode
 - "Passionate developer who loves clean code" copy
-- Terminal/matrix/particle backgrounds as decoration
-- Card grids of identical-looking projects with no hierarchy
-- Listing every course taken or every tool ever touched
-- Case studies that describe *what* was built with no *why*
-- Animation that delays reading
+- Decorative animation, as distinct from interaction that explains something
+- Card grids of identical projects with no hierarchy
 
 ---
 
-## 10. Build sequence
+## 11. Build sequence
 
 | Phase | Work | Signature |
 |---|---|---|
-| **A** | Consolidate routes to 4 pages; delete Gallery; redirect old paths | — |
-| **B** | Typed content model for case studies with `roles[]`; migrate the 10 projects | — |
-| **C** | Work page editorial index + role filter | #1 |
-| **D** | Case study template + interactive architecture diagrams | #2 |
-| **E** | About page consolidation; homepage Selected Work + closing CTA | — |
+| **A** | Consolidate 8 routes → 4; delete Gallery; redirect old paths | — |
+| **B** | Two-tier width tokens (`--measure`); typed content model with `roles[]`; migrate 10 projects | — |
+| **C** | Work archive table + filter | #1 |
+| **D** | Case study template + explorable architecture diagrams | #2 |
+| **E** | **Write the case studies** — constraints, tradeoffs, decisions. The highest-value phase per §0. | — |
 | **F** | Live pipeline + homepage live panel | #3 |
-| **G** | Hardening pass against [QUALITY_CHECKLIST.md](./QUALITY_CHECKLIST.md): SEO metadata, sitemap, JSON-LD, 404, error boundary, contrast audit, Lighthouse | — |
+| **G** | Hardening against [QUALITY_CHECKLIST.md](./QUALITY_CHECKLIST.md) | — |
 
-Each phase is a review checkpoint.
+Phase E is where this portfolio is actually won or lost.
 
 ---
 
-## 11. Competitive research findings
+## 12. Research sources
 
-*(To be filled in from the in-flight design research pass: specific admired engineer portfolios, the structural devices they use, layout conventions on large displays, and what hiring managers report actually valuing. Findings that contradict anything above take precedence, and this document gets revised accordingly.)*
+Discussion and review: [HN 32113545](https://news.ycombinator.com/item?id=32113545) · [HN 14420802](https://news.ycombinator.com/item?id=14420802) · [dev.to, 40+ portfolios reviewed](https://dev.to/kethmars/what-i-learned-after-reviewing-over-40-developer-portfolios-9-tips-for-a-better-portfolio-4me7) · [The Crit](https://www.thecrit.co/resources/portfolio-project-examples) · [Opendoors](https://blog.opendoorscareers.com/p/how-to-write-a-strong-case-study-for-your-portfolio-in-2025-a14b)
+
+Data/AI specific: [dataexpert.io](https://www.dataexpert.io/blog/data-engineering-portfolio-projects-get-hired) · [pipeline2insights](https://pipeline2insights.substack.com/p/how-to-create-data-engineering-data-engineers-github-portfolio-in-2026)
+
+Sites analyzed: [paco.me](https://paco.me) · [rauno.me](https://rauno.me) · [brittanychiang.com](https://brittanychiang.com) · [mxstbr.com](https://mxstbr.com) · [leerob.com](https://leerob.com) · [nan.fyi](https://nan.fyi) · [joshwcomeau.com](https://www.joshwcomeau.com) · [maggieappleton.com](https://maggieappleton.com) · [shud.in](https://shud.in) · [emilkowal.ski](https://emilkowal.ski)
+
+---
+
+## 13. Open questions
+
+1. **Background animation** — keep, reduce to static, or remove? (§9)
+2. **Phase A is destructive** (deletes 4 route files including Gallery). Explicit go needed.
+3. **Writing capacity** — Phase E needs ~10 case studies at 600-1200 words each. Draft all ten, or start with the 4-5 that appear on the homepage and let the rest stay as table rows linking to GitHub?
