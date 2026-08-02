@@ -31,7 +31,7 @@ const FOOTER_LINKS = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-line px-gutter py-8 text-sm text-ink-soft">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-4">
         <span className="font-display text-ink">Dhanvardini Rajendran</span>
         <nav aria-label="Contact" className="flex items-center gap-2">
           {FOOTER_LINKS.map(({ href, label, Icon, external, download }) => (
@@ -49,7 +49,7 @@ export function SiteFooter() {
           ))}
         </nav>
       </div>
-      <p className="mt-4 text-ink-faint">
+      <p className="mx-auto mt-4 max-w-page text-ink-faint">
         &copy; {new Date().getFullYear()} Dhanvardini Rajendran.
       </p>
     </footer>

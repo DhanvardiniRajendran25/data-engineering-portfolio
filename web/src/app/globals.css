@@ -2,7 +2,11 @@
 
 /* ---------- Design tokens (ported from ../../../css/styles.css) ---------- */
 :root {
-  --maxw: 1180px;
+  /* Single shared shell width. Header, hero, impact, and footer all use this
+     via `max-w-page` so their left/right edges line up at every viewport.
+     1600px keeps a 1920px monitor feeling used (not a narrow centered island)
+     while still capping sensibly on ultra-wide displays. */
+  --maxw: 1600px;
   --gutter: clamp(1.25rem, 4vw, 4rem);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --accent: #c2453d;
@@ -55,7 +59,7 @@
   --radius-brand-sm: 10px;
   --shadow-brand: var(--shadow);
   --ease-brand: var(--ease);
-  --container-page: 1180px;
+  --container-page: 1600px;
   --spacing-gutter: clamp(1.25rem, 4vw, 4rem);
 }
 

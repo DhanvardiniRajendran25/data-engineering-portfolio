@@ -52,7 +52,7 @@ export function Hero() {
   };
 
   return (
-    <section className="mx-auto grid max-w-page items-center gap-10 px-gutter py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:py-28">
+    <section className="mx-auto grid max-w-page items-center gap-10 px-gutter py-10 sm:py-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:py-16">
       <motion.div initial="hidden" animate="show" variants={container}>
         <motion.h1 variants={item} className="text-4xl sm:text-5xl lg:text-6xl">
           Dhanvardini
@@ -99,7 +99,7 @@ export function Hero() {
         initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-        className="relative mx-auto w-full max-w-sm"
+        className="relative mx-auto w-full max-w-sm lg:mr-0 lg:ml-auto lg:max-w-[420px]"
       >
         <div className="overflow-hidden rounded-brand border border-line shadow-brand">
           <Image
