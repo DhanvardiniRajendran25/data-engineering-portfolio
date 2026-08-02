@@ -40,7 +40,7 @@ export function ProjectBand({
             mirrored ? "lg:order-2" : ""
           }`}
         >
-          <div className="aspect-[16/10] w-full overflow-hidden">
+          <div className="aspect-[3/2] w-full overflow-hidden">
             <div className="h-full w-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-focus-visible:scale-[1.04] motion-reduce:transform-none motion-reduce:transition-none">
               <ProjectCover project={project} />
             </div>
