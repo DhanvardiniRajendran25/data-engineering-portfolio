@@ -8,12 +8,8 @@ import { ThemeToggle } from "./theme-toggle";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/experience", label: "Experience" },
-  { href: "/education", label: "Education" },
-  { href: "/skills", label: "Skills" },
-  { href: "/awards", label: "Awards" },
-  { href: "/projects", label: "Projects" },
-  { href: "/gallery", label: "Gallery" },
+  { href: "/work", label: "Work" },
+  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -57,7 +53,7 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 aria-current={isActive ? "page" : undefined}
-                className="relative rounded-full px-3 py-1.5"
+                className="relative rounded-full px-4 py-1.5"
               >
                 {isActive && (
                   <motion.span

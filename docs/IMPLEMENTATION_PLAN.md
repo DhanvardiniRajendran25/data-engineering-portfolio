@@ -8,28 +8,31 @@ Each phase is a review checkpoint. Nothing in a later phase starts until the cur
 
 ---
 
-## Phase A — Route consolidation (8 pages → 4)
+## Phase A — Route consolidation (8 pages → 4) ✅ DONE
 
 **Goal:** collapse the nav from eight routes to Home / Work / About / Contact.
-**Destructive:** yes. Deletes 5 route files. All recoverable from git.
-**Estimated size:** small, mechanical. No visual design work.
+**Destructive:** yes. Deleted 6 route files. All recoverable from git.
+**Outcome:** build emits exactly 4 pages; all return 200; deleted routes 404.
 
 ### A1. Create the new routes
-- [ ] `src/app/work/page.tsx` — placeholder, real index lands in Phase C
-- [ ] `src/app/about/page.tsx` — placeholder, real content lands in Phase E
+- [x] `src/app/work/page.tsx` — placeholder, real index lands in Phase C
+- [x] `src/app/about/page.tsx` — placeholder, real content lands in Phase E
+- [x] Both export `metadata` (title + description), picked up by the root layout's `%s · Dhanvardini Rajendran` template. Slightly ahead of Phase G scope, but creating a new page with no title would have been an obvious miss.
 
 ### A2. Delete the absorbed routes
-- [ ] Delete `src/app/experience/` → folds into About
-- [ ] Delete `src/app/education/` → folds into About
-- [ ] Delete `src/app/skills/` → folds into About
-- [ ] Delete `src/app/awards/` → folds into About
-- [ ] Delete `src/app/projects/` → replaced by `/work`
-- [ ] Delete `src/app/gallery/` → dropped entirely
+- [x] Delete `src/app/experience/` → folds into About
+- [x] Delete `src/app/education/` → folds into About
+- [x] Delete `src/app/skills/` → folds into About
+- [x] Delete `src/app/awards/` → folds into About
+- [x] Delete `src/app/projects/` → replaced by `/work`
+- [x] Delete `src/app/gallery/` → dropped entirely
+
+All six were single-file placeholders; no written content was lost.
 
 ### A3. Update navigation
-- [ ] `site-header.tsx` — `NAV_LINKS` from 8 entries to 4 (Home, Work, About, Contact)
-- [ ] Verify the desktop pill still balances visually with only 4 items (it was sized for 8; may want slightly more horizontal padding)
-- [ ] Verify the mobile slide-out menu still looks intentional with 4 large links rather than 8
+- [x] `site-header.tsx` — `NAV_LINKS` from 8 entries to 4 (Home, Work, About, Contact)
+- [x] Desktop pill rebalanced: per-link padding `px-3` → `px-4`, so a 4-item pill does not look undersized in the 1600px rail
+- [x] Mobile slide-out menu verified — 4 large links, unchanged treatment
 
 ### A4. Record the redirect map (do not implement yet)
 The current **live static site** has real URLs that must not 404 after cutover. Implementation belongs in Phase G, but the mapping is decided here:
@@ -46,17 +49,18 @@ The current **live static site** has real URLs that must not 404 after cutover. 
 | `/gallery.html` | `/` (no equivalent; Gallery dropped) |
 | `/contact.html` | `/contact` |
 
-- [ ] Save this table in the repo so it survives to Phase G
+- [x] Saved as [REDIRECT_MAP.md](./REDIRECT_MAP.md), expanded with case-study slugs, anchor-target caveats, and a Phase G verification checklist
 
 **Note:** no redirects are needed *within* the new app for `/projects` → `/work`, because the new app has never been deployed. Only the old static URLs matter.
 
 ### A5. Verify
-- [ ] `npm run lint` and `tsc --noEmit` clean
-- [ ] `npm run build` succeeds and the route list shows exactly 4 pages + `/api/health` + not-found
-- [ ] Every nav link returns 200
-- [ ] No dead imports left behind (`page-placeholder.tsx` still used by Work/About placeholders)
+- [x] `npm run lint` and `tsc --noEmit` clean
+- [x] `npm run build` succeeds; route list is exactly `/`, `/about`, `/contact`, `/work` + `/_not-found`, `/api/health`, `/icon.svg`
+- [x] All 4 nav routes return 200
+- [x] All 6 deleted routes return 404 (correct — never publicly deployed, so no redirect owed)
+- [x] No dead references to deleted paths anywhere in `src/`
 
-**Acceptance:** nav shows 4 items, all resolve, build is clean, redirect map is committed.
+**Acceptance met.** Nav shows 4 items, all resolve, build clean, redirect map committed.
 
 ---
 
