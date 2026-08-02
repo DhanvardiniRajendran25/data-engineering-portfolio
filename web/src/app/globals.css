@@ -63,6 +63,10 @@
      Using one width for both is what made the layout read as a narrow
      centered island on large monitors. Keep them distinct. */
   --container-page: 1600px;
+  /* Middle tier for text-dense pages (About, project bodies). 1600px is
+     right for the nav rail and image-led layouts, but it stretches lists and
+     rows so far apart that related items stop reading as related. */
+  --container-content: 1120px;
   --container-measure: 68ch;
 
   --spacing-gutter: clamp(1.25rem, 4vw, 4rem);
@@ -113,6 +117,14 @@
   .shell {
     margin-inline: auto;
     max-width: var(--container-page);
+    padding-inline: var(--gutter);
+    width: 100%;
+  }
+
+  /* Narrower shell for reading/scanning pages. */
+  .shell-content {
+    margin-inline: auto;
+    max-width: var(--container-content);
     padding-inline: var(--gutter);
     width: 100%;
   }

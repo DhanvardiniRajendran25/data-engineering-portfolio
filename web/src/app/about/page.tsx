@@ -49,7 +49,7 @@ function Section({
 
 export default function AboutPage() {
   return (
-    <div className="shell pb-24">
+    <div className="shell-content pb-24">
       <Section id="experience" index={1} label="Experience">
         <div className="border-t border-line">
           {PROFESSIONAL.map((role) => (
@@ -98,24 +98,6 @@ export default function AboutPage() {
                   )}
                 </div>
               </div>
-
-              {entry.honors && (
-                <div className="mt-8">
-                  <h4 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
-                    Honors and societies
-                  </h4>
-                  <ul className="mt-4 grid gap-2 lg:grid-cols-2 lg:gap-x-10">
-                    {entry.honors.map((honor) => (
-                      <li
-                        key={honor}
-                        className="border-l border-line pl-4 text-sm text-ink-soft"
-                      >
-                        {honor}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
 
               <div className="mt-8">
                 <h4 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
