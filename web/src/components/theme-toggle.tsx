@@ -45,7 +45,7 @@ export function ThemeToggle() {
       type="button"
       onClick={() => applyTheme(theme === "dark" ? "light" : "dark")}
       aria-label="Toggle light and dark mode"
-      className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+      className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
     >
       {theme === "dark" ? (
         <svg

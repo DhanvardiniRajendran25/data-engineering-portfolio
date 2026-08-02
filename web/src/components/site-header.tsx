@@ -48,7 +48,7 @@ export function SiteHeader() {
 
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-1 rounded-full border border-line bg-bg-elev/90 px-2 py-2 text-sm font-medium shadow-brand backdrop-blur md:flex"
+          className="hidden items-center gap-1 rounded-full border border-line bg-bg-elev/90 px-2 py-2 text-sm font-medium shadow-brand backdrop-blur lg:flex"
         >
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
@@ -86,7 +86,7 @@ export function SiteHeader() {
             aria-label="Open menu"
             aria-expanded={open}
             aria-controls="site-menu"
-            className="grid h-9 w-9 place-items-center rounded-full border border-line bg-bg-elev/90 text-ink shadow-brand backdrop-blur transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent md:hidden"
+            className="grid h-10 w-10 place-items-center rounded-full border border-line bg-bg-elev/90 text-ink shadow-brand backdrop-blur transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent lg:hidden"
           >
             <svg
               viewBox="0 0 24 24"
@@ -121,7 +121,7 @@ export function SiteHeader() {
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+              className="grid h-10 w-10 place-items-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -151,7 +151,7 @@ export function SiteHeader() {
                   href={link.href}
                   onClick={() => setOpen(false)}
                   aria-current={isActive ? "page" : undefined}
-                  className={`font-display text-4xl transition-colors sm:text-5xl ${
+                  className={`font-display text-3xl transition-colors sm:text-4xl lg:text-5xl ${
                     isActive ? "text-ink underline" : "text-ink-soft hover:text-ink"
                   }`}
                 >

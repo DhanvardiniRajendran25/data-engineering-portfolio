@@ -42,7 +42,7 @@ export function SiteFooter() {
               target={external ? "_blank" : undefined}
               rel={external ? "noopener" : undefined}
               download={download}
-              className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink-soft transition-colors hover:border-ink hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+              className="grid h-10 w-10 place-items-center rounded-full border border-line text-ink-soft transition-colors hover:border-ink hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
             >
               <Icon className="h-[16px] w-[16px]" />
             </a>

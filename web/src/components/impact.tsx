@@ -63,13 +63,13 @@ export function Impact() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section aria-label="Impact by the numbers" className="relative border-t border-line py-20">
+    <section aria-label="Impact by the numbers" className="relative border-t border-line py-12 sm:py-16 lg:py-20">
       <motion.div
         initial={prefersReducedMotion ? undefined : "hidden"}
         whileInView={prefersReducedMotion ? undefined : "show"}
         viewport={{ once: true, margin: "-80px" }}
         variants={container}
-        className="mx-auto grid max-w-page grid-cols-2 gap-6 px-gutter sm:grid-cols-3 md:grid-cols-6"
+        className="mx-auto grid max-w-page grid-cols-2 gap-4 px-gutter sm:grid-cols-3 sm:gap-6 lg:grid-cols-6"
       >
         {STATS.map(({ value, label, tag, Icon }) => (
           <motion.div

@@ -52,15 +52,15 @@ export function Hero() {
   };
 
   return (
-    <section className="mx-auto grid max-w-page items-center gap-16 px-gutter py-28 md:grid-cols-[1.1fr_0.9fr]">
+    <section className="mx-auto grid max-w-page items-center gap-10 px-gutter py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:py-28">
       <motion.div initial="hidden" animate="show" variants={container}>
-        <motion.h1 variants={item} className="text-5xl sm:text-6xl">
+        <motion.h1 variants={item} className="text-4xl sm:text-5xl lg:text-6xl">
           Dhanvardini
           <br />
           Rajendran
         </motion.h1>
 
-        <motion.p variants={item} className="mt-6 max-w-prose text-lg text-ink-soft">
+        <motion.p variants={item} className="mt-6 max-w-prose text-base text-ink-soft sm:text-lg">
           I engineer data pipelines, backend systems, and AI features that
           ship to production.
         </motion.p>
@@ -90,7 +90,7 @@ export function Hero() {
           </div>
         </motion.div>
 
-        <motion.p variants={item} className="mt-8 text-lg text-ink-soft">
+        <motion.p variants={item} className="mt-8 text-base text-ink-soft sm:text-lg">
           Open to roles as <RoleRotator />
         </motion.p>
       </motion.div>
