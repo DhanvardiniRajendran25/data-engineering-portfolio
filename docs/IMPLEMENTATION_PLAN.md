@@ -86,17 +86,23 @@ The current **live static site** has real URLs that must not 404 after cutover. 
   abstract, problem, constraints[], architecture, decisions[],
   codeSnippets[], outcome[], retrospective, links{github?, live?, prd?}
   ```
-- [ ] Decide storage format: MDX (rich prose, easy code blocks) vs. typed `.ts` records. **Recommendation: MDX with typed frontmatter** — prose-heavy content is painful in TS string literals, and Phase E is prose-heavy.
+- [x] **Decided: MDX with typed frontmatter.** Structured data in the frontmatter, prose below it. Chosen because the content is prose plus code blocks, which is exactly what markdown is for; TS string literals would make it painful to write and easy to break.
 - [ ] Build the loader with runtime validation, so a malformed/missing field is a **build-time error**, not a silent broken page
 
-### B4. Migrate the 10 projects as data
-Source: the old static pages on `main` (`projects/*.html`).
-- [ ] seattle-pet-etl · nypd-crime · imdb-analytics · food-inspection · podcastiq
-- [ ] sage · multiagent-codegen · docuparse · meta-tradepulse · mookit
-- [ ] Carry over `sage-prd` and `podcastiq-prd` as linked documents
-- [ ] Migrate hero images into `public/`, referenced by slug
+### B4. Migrate the featured projects as data
+Set and rationale in [PROJECT_INVENTORY.md](./PROJECT_INVENTORY.md). Source for existing copy: the old static pages on `main` (`projects/*.html`).
 
-**Migration note:** this phase moves *existing* copy across verbatim. Rewriting to the new case-study structure is Phase E. Keeping those separate avoids doing structural work and writing work in the same pass.
+- [ ] imdb-analytics · nypd-crime · food-inspection · seattle-pet-etl (Data)
+- [ ] sage (AI · Systems, live deployment)
+- [ ] courtvision (AI) — recover copy from `git show 7549fa4:projects/courtvision.html`
+- [ ] reflexai (AI · Data) — no existing page, needs writing from scratch in Phase E
+- [ ] podcastiq — decide: eighth featured, or archive row. Must be labeled a team project.
+- [ ] **Attach the repo URL to every record** (the old site linked almost none; this is the biggest easy win)
+- [ ] Carry over `sage-prd`, `podcastiq-prd`, `courtvision-prd` as linked documents
+- [ ] Migrate hero images into `public/`, referenced by slug
+- [ ] Decide the fate of `multiagent-codegen`, `docuparse`, `meta-tradepulse`, `mookit` — no repo, no live link, so no verifiable artifact
+
+**Migration note:** this phase moves *existing* copy across verbatim. Rewriting to the new structure is Phase E. Keeping those separate avoids doing structural and writing work in the same pass.
 
 ### B5. Verify
 - [ ] Build fails loudly if a case study is missing a required field or references a missing image
@@ -162,15 +168,17 @@ Source: the old static pages on `main` (`projects/*.html`).
 
 **Goal:** the actual content. Per DESIGN_PLAN §0, this is where the portfolio is won or lost.
 
-### E1. Per case study (600-1200 words each)
-For each of the chosen projects:
+### E1. Per case study (300-500 words each)
+Target revised down from 600-1200: with the repo linked, the repo carries the "what" and the write-up only has to carry the "why." Seven featured projects at this length is roughly 2,500-3,500 words total.
+
 - [ ] Abstract: problem + outcome + numbers, above the fold
 - [ ] Context and **constraints** (SLA, budget, data volume, org constraints)
 - [ ] Architecture described well enough to drive the diagram data
-- [ ] **2-4 named decisions**, each with options considered, choice, rationale, and cost
+- [ ] **2-4 named decisions**, each with options considered, choice, rationale, and cost — the highest-signal section
 - [ ] 1-2 surgical code snippets
 - [ ] Concrete outcome metrics
 - [ ] Short retrospective
+- [ ] PodcastIQ specifically: state the team context and the role played
 
 ### E2. About page
 - [ ] Opening in first-person voice
@@ -251,16 +259,11 @@ Driven by [QUALITY_CHECKLIST.md](./QUALITY_CHECKLIST.md).
 
 ---
 
-## Scope question (Phase E)
+## Scope — resolved (2026-08-02)
 
-Ten case studies at 600-1200 words is roughly 6,000-12,000 words of technical writing. That is the real cost of this project, and it is writing only you can do — the constraints, tradeoffs, and numbers are yours.
+- **5-7 featured projects**, each end-to-end with a verifiable artifact. Recommended set of 7 in [PROJECT_INVENTORY.md](./PROJECT_INVENTORY.md).
+- **300-500 words each**, not 600-1200. The repo carries the "what"; the prose carries the "why."
+- **Every featured project links its repo.** The old site linked almost none, which left the work unverifiable.
+- Projects with no repo and no live deployment (`multiagent-codegen`, `docuparse`, `meta-tradepulse`, `mookit`) are not featured. Their fate is decided in B4.
 
-Three options:
-
-| Option | Effort | Result |
-|---|---|---|
-| **All 10 in full** | Highest | Every row is a full case study |
-| **4-5 in full, rest as rows** | Moderate | Featured projects go deep; the others stay as archive rows linking to GitHub. This is what leerob.com and paco.me do, and research supports 3-5 deep over 10 shallow. |
-| **Rolling** | Lowest upfront | Ship with 2-3 written, add over time |
-
-**Recommendation: 4-5 in full.** Research explicitly favors depth over count, and a table row with a real GitHub link is honest — it does not pretend to be more than it is.
+Total writing load: roughly 2,500-3,500 words across seven projects, plus the About page.
