@@ -247,17 +247,24 @@ export default function AboutPage() {
         <div className="flex flex-wrap gap-3">
           {CERTIFICATIONS.map((cert) => (
             <span
-              key={cert}
+              key={cert.title}
               className="flex items-center gap-3 rounded-brand-sm border border-line bg-bg-elev px-4 py-3"
             >
               <Image
-                src="/logos/aws.webp"
+                src={cert.logo}
                 alt=""
                 width={28}
                 height={28}
                 className="h-7 w-7 object-contain"
               />
-              <span className="text-sm">{cert}</span>
+              <span className="text-sm">
+                {cert.title}
+                {cert.code && (
+                  <span className="ml-2 font-mono text-[11px] text-ink-faint">
+                    {cert.code}
+                  </span>
+                )}
+              </span>
             </span>
           ))}
         </div>
