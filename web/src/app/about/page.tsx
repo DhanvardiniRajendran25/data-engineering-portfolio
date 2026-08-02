@@ -131,7 +131,18 @@ export default function AboutPage() {
             <h3 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
               {group.group}
             </h3>
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+              className={`mt-6 grid gap-6 sm:grid-cols-2 ${
+                // Columns follow the group size so a group never wraps a
+                // lone card onto a second row. Classes are written out in
+                // full because Tailwind cannot see interpolated names.
+                group.items.length === 4
+                  ? "lg:grid-cols-4"
+                  : group.items.length === 3
+                    ? "lg:grid-cols-3"
+                    : "lg:grid-cols-2"
+              }`}
+            >
               {group.items.map((award) => {
                 const card = (
                   <>
