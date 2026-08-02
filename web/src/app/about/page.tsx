@@ -18,19 +18,17 @@ export const metadata: Metadata = {
 };
 
 /**
- * A page section. Each gets a large numbered display heading and generous
+ * A page section. Each gets a large display heading and generous
  * space above it, so the eye registers a real break between Experience,
  * Education, Recognition and so on rather than one continuous list.
  */
 function Section({
   id,
-  index,
   label,
   children,
   wide = false,
 }: {
   id: string;
-  index: number;
   label: string;
   children: React.ReactNode;
   /** Use the full 1600px rail instead of the narrower reading column. */
@@ -42,9 +40,6 @@ function Section({
       className={`${wide ? "shell" : "shell-content"} scroll-mt-28 pt-20 lg:pt-28`}
     >
       <div className="flex items-baseline gap-4 sm:gap-6">
-        <span className="font-mono text-xs text-accent">
-          {String(index).padStart(2, "0")}
-        </span>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl">{label}</h2>
         <span aria-hidden="true" className="h-px flex-1 bg-line" />
       </div>
@@ -56,7 +51,7 @@ function Section({
 export default function AboutPage() {
   return (
     <div className="pb-24">
-      <Section id="experience" index={1} label="Experience">
+      <Section id="experience" label="Experience">
         <div className="border-t border-line">
           {PROFESSIONAL.map((role) => (
             <RoleEntry key={`${role.org}-${role.title}`} role={role} />
@@ -73,7 +68,7 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section id="education" index={2} label="Education">
+      <Section id="education" label="Education">
         <div className="space-y-8">
           {EDUCATION.map((entry) => (
             <div
@@ -125,7 +120,7 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section id="awards" index={3} label="Recognition" wide>
+      <Section id="awards" label="Recognition" wide>
         {AWARDS.map((group) => (
           <div key={group.group} className="mb-14 last:mb-0">
             <h3 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
@@ -206,7 +201,7 @@ export default function AboutPage() {
         ))}
       </Section>
 
-      <Section id="publications" index={4} label="Publications">
+      <Section id="publications" label="Publications">
         <ul className="border-t border-line">
           {PUBLICATIONS.map((pub) => (
             <li key={pub.url}>
@@ -243,7 +238,7 @@ export default function AboutPage() {
         </ul>
       </Section>
 
-      <Section id="skills" index={5} label="Certifications and skills" wide>
+      <Section id="skills" label="Certifications and skills" wide>
         <div className="flex flex-wrap gap-3">
           {CERTIFICATIONS.map((cert) => (
             <span
