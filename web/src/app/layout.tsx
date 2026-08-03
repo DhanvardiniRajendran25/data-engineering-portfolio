@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { SITE } from "@/content/site";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -24,13 +25,57 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://dhanvardinirajendran25.github.io"),
+  metadataBase: new URL(SITE.url),
   title: {
-    default: "Dhanvardini Rajendran",
-    template: "%s · Dhanvardini Rajendran",
+    default: `${SITE.name}, ${SITE.role}`,
+    template: `%s · ${SITE.name}`,
   },
-  description:
-    "Dhanvardini Rajendran builds data pipelines, backend systems, and AI features that ship to production.",
+  description: SITE.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    title: `${SITE.name}, ${SITE.role}`,
+    description: SITE.description,
+    url: SITE.url,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name}, ${SITE.role}`,
+    description: SITE.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+  authors: [{ name: SITE.name, url: SITE.url }],
+  creator: SITE.name,
+};
+
+/**
+ * `theme-color` drives the browser chrome tint on mobile. Two entries so it
+ * tracks the active theme instead of forcing one appearance on both.
+ */
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8f5ef" },
+    { media: "(prefers-color-scheme: dark)", color: "#11151c" },
+  ],
+  colorScheme: "light dark",
+};
+
+/** Schema.org Person, so search engines can attribute the work correctly. */
+const PERSON_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE.name,
+  url: SITE.url,
+  jobTitle: SITE.role,
+  email: `mailto:${SITE.email}`,
+  address: { "@type": "PostalPlace", addressLocality: SITE.location },
+  sameAs: [SITE.linkedin, SITE.github],
 };
 
 // Runs before first paint (see Next.js guide: preventing-flash-before-hydration).
@@ -55,9 +100,21 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
       <body className="flex min-h-screen flex-col antialiased">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-full focus:border focus:border-ink focus:bg-bg focus:px-5 focus:py-3 focus:text-sm focus:text-ink"
+        >
+          Skip to content
+        </a>
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main id="main" className="flex-1">
+          {children}
+        </main>
         <SiteFooter />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
+        />
       </body>
     </html>
   );
