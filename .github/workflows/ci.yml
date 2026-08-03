@@ -61,7 +61,9 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      # All three engines. Chromium alone previously hid a WebKit-only
+      # regression where a CSP directive broke every stylesheet.
+      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run build
 
       - name: Run axe against every route
@@ -83,7 +85,14 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - name: Lighthouse CI
-        run: npx --yes @lhci/cli@0.14.x autorun
+      - name: Lighthouse budgets (desktop)
+        run: npx --yes @lhci/cli@0.14.x autorun --config=lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      # Simulated slow 4G plus 4x CPU throttling. Desktop runs unthrottled and
+      # will not catch a regression that only hurts phones.
+      - name: Lighthouse budgets (mobile, throttled)
+        run: npx --yes @lhci/cli@0.14.x autorun --config=lighthouserc.mobile.json
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

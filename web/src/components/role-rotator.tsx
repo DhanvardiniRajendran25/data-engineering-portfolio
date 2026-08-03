@@ -18,12 +18,28 @@ export function RoleRotator() {
   const [index, setIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
 
+  /**
+   * Rotation stops entirely under `prefers-reduced-motion`, showing the first
+   * role statically.
+   *
+   * Previously the interval ran regardless and only the transition was
+   * suppressed, which left content auto-updating forever with no way to pause
+   * it. WCAG 2.2.2 (Pause, Stop, Hide) covers auto-updating content, not just
+   * animation, so honouring the preference here means not cycling at all.
+   *
+   * It also removed a real flake: axe could sample the accent text mid
+   * crossfade and read its blended value (~90% opacity over the background)
+   * as a contrast failure, which is a transient composite rather than a colour
+   * anyone is asked to read.
+   */
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
     const id = setInterval(() => {
       setIndex((current) => (current + 1) % ROLES.length);
     }, ROTATE_MS);
     return () => clearInterval(id);
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <span className="inline-flex items-baseline gap-2">

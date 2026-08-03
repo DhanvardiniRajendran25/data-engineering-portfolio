@@ -31,7 +31,22 @@ for (const route of ROUTES) {
   });
 }
 
-test("mobile menu traps focus and restores it on close", async ({ page }) => {
+/**
+ * WebKit does not include links in the Tab order by default, mirroring Safari,
+ * where reaching links by keyboard requires enabling "Press Tab to highlight
+ * each item on a webpage". That is platform behaviour, not a defect in this
+ * markup, and there is no author-side fix for it.
+ *
+ * Tests that walk the tab sequence through links are therefore asserted on
+ * Chromium and Firefox. The markup itself is still verified everywhere below,
+ * so a missing or mistargeted skip link would still fail on every engine.
+ */
+const TAB_REACHES_LINKS = (browserName: string) => browserName !== "webkit";
+
+test("mobile menu traps focus and restores it on close", async ({
+  page,
+  browserName,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
 
@@ -42,23 +57,37 @@ test("mobile menu traps focus and restores it on close", async ({ page }) => {
   await expect(dialog).toBeVisible();
 
   // Tabbing past the last item must cycle back inside the dialog, never out
-  // into the page behind it.
-  for (let i = 0; i < 12; i++) await page.keyboard.press("Tab");
-  const stillInside = await page.evaluate(() => {
-    const d = document.getElementById("site-menu");
-    return !!d && d.contains(document.activeElement);
-  });
-  expect(stillInside).toBe(true);
+  // into the page behind it. The dialog's own items are links, so this only
+  // applies where Tab visits links.
+  if (TAB_REACHES_LINKS(browserName)) {
+    for (let i = 0; i < 12; i++) await page.keyboard.press("Tab");
+    const stillInside = await page.evaluate(() => {
+      const d = document.getElementById("site-menu");
+      return !!d && d.contains(document.activeElement);
+    });
+    expect(stillInside).toBe(true);
+  }
 
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
 });
 
-test("skip link is reachable and targets main", async ({ page }) => {
+test("skip link exists, targets main, and is first in the tab order", async ({
+  page,
+  browserName,
+}) => {
   await page.goto("/");
-  await page.keyboard.press("Tab");
+
   const skip = page.getByRole("link", { name: "Skip to content" });
-  await expect(skip).toBeFocused();
+
+  // Asserted on every engine: the link must exist and point at a real target.
   await expect(skip).toHaveAttribute("href", "#main");
+  await expect(page.locator("#main")).toHaveCount(1);
+
+  // Being *first* in the tab order can only be checked where Tab visits links.
+  if (TAB_REACHES_LINKS(browserName)) {
+    await page.keyboard.press("Tab");
+    await expect(skip).toBeFocused();
+  }
 });

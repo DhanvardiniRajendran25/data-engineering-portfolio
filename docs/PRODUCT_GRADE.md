@@ -30,11 +30,12 @@ This list previously existed only in conversation and kept getting lost. It live
 | Self-hosted fonts, no CDN round trip | ✅ | `next/font` |
 | Image optimization | ✅ | `next/image`, modern formats, correct sizing |
 | Static prerendering | ✅ | 20 pages, all 9 projects SSG |
-| Lighthouse budgets in CI | ✅ | Fails the build on regression |
+| Lighthouse budgets in CI | ✅ | Desktop gates as error. A throttled mobile profile (slow 4G, 4x CPU) was added and currently reports as warn until CI establishes a baseline, since it cannot be measured on Windows. |
 | Bundle analyzer wired | ✅ | `@next/bundle-analyzer` |
 | `loading.tsx` boundaries | ✅ | Layout-shaped skeleton, motion-safe, `role="status"` for screen readers. |
 | API caching / revalidation | ⬜ | Matters once the live demo serves real queries; currently only `/api/health`. |
-| Real-device profiling | ⬜ | Never tested on a mid-tier Android. Blur and blend-mode effects are GPU-cost items. |
+| Real hardware profiling | ⬜ | Emulated viewports and CPU throttling are not a physical mid-tier Android. |
+| Cross-browser + viewport matrix | ✅ | 96 tests: Chromium, Firefox and WebKit, plus iPhone SE (320px), iPhone 14, iPad, iPad Pro and Pixel 7. Found and fixed two real bugs Chromium had hidden. |
 
 ## 3. System design
 

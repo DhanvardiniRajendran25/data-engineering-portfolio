@@ -45,7 +45,17 @@ const csp = [
   `base-uri 'self'`,
   `form-action 'self'`,
   `frame-ancestors 'none'`,
-  `upgrade-insecure-requests`,
+  // `upgrade-insecure-requests` is deliberately absent.
+  //
+  // It rewrites http:// subresource requests to https://. WebKit applies that
+  // to localhost as well, where nothing is listening on TLS, so every asset
+  // failed with an SSL error and pages rendered unstyled. Chromium exempts
+  // localhost, which is why this only showed up once Safari was added to the
+  // matrix.
+  //
+  // Dropping it costs nothing. Every asset URL here is relative, so requests
+  // inherit the page's scheme and there is no mixed content to upgrade, and
+  // Strict-Transport-Security above already forces HTTPS for the whole origin.
 ].join("; ");
 
 const securityHeaders = [
