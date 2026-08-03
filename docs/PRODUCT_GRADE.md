@@ -17,9 +17,9 @@ This list previously existed only in conversation and kept getting lost. It live
 | CI: Lighthouse budgets | ✅ | `lighthouserc.json` |
 | Concurrency cancellation | ✅ | Stale runs cancelled on new push |
 | Scheduled data pipeline | 🟡 | `pipeline.yml` + `pipeline/ingest.py` exist, never run against a real database |
-| **Duplicate CI workflows** | ⬜ | **`web-ci.yml` duplicates `ci.yml`.** Both run lint/typecheck/build on the same triggers. Double the minutes, two places to maintain. Delete `web-ci.yml`. |
-| Security headers / CSP | ⬜ | Only `poweredByHeader: false`. No CSP, HSTS, `X-Frame-Options`, `Referrer-Policy`, or `X-Content-Type-Options`. **Biggest single gap.** Note the theme bootstrap is an inline script, so CSP needs a nonce or hash, not blanket `unsafe-inline`. |
-| Env var validation | ⬜ | `DATABASE_URL` is read directly in `src/db/client.ts`. A missing value fails at request time with an unclear error instead of failing fast at boot. |
+| Duplicate CI workflows | ✅ | `web-ci.yml` deleted; `ci.yml` was a superset of it. |
+| Security headers / CSP | ✅ | CSP, HSTS preload, nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy. `script-src` uses `unsafe-inline` as a documented trade: see the reasoning block in `next.config.ts`. Verified in a real browser with zero violations across all routes. |
+| Env var validation | ✅ | Already correct on audit: `getDb()` throws a directed message naming the file to copy. Lazy by design so builds never require the variable. |
 | Deployment config | ⬜ | No `vercel.json`. No preview/production env separation. |
 | Redirect map implemented | ⬜ | Written up in [REDIRECT_MAP.md](./REDIRECT_MAP.md), not built. Old `.html` URLs will 404 at cutover. |
 
@@ -32,7 +32,7 @@ This list previously existed only in conversation and kept getting lost. It live
 | Static prerendering | ✅ | 20 pages, all 9 projects SSG |
 | Lighthouse budgets in CI | ✅ | Fails the build on regression |
 | Bundle analyzer wired | ✅ | `@next/bundle-analyzer` |
-| `loading.tsx` boundaries | ⬜ | Missing. Any future slow route shows nothing rather than a skeleton. |
+| `loading.tsx` boundaries | ✅ | Layout-shaped skeleton, motion-safe, `role="status"` for screen readers. |
 | API caching / revalidation | ⬜ | Matters once the live demo serves real queries; currently only `/api/health`. |
 | Real-device profiling | ⬜ | Never tested on a mid-tier Android. Blur and blend-mode effects are GPU-cost items. |
 
@@ -55,8 +55,8 @@ This list previously existed only in conversation and kept getting lost. It live
 
 | Item | Status | Detail |
 |---|---|---|
-| Error tracking | ⬜ | No Sentry or equivalent. A runtime error for a real visitor is invisible. |
-| Web vitals / RUM | ⬜ | Lighthouse measures synthetic lab conditions. No field data from actual visitors. |
+| Error tracking | ⬜ | Still nothing. Needs a vendor DSN, so it is blocked on a decision from you. |
+| Web vitals / RUM | 🟡 | Field collection wired via `useReportWebVitals` to `/api/vitals`, which validates and logs structured lines. No durable sink yet, so data is not retained beyond platform logs. |
 | Analytics | ⬜ | No idea which projects get read. Worth a privacy-respecting option. |
 | Uptime monitoring | ⬜ | Nothing notices if the site or pipeline goes down. |
 | Pipeline alerting | ⬜ | A failed cron run fails silently. |

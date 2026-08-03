@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { THEME_SCRIPT } from "@/lib/theme-script";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { WebVitals } from "@/components/web-vitals";
 import { SITE } from "@/content/site";
 
 const geist = Geist({
@@ -74,15 +76,10 @@ const PERSON_JSON_LD = {
   url: SITE.url,
   jobTitle: SITE.role,
   email: `mailto:${SITE.email}`,
-  address: { "@type": "PostalPlace", addressLocality: SITE.location },
+  address: { "@type": "PostalAddress", addressLocality: SITE.location },
   sameAs: [SITE.linkedin, SITE.github],
 };
 
-// Runs before first paint (see Next.js guide: preventing-flash-before-hydration).
-// Sets data-theme from localStorage/OS preference, and only adds the
-// `.motion` class when the visitor hasn't asked for reduced motion, so
-// scroll/reveal animations added in later phases can safely gate on it.
-const THEME_SCRIPT = `(function(){try{var saved=localStorage.getItem("theme");var prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.setAttribute("data-theme",saved||(prefersDark?"dark":"light"))}catch(e){}try{if(!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)){document.documentElement.classList.add("motion")}}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -111,6 +108,7 @@ export default function RootLayout({
           {children}
         </main>
         <SiteFooter />
+        <WebVitals />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
