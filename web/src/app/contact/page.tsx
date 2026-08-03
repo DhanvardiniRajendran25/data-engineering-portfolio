@@ -6,6 +6,7 @@ import {
   EmailIcon,
   GithubIcon,
   LinkedinIcon,
+  PhoneIcon,
 } from "@/components/icons";
 import { SITE } from "@/content/site";
 
@@ -16,14 +17,15 @@ export const metadata: Metadata = {
 };
 
 /**
- * Deliberately not a form, and deliberately not a second copy of the footer.
+ * Deliberately not a form: a statically exported site has nowhere to POST to,
+ * and a form that silently fails is worse than none.
  *
- * A statically exported site has nowhere to POST to, and a form that silently
- * fails is worse than none. The footer already carries the same four links on
- * every page, so repeating them as the whole page would be redundant. What a
- * hiring reader actually cannot get anywhere else is the qualifying detail:
- * what roles, from when, on what terms, and whether their team is a fit. That
- * is what this page leads with; the channels are the closing step.
+ * The contact details are the point of this page, so they sit centred at the
+ * top at full width rather than in a sidebar. The qualifying detail (roles,
+ * availability, fit) follows underneath as supporting context. An earlier
+ * version inverted this and put the channels in a 20rem right-hand column,
+ * which buried the one thing a visitor came for and also squeezed the role
+ * chips into a column too narrow to hold them on one line.
  */
 
 const LOOKING_FOR = [
@@ -78,9 +80,74 @@ export default function ContactPage() {
 
       <h1 className="mt-6 text-display">Let us talk</h1>
 
-      {/* Asymmetric split: the prose column is itself the reading measure, so
-          text is never a narrow paragraph stranded in a wide empty container. */}
-      <div className="mt-12 grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1fr)_20rem]">
+      {/* Channels first, centred, full width. This is what the page is for. */}
+      <section
+        aria-labelledby="reach-me"
+        className="mt-12 rounded-brand border border-line bg-bg-elev px-6 py-10 text-center sm:px-10"
+      >
+        <h2
+          id="reach-me"
+          className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase"
+        >
+          Reach me
+        </h2>
+
+        {/* Email shown in full. It breaks to a second line on narrow screens
+            rather than truncating, since a clipped address is unusable. */}
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
+          <a
+            href={`mailto:${SITE.email}`}
+            className="inline-flex max-w-full items-center gap-3 text-xl break-all transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:text-2xl"
+          >
+            <EmailIcon className="h-5 w-5 shrink-0 text-ink-faint" />
+            {SITE.email}
+          </a>
+          <CopyButton value={SITE.email} label="Email address" />
+        </div>
+
+        <p className="mt-3 text-sm text-ink-faint">
+          Best channel. {SITE.responseTime}
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href={`tel:${SITE.phone}`}
+            className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2.5 text-sm transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <PhoneIcon className="h-4 w-4" />
+            {SITE.phoneDisplay}
+          </a>
+          <a
+            href={SITE.linkedin}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2.5 text-sm transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <LinkedinIcon className="h-4 w-4" />
+            LinkedIn
+          </a>
+          <a
+            href={SITE.github}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2.5 text-sm transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <GithubIcon className="h-4 w-4" />
+            GitHub
+          </a>
+          <a
+            href={SITE.resume}
+            download={SITE.resumeFilename}
+            className="inline-flex items-center gap-2 rounded-full border border-ink px-5 py-2.5 font-mono text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <DownloadIcon className="h-4 w-4" />
+            Resume
+          </a>
+        </div>
+      </section>
+
+      {/* Supporting context, now at full width so the role chips fit one line */}
+      <div className="mt-16">
         <div className="min-w-0">
           <section>
             <h2 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
@@ -138,63 +205,6 @@ export default function ContactPage() {
             </div>
           </section>
         </div>
-
-        {/* Channels: compact sidebar, not the headline act */}
-        <aside className="lg:sticky lg:top-28 lg:self-start">
-          <div className="rounded-brand border border-line bg-bg-elev p-6">
-            <h2 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
-              Reach me
-            </h2>
-
-            <div className="mt-5 space-y-4">
-              <div>
-                <div className="flex items-center justify-between gap-3">
-                  <a
-                    href={`mailto:${SITE.email}`}
-                    className="inline-flex min-w-0 items-center gap-2 text-sm transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                  >
-                    <EmailIcon className="h-4 w-4 shrink-0 text-ink-faint" />
-                    <span className="truncate">{SITE.email}</span>
-                  </a>
-                  <CopyButton value={SITE.email} label="Email address" />
-                </div>
-                <p className="mt-2 text-xs text-ink-faint">
-                  Best channel. {SITE.responseTime}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-2 border-t border-line pt-4">
-                <a
-                  href={SITE.linkedin}
-                  target="_blank"
-                  rel="noopener"
-                  className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-2 text-xs transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                >
-                  <LinkedinIcon className="h-4 w-4" />
-                  LinkedIn
-                </a>
-                <a
-                  href={SITE.github}
-                  target="_blank"
-                  rel="noopener"
-                  className="inline-flex items-center gap-2 rounded-full border border-line px-3 py-2 text-xs transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                >
-                  <GithubIcon className="h-4 w-4" />
-                  GitHub
-                </a>
-              </div>
-
-              <a
-                href={SITE.resume}
-                download={SITE.resumeFilename}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-ink px-5 py-3 font-mono text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                <DownloadIcon className="h-4 w-4" />
-                Resume
-              </a>
-            </div>
-          </div>
-        </aside>
       </div>
     </div>
   );
