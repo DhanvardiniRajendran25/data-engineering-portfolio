@@ -1,6 +1,11 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices, type PlaywrightTestConfig } from "@playwright/test";
 
-export default defineConfig({
+/**
+ * Typed explicitly rather than relying on inference through `defineConfig`.
+ * Its overloads resolve the generic parameters to `unknown` here, which makes
+ * valid context options such as `reducedMotion` look unknown to tsc.
+ */
+const config: PlaywrightTestConfig = {
   testDir: "./tests",
   fullyParallel: true,
   // Guards against a committed `test.only`, which would silently skip the
@@ -11,6 +16,16 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
+    /**
+     * Reduced motion for every test.
+     *
+     * Without it, axe samples elements mid scroll-reveal and reports their
+     * partially-transparent blend as a contrast failure. Those readings are
+     * transient and not what WCAG measures, so they are noise that would
+     * make the suite flaky. Settling elements at their final opacity also
+     * exercises the reduced-motion path real users with that preference get.
+     */
+    contextOptions: { reducedMotion: "reduce" },
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
@@ -24,4 +39,6 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
-});
+};
+
+export default defineConfig(config);

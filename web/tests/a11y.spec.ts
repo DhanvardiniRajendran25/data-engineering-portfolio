@@ -12,18 +12,6 @@ import AxeBuilder from "@axe-core/playwright";
 
 const ROUTES = ["/", "/work", "/about", "/contact", "/work/sage"];
 
-/**
- * Every check runs with reduced motion emulated.
- *
- * Without it, axe samples elements mid scroll-reveal and reports their
- * partially-transparent blend as a contrast failure. Those readings are
- * transient and not what WCAG measures, so they are noise that would make
- * the suite flaky. Emulating reduced motion settles elements at their final
- * opacity, and has the side benefit of exercising the reduced-motion path
- * that real users with that preference actually see.
- */
-test.use({ reducedMotion: "reduce" });
-
 for (const route of ROUTES) {
   test(`${route} has no detectable a11y violations (light)`, async ({ page }) => {
     await page.goto(route);

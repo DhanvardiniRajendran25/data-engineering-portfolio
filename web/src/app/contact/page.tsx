@@ -57,12 +57,16 @@ export default function ContactPage() {
             <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-70 motion-safe:animate-ping" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
           </span>
-          Available from May 2026
+          Available from {SITE.availableFrom}
         </span>
         <span aria-hidden="true" className="opacity-30">
           /
         </span>
         <span>{SITE.location}</span>
+        <span aria-hidden="true" className="opacity-30">
+          /
+        </span>
+        <span>{SITE.relocation}</span>
         <span aria-hidden="true" className="opacity-30">
           /
         </span>
@@ -83,9 +87,9 @@ export default function ContactPage() {
               What I am looking for
             </h2>
             <p className="mt-4 text-body-lg text-ink-soft">
-              I finish my MS at Northeastern in May 2026. I am looking for a
-              team where I can own data and AI systems end to end, in any of
-              these shapes:
+              I finish my MS at Northeastern in May 2026 and am available to
+              start from {SITE.availableFrom}. I am looking for a team where I
+              can own data and AI systems end to end, in any of these shapes:
             </p>
             <ul className="mt-5 flex flex-wrap gap-2">
               {LOOKING_FOR.map((role) => (
@@ -155,7 +159,7 @@ export default function ContactPage() {
                   <CopyButton value={SITE.email} label="Email address" />
                 </div>
                 <p className="mt-2 text-xs text-ink-faint">
-                  Best channel. I reply within a day or two.
+                  Best channel. {SITE.responseTime}
                 </p>
               </div>
 
