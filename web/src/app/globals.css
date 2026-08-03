@@ -70,6 +70,18 @@
   --container-measure: 68ch;
 
   --spacing-gutter: clamp(1.25rem, 4vw, 4rem);
+
+  /* Fluid type scale.
+     Every size interpolates continuously between a small-screen floor and a
+     large-screen ceiling, so text is correct at 320px, at 768px, and at
+     2560px without a breakpoint jump at any width in between. The rem term
+     in each clamp keeps the size responsive to browser font-size settings;
+     a pure-vw expression would ignore user zoom preferences entirely. */
+  --text-display: clamp(2.25rem, 1.35rem + 4.5vw, 4.5rem);
+  --text-h1: clamp(1.875rem, 1.35rem + 2.6vw, 3.25rem);
+  --text-h2: clamp(1.5rem, 1.25rem + 1.25vw, 2.25rem);
+  --text-h3: clamp(1.25rem, 1.13rem + 0.6vw, 1.5rem);
+  --text-body-lg: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
 }
 
 @layer base {
@@ -143,21 +155,57 @@
     width: 100%;
   }
 
-  /* Standard vertical rhythm for page sections. Use instead of per-component
-     py-* values so spacing stays consistent as pages are added. */
+  /* Standard vertical rhythm for page sections. Fluid rather than stepped at
+     two breakpoints, so the rhythm is proportionate at every width instead of
+     jumping at 640px and 1024px. */
   .section-y {
-    padding-block: 3rem;
+    padding-block: clamp(3rem, 1.5rem + 5vw, 6rem);
   }
 
-  @media (min-width: 640px) {
-    .section-y {
-      padding-block: 4rem;
+  /*
+   * Translucent surface (nav pill, mobile menu).
+   *
+   * Defined once here rather than repeating `bg-bg-elev/90 backdrop-blur` at
+   * each call site, because the fallbacks below have to apply everywhere the
+   * effect is used, and a utility-string copy would inevitably miss one.
+   */
+  .glass {
+    background: color-mix(in srgb, var(--bg-elev) 90%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  /* Some users disable transparency at OS level for legibility or motion
+     sensitivity. Honour that by going fully opaque. */
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      background: var(--bg-elev);
+      backdrop-filter: none;
     }
   }
 
-  @media (min-width: 1024px) {
-    .section-y {
-      padding-block: 5rem;
+  /*
+   * Windows High Contrast / forced-colors.
+   *
+   * This design leans heavily on low-opacity borders (--line is 12% ink).
+   * Forced-colors overrides author colours with a system palette, and those
+   * translucent borders flatten into the background, so cards and dividers
+   * would vanish. Rebinding the token to a system colour keeps every border
+   * that uses it visible, without touching individual components.
+   */
+  @media (forced-colors: active) {
+    :root,
+    [data-theme="light"],
+    [data-theme="dark"] {
+      --line: CanvasText;
+    }
+
+    .glass {
+      background: Canvas;
+      backdrop-filter: none;
+    }
+
+    .logo-plate {
+      background: Canvas;
     }
   }
 

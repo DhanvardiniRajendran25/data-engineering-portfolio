@@ -44,7 +44,7 @@ export function SiteHeader() {
 
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-1 rounded-full border border-line bg-bg-elev/90 px-2 py-2 text-sm font-medium shadow-brand backdrop-blur lg:flex"
+          className="hidden items-center gap-1 glass rounded-full border border-line px-2 py-2 text-sm font-medium shadow-brand lg:flex"
         >
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
@@ -82,7 +82,7 @@ export function SiteHeader() {
             aria-label="Open menu"
             aria-expanded={open}
             aria-controls="site-menu"
-            className="grid h-10 w-10 place-items-center rounded-full border border-line bg-bg-elev/90 text-ink shadow-brand backdrop-blur transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent lg:hidden"
+            className="grid h-10 w-10 place-items-center glass rounded-full border border-line text-ink shadow-brand transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent lg:hidden"
           >
             <svg
               viewBox="0 0 24 24"
@@ -106,7 +106,7 @@ export function SiteHeader() {
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
-          className="fixed inset-0 z-[60] flex flex-col bg-bg"
+          className="fixed inset-0 z-[60] flex h-[100dvh] flex-col bg-bg"
         >
           <div className="flex items-center justify-between px-gutter py-4">
             <span className="font-display text-lg font-bold text-ink">
