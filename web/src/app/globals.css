@@ -18,7 +18,9 @@
   --bg-elev: #fffdf8;
   --ink: #1a2230;
   --ink-soft: #4a5566;
-  --ink-faint: #8a93a3;
+  /* AA-compliant. Was #8a93a3 at 2.85:1, below even the 3:1 large-text
+     floor, and this token labels small mono metadata that needs 4.5:1. */
+  --ink-faint: #6a717e;
   --line: rgba(26, 34, 48, 0.12);
   --accent: #c2453d;
   --accent-soft: rgba(194, 69, 61, 0.1);
@@ -30,7 +32,8 @@
   --bg-elev: #19202a;
   --ink: #ece7dd;
   --ink-soft: #aab2bf;
-  --ink-faint: #6c7686;
+  /* AA-compliant. Was #6c7686 at 3.57:1 against bg-elev. */
+  --ink-faint: #7e8795;
   --line: rgba(236, 231, 221, 0.12);
   --accent: #e0685f;
   --accent-soft: rgba(224, 104, 95, 0.14);

@@ -17,21 +17,53 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
 
+    const trigger = triggerRef.current;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+
+      // Focus trap. A dialog with aria-modal="true" still lets Tab walk into
+      // the page behind it, which leaves keyboard users lost in content they
+      // cannot see. Cycle focus within the dialog instead.
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
     }
+
     document.addEventListener("keydown", onKeyDown);
 
     return () => {
       document.body.style.overflow = "";
       document.removeEventListener("keydown", onKeyDown);
+      // Return focus to whatever opened the dialog, so keyboard users resume
+      // where they left off rather than at the top of the document.
+      trigger?.focus();
     };
   }, [open]);
 
@@ -77,6 +109,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <button
+            ref={triggerRef}
             type="button"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
@@ -102,6 +135,7 @@ export function SiteHeader() {
 
       {open && (
         <div
+          ref={dialogRef}
           id="site-menu"
           role="dialog"
           aria-modal="true"

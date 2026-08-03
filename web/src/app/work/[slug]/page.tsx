@@ -92,7 +92,11 @@ export default async function ProjectPage({
 
       <div className="mt-10 overflow-hidden rounded-brand border border-line">
         <div className="aspect-[16/10] w-full">
-          <ProjectCover project={project} />
+          <ProjectCover
+            project={project}
+            priority
+            sizes="(min-width: 1120px) 1120px, 100vw"
+          />
         </div>
       </div>
 
