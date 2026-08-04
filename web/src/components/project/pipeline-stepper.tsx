@@ -2,6 +2,37 @@
 
 import { useRef, useState } from "react";
 import { PHASES, type Stage } from "@/content/projects/podcastiq";
+import {
+  CaptionsIcon,
+  ClockIcon,
+  DatabaseIcon,
+  GridIcon,
+  LayersIcon,
+  MagnifierIcon,
+  NetworkIcon,
+  QuoteIcon,
+  RouteIcon,
+  ShieldIcon,
+  SpeakerIcon,
+} from "@/components/icons";
+
+/**
+ * One mark per stage, used only as a watermark. Purely decorative: each is
+ * aria-hidden, so nothing here is information a reader could miss.
+ */
+const STAGE_ICON: Record<string, (p: { className?: string }) => React.ReactElement> = {
+  extract: CaptionsIcon,
+  profile: MagnifierIcon,
+  load: DatabaseIcon,
+  transform: LayersIcon,
+  chunk: GridIcon,
+  speakers: SpeakerIcon,
+  claims: QuoteIcon,
+  temporal: ClockIcon,
+  graph: NetworkIcon,
+  agents: RouteIcon,
+  safety: ShieldIcon,
+};
 
 /**
  * The pipeline as three named phases.
@@ -36,6 +67,7 @@ export function PipelineStepper({ stages }: { stages: Stage[] }) {
 
   const stage = stages[active];
   const phase = PHASES.find((p) => p.id === stage.phase);
+  const StageMark = STAGE_ICON[stage.id] ?? LayersIcon;
 
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,20rem)_1fr] lg:gap-12">
@@ -120,9 +152,19 @@ export function PipelineStepper({ stages }: { stages: Stage[] }) {
         id={`stage-panel-${stage.id}`}
         aria-labelledby={`stage-tab-${stage.id}`}
         tabIndex={0}
-        className="rounded-brand border border-line bg-bg-elev p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent sm:p-8 lg:sticky lg:top-28"
+        className="relative overflow-hidden rounded-brand border border-line bg-bg-elev p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent sm:p-8 lg:sticky lg:top-28"
       >
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        {/* Fills the dead space under the sticky panel, matching the
+            watermark treatment on the homepage impact tiles. */}
+        <StageMark
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-10 -bottom-12 h-56 w-56 text-ink opacity-[0.045]"
+        />
+
+        <div className="relative flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span className="grid h-7 w-7 place-items-center rounded-full bg-ink/[0.05] text-ink-soft">
+            <StageMark className="h-4 w-4" />
+          </span>
           <span className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
             {phase?.label}
           </span>
@@ -132,11 +174,11 @@ export function PipelineStepper({ stages }: { stages: Stage[] }) {
           </span>
         </div>
 
-        <h3 className="mt-2 text-2xl sm:text-3xl">{stage.title}</h3>
-        <p className="mt-1.5 font-mono text-xs text-ink-soft">{stage.tool}</p>
+        <h3 className="relative mt-2 text-2xl sm:text-3xl">{stage.title}</h3>
+        <p className="relative mt-1.5 font-mono text-xs text-ink-soft">{stage.tool}</p>
 
         {/* Facts as chips, not a paragraph */}
-        <ul className="mt-5 flex flex-wrap gap-2">
+        <ul className="relative mt-5 flex flex-wrap gap-2">
           {stage.facts.map((f) => (
             <li
               key={f}
@@ -148,7 +190,7 @@ export function PipelineStepper({ stages }: { stages: Stage[] }) {
         </ul>
 
         {/* The decision, as a structure rather than prose */}
-        <div className="mt-7 rounded-brand border border-line bg-bg p-5">
+        <div className="relative mt-7 rounded-brand border border-line bg-bg p-5">
           <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
             Decision
           </p>
@@ -206,7 +248,7 @@ export function PipelineStepper({ stages }: { stages: Stage[] }) {
         </div>
 
         {/* Output as figures */}
-        <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-5">
+        <dl className="relative mt-6 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-5">
           {stage.output.map((o) => (
             <div key={o.label}>
               <dd className="font-mono text-lg text-ink">{o.value}</dd>
