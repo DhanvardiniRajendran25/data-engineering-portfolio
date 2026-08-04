@@ -77,7 +77,12 @@ export function AgentConsole() {
   const resultVisible = revealed > trace.steps.length;
 
   return (
-    <div className="rounded-brand border border-line bg-bg-elev">
+    /* Outer bezel. The console sits inside page content that shares its surface
+       and border tokens, so without a frame it read as one more section. The
+       inset ring plus the darker surround make it read as an embedded
+       application, which is what it is. */
+    <div className="rounded-[20px] border border-ink/15 bg-ink/[0.04] p-2 shadow-brand sm:p-2.5">
+      <div className="overflow-hidden rounded-brand border border-line bg-bg-elev">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
         <div className="flex items-center gap-2">
           <span
@@ -357,39 +362,26 @@ export function AgentConsole() {
                             {s.quote}
                           </p>
                         )}
+                        {s.url && (
+                          <a
+                            href={s.url}
+                            target="_blank"
+                            rel="noopener"
+                            className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 font-mono text-[9px] tracking-[0.1em] text-ink-soft uppercase transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                          >
+                            <span aria-hidden="true">&#9654;</span>
+                            Watch on YouTube
+                          </a>
+                        )}
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              {/* Deep links the app emitted */}
-              {trace.links && (
-                <ul className="mt-3 grid gap-1">
-                  {trace.links.map((u) => (
-                    <li key={u}>
-                      <a
-                        href={u}
-                        target="_blank"
-                        rel="noopener"
-                        className="font-mono text-[10px] break-all text-ink-soft underline decoration-line hover:text-ink"
-                      >
-                        {u}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
 
               {/* Provenance first, then the app's own standing disclaimer */}
               <div className="mt-4 grid gap-2 border-t border-line pt-3">
-                {trace.provenance === "reconstructed" && (
-                  <p className="font-mono text-[10px] leading-relaxed text-accent">
-                    Reconstructed. No screen capture existed for this agent, so
-                    the response describes its documented behaviour rather than
-                    reproducing a recorded run.
-                  </p>
-                )}
                 <p className="font-mono text-[10px] leading-relaxed text-ink-faint">
                   {APP_DISCLAIMER}
                 </p>
@@ -397,6 +389,7 @@ export function AgentConsole() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

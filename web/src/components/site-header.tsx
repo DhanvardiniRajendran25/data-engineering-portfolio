@@ -16,9 +16,36 @@ const NAV_LINKS = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  // Nav pill visibility. Hidden while scrolling down, shown on any scroll up
+  // and whenever near the top. The wordmark and theme toggle never hide: those
+  // are orientation and a control, and both should stay put.
+  const [navHidden, setNavHidden] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let frame = 0;
+
+    function onScroll() {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const y = window.scrollY;
+        // 8px deadzone so a trackpad jitter does not toggle the pill.
+        if (Math.abs(y - lastY) < 8) return;
+        setNavHidden(y > lastY && y > 160);
+        lastY = y;
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -69,14 +96,18 @@ export function SiteHeader() {
 
   return (
     <div className="sticky top-4 z-50 px-gutter pt-4">
-      <div className="mx-auto flex w-full max-w-page items-center justify-between gap-4">
+      <div className="flex w-full items-center justify-between gap-4">
         <Link href="/" className="font-display text-lg font-bold text-accent">
           DR
         </Link>
 
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-1 glass rounded-full border border-line px-2 py-2 text-sm font-medium shadow-brand lg:flex"
+          className={`glass hidden items-center gap-1 rounded-full border border-line px-2 py-2 text-sm font-medium shadow-brand transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:flex ${
+            navHidden
+              ? "pointer-events-none -translate-y-3 opacity-0"
+              : "translate-y-0 opacity-100"
+          }`}
         >
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
