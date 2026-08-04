@@ -15,6 +15,7 @@ import {
   STAGES,
   TECH_STACK,
 } from "@/content/projects/podcastiq";
+import { CHANNEL_DRIFT } from "@/content/projects/podcastiq-traces";
 import { AgentConsole } from "./agent-console";
 import { BarChart } from "./bar-chart";
 import { MagnitudeTable } from "./magnitude-table";
@@ -252,8 +253,52 @@ export function PodcastIQDeepDive() {
         </dl>
       </Section>
 
-      <Section id="drift" label="Claim drift" kicker="823 pairs">
-        <BarChart data={DRIFT} caption="Evolution pairs by drift type" />
+      <Section id="drift" label="Claim drift" kicker="823 pairs" wide>
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-10">
+          <BarChart data={DRIFT} caption="Evolution pairs by drift type" />
+
+          <div>
+            <p className="font-mono text-[11px] tracking-[0.14em] text-ink-faint uppercase">
+              Contradictions by channel
+            </p>
+            <table className="mt-4 w-full border-collapse text-xs">
+              <caption className="sr-only">
+                Claim evolutions per channel, split by drift type
+              </caption>
+              <thead>
+                <tr className="border-b border-line text-left">
+                  <th scope="col" className="py-2 pr-3 font-mono text-[9px] tracking-[0.12em] text-ink-faint uppercase">
+                    Channel
+                  </th>
+                  <th scope="col" className="py-2 pr-3 text-right font-mono text-[9px] tracking-[0.12em] text-ink-faint uppercase">
+                    Total
+                  </th>
+                  <th scope="col" className="py-2 text-right font-mono text-[9px] tracking-[0.12em] text-ink-faint uppercase">
+                    Contradicted
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {CHANNEL_DRIFT.map((c) => (
+                  <tr key={c.channel} className="border-b border-line/60">
+                    <td className="py-2 pr-3">{c.channel}</td>
+                    <td className="py-2 pr-3 text-right font-mono tabular-nums text-ink-faint">
+                      {c.total}
+                    </td>
+                    <td className="py-2 text-right font-mono tabular-nums text-ink">
+                      {c.contradicted}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="mt-4 max-w-measure text-sm text-ink-soft">
+              The Diary Of A CEO leads at 52 contradictions, close to half its
+              total evolutions. This is the corpus disagreeing with itself,
+              measured.
+            </p>
+          </div>
+        </div>
       </Section>
 
       <Section id="performance" label="Measured results" kicker="110 test queries">

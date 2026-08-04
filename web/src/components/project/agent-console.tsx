@@ -2,21 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import { TRACES, type Trace } from "@/content/projects/podcastiq-traces";
+import {
+  APP_DISCLAIMER,
+  TRACES,
+  type Trace,
+} from "@/content/projects/podcastiq-traces";
 
 /**
- * Replays a recorded run through the 9-agent system.
+ * Replays recorded runs through the 9-agent system.
  *
- * Deliberately framed as a replay, not a live demo. The real system needs a
- * Snowflake account and a Neo4j instance in local Docker, neither of which a
- * static site can reach, and presenting a simulation as live would be a lie a
- * reviewer could catch in one question. So the header says "recorded", each
- * trace is badged with its provenance, and traces with no recorded response body
- * show the shape the agent returns instead of an invented answer.
+ * Every query, answer, source, verdict and URL is transcribed from screen
+ * captures of the running Streamlit application, so what appears here is what
+ * the system actually produced rather than a reconstruction.
  *
- * Timings are the measured ones. Playback is compressed to a fixed cadence
- * because waiting 4.7 real seconds to watch a bar fill is not a demo, and each
- * step still displays its true duration.
+ * Framed as a replay, not a live demo. The real system needs a Snowflake account
+ * and Neo4j in local Docker, neither of which a static site can reach, and
+ * presenting a simulation as live is a claim a reviewer disproves in one
+ * question.
+ *
+ * Playback is compressed to a fixed cadence because waiting 4.7 real seconds to
+ * watch a bar fill is not a demo; each step still shows its measured duration.
  */
 
 const STEP_MS = 420;
@@ -43,7 +48,6 @@ export function AgentConsole() {
 
     const next = TRACES[index];
 
-    // With reduced motion, skip the staged reveal entirely.
     if (prefersReducedMotion) {
       setRevealed(next.steps.length + 1);
       setRunning(false);
@@ -59,7 +63,6 @@ export function AgentConsole() {
       );
     });
 
-    // One extra tick reveals the result block.
     timers.current.push(
       setTimeout(
         () => {
@@ -75,7 +78,6 @@ export function AgentConsole() {
 
   return (
     <div className="rounded-brand border border-line bg-bg-elev">
-      {/* Console header */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
         <div className="flex items-center gap-2">
           <span
@@ -87,7 +89,6 @@ export function AgentConsole() {
           <span className="font-mono text-[10px] tracking-[0.16em] text-ink-soft uppercase">
             Agent console
           </span>
-          {/* Status is announced, not colour-only */}
           <span
             role="status"
             className="font-mono text-[10px] tracking-[0.14em] text-accent uppercase"
@@ -110,7 +111,7 @@ export function AgentConsole() {
             {TRACES.map((t, i) => {
               const active = i === selected;
               return (
-                <li key={t.intent}>
+                <li key={t.query}>
                   <button
                     type="button"
                     onClick={() => run(i)}
@@ -156,7 +157,6 @@ export function AgentConsole() {
             )}
           </div>
 
-          {/* Steps. aria-live so a screen reader hears the trace progress. */}
           <ol className="mt-5 grid gap-2" aria-live="polite">
             {trace.steps.map((s, i) => {
               const shown = i < revealed;
@@ -200,44 +200,181 @@ export function AgentConsole() {
             <div className="rounded-brand border-l-2 border-accent bg-bg p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
-                  {trace.answer ? "Response" : "Returns"}
+                  Response
                 </span>
                 <span className="font-mono text-[10px] text-ink-faint">
-                  {trace.agent} · {(trace.totalMs / 1000).toFixed(1)}s total
+                  {trace.agent} &middot; {(trace.totalMs / 1000).toFixed(1)}s
                 </span>
               </div>
 
-              {trace.answer ? (
-                <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                  {trace.answer}
-                </p>
-              ) : (
-                <ul className="mt-2 grid gap-1.5">
-                  {trace.returns?.map((r) => (
-                    <li key={r} className="flex gap-2 text-sm text-ink-soft">
-                      <span aria-hidden="true" className="text-accent">
-                        &middot;
-                      </span>
-                      {r}
+              <p className="mt-2 text-sm leading-relaxed whitespace-pre-line text-ink-soft">
+                {trace.answer}
+              </p>
+
+              {/* Fact-check verdict */}
+              {trace.verdict && (
+                <div
+                  className={`mt-4 rounded-brand-sm border p-4 ${
+                    trace.verdict.state === "VERIFIED"
+                      ? "border-ink/30 bg-ink/[0.03]"
+                      : "border-accent/40 bg-accent-soft"
+                  }`}
+                >
+                  <p className="flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] uppercase">
+                    <span aria-hidden="true">
+                      {trace.verdict.state === "VERIFIED" ? "✓" : "✕"}
+                    </span>
+                    {trace.verdict.state}
+                  </p>
+                  <p className="mt-2 text-sm text-ink italic">
+                    &ldquo;{trace.verdict.claim}&rdquo;
+                  </p>
+                  <p className="mt-2 font-mono text-[10px] text-ink-faint">
+                    {trace.verdict.basis}
+                  </p>
+                  {trace.verdict.evidence && (
+                    <ul className="mt-3 grid gap-1.5 border-t border-line pt-3">
+                      {trace.verdict.evidence.map((u) => (
+                        <li key={u}>
+                          <a
+                            href={u}
+                            target="_blank"
+                            rel="noopener"
+                            className="font-mono text-[10px] break-all text-ink-soft underline decoration-line hover:text-ink"
+                          >
+                            {u}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+
+              {/* Claim evolution, before against after */}
+              {trace.evolution && (
+                <div className="mt-4">
+                  <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
+                    Claim evolution
+                  </p>
+                  <ul className="mt-3 grid gap-3">
+                    {trace.evolution.map((e) => (
+                      <li
+                        key={e.before}
+                        className="grid items-center gap-2 rounded-brand-sm border border-line bg-bg-elev p-3 sm:grid-cols-[1fr_auto_1fr]"
+                      >
+                        <div>
+                          <p className="text-xs text-ink-soft">{e.before}</p>
+                          <p className="mt-1 font-mono text-[9px] text-ink-faint">
+                            {e.beforeDate}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <span className="rounded-full border border-accent px-2 py-0.5 font-mono text-[9px] tracking-[0.1em] text-accent uppercase">
+                            {e.drift}
+                          </span>
+                          <p className="mt-1 font-mono text-[9px] text-ink-faint">
+                            {e.gap}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-ink">{e.after}</p>
+                          <p className="mt-1 font-mono text-[9px] text-ink-faint">
+                            {e.afterDate}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Claim cards from the compare view */}
+              {trace.claims && (
+                <div className="mt-4">
+                  <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
+                    Claims compared
+                  </p>
+                  <ul className="mt-3 grid gap-2">
+                    {trace.claims.map((c) => (
+                      <li
+                        key={c.text}
+                        className="rounded-brand-sm border border-line bg-bg-elev p-3"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="font-mono text-[9px] text-ink-faint">
+                            {c.channel}
+                          </span>
+                          <span className="font-mono text-[9px] tracking-[0.1em] text-ink-soft uppercase">
+                            {c.type}
+                          </span>
+                        </div>
+                        <p className="mt-1.5 text-xs text-ink">{c.text}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Retrieved sources */}
+              {trace.sources && (
+                <div className="mt-4">
+                  <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
+                    Sources
+                  </p>
+                  <ul className="mt-3 grid gap-2">
+                    {trace.sources.map((s, i) => (
+                      <li
+                        key={s.title}
+                        className="rounded-brand-sm border-l-2 border-line bg-bg-elev p-3"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <p className="text-xs text-ink">{s.title}</p>
+                          <span className="shrink-0 font-mono text-[9px] text-ink-faint">
+                            #{String(i + 1).padStart(2, "0")}
+                          </span>
+                        </div>
+                        <p className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[9px] text-ink-faint">
+                          <span className="rounded-full border border-line px-1.5">
+                            {s.channel}
+                          </span>
+                          {s.date}
+                          {s.match && (
+                            <span className="text-ink-soft">{s.match}</span>
+                          )}
+                        </p>
+                        {s.quote && (
+                          <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
+                            {s.quote}
+                          </p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Deep links the app emitted */}
+              {trace.links && (
+                <ul className="mt-3 grid gap-1">
+                  {trace.links.map((u) => (
+                    <li key={u}>
+                      <a
+                        href={u}
+                        target="_blank"
+                        rel="noopener"
+                        className="font-mono text-[10px] break-all text-ink-soft underline decoration-line hover:text-ink"
+                      >
+                        {u}
+                      </a>
                     </li>
                   ))}
                 </ul>
               )}
 
-              {trace.confidence && (
-                <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-[10px] text-ink-soft">
-                  GPT-4o judge
-                  <span className="text-ink">
-                    {trace.confidence.score}% {trace.confidence.verdict}
-                  </span>
-                </p>
-              )}
-
-              {/* Provenance, stated plainly rather than buried */}
-              <p className="mt-3 border-t border-line pt-3 font-mono text-[10px] text-ink-faint">
-                {trace.provenance === "full"
-                  ? "Full trace transcribed from a recorded run."
-                  : "Guardrail, routing and total latency are measured. No response body was recorded, so the return shape is shown instead."}
+              {/* The application's own standing disclaimer */}
+              <p className="mt-4 border-t border-line pt-3 font-mono text-[10px] leading-relaxed text-ink-faint">
+                {APP_DISCLAIMER}
               </p>
             </div>
           </div>
