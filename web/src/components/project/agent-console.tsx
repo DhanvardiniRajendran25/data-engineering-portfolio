@@ -24,7 +24,6 @@ const STEP_MS = 420;
 export function AgentConsole() {
   const [selected, setSelected] = useState(0);
   const [revealed, setRevealed] = useState(0);
-  const [running, setRunning] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
@@ -46,12 +45,10 @@ export function AgentConsole() {
     // With reduced motion, skip the staged reveal entirely.
     if (prefersReducedMotion) {
       setRevealed(next.steps.length + 1);
-      setRunning(false);
       return;
     }
 
     setRevealed(0);
-    setRunning(true);
 
     next.steps.forEach((_, i) => {
       timers.current.push(
@@ -62,10 +59,7 @@ export function AgentConsole() {
     // One extra tick reveals the result block.
     timers.current.push(
       setTimeout(
-        () => {
-          setRevealed(next.steps.length + 1);
-          setRunning(false);
-        },
+        () => setRevealed(next.steps.length + 1),
         STEP_MS * (next.steps.length + 1),
       ),
     );
@@ -128,17 +122,10 @@ export function AgentConsole() {
 
         {/* Trace */}
         <div className="p-5 sm:p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <p className="font-mono text-xs text-ink">
               <span className="text-accent">&gt;</span> {trace.query}
             </p>
-            <button
-              type="button"
-              onClick={() => run(selected)}
-              className="shrink-0 rounded-full border border-line px-3 py-1 font-mono text-[10px] tracking-[0.12em] text-ink-soft uppercase transition-colors hover:border-ink hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              {running ? "Running" : "Replay"}
-            </button>
           </div>
 
           {/* Steps. aria-live so a screen reader hears the trace progress. */}

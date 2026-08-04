@@ -7,9 +7,9 @@ import {
   DRIFT,
   GRAPH_EDGES,
   GRAPH_NODES,
-  KPIS,
-  LATENCY,
-  LATENCY_TARGET,
+  COST_BY_AGENT,
+  EVAL,
+  LATENCY_FACTS,
   PHASES,
   ROUTER,
   STAGES,
@@ -256,45 +256,104 @@ export function PodcastIQDeepDive() {
         <BarChart data={DRIFT} caption="Evolution pairs by drift type" />
       </Section>
 
-      <Section id="performance" label="Latency" kicker="5s p95 budget">
-        <BarChart
-          data={LATENCY}
-          unit="s"
-          decimals={1}
-          target={LATENCY_TARGET}
-          targetLabel="p95 target, 5 seconds"
-          caption="Mean latency by agent"
-        />
-      </Section>
-
-      <Section id="evaluation" label="Evaluation" kicker="7 of 7 passing">
+      <Section id="performance" label="Measured results" kicker="110 test queries">
+        {/* Scorecard, including what missed. Six evaluation scripts, 17 Apr 2026. */}
         <table className="w-full border-collapse text-sm">
-          <caption className="sr-only">Domain KPI thresholds and measured results</caption>
+          <caption className="sr-only">
+            Evaluation results against target, including dimensions below target
+          </caption>
           <thead>
             <tr className="border-b border-line text-left">
               <th scope="col" className="py-2 pr-4 font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-                Check
+                Dimension
               </th>
-              <th scope="col" className="py-2 pr-4 font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-                Threshold
-              </th>
-              <th scope="col" className="py-2 text-right font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+              <th scope="col" className="py-2 pr-4 text-right font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
                 Measured
+              </th>
+              <th scope="col" className="py-2 pr-4 text-right font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+                Target
+              </th>
+              <th scope="col" className="py-2 font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+                Status
               </th>
             </tr>
           </thead>
           <tbody>
-            {KPIS.map((k) => (
-              <tr key={k.check} className="border-b border-line/60">
-                <td className="py-2.5 pr-4">{k.check}</td>
-                <td className="py-2.5 pr-4 font-mono text-xs text-ink-faint">{k.threshold}</td>
-                <td className="py-2.5 text-right font-mono text-xs tabular-nums text-ink">
-                  {k.actual}
+            {EVAL.map((e) => (
+              <tr key={e.dimension} className="border-b border-line/60">
+                <td className="py-2.5 pr-4">{e.dimension}</td>
+                <td className="py-2.5 pr-4 text-right font-mono text-xs tabular-nums text-ink">
+                  {e.result}
+                </td>
+                <td className="py-2.5 pr-4 text-right font-mono text-xs tabular-nums text-ink-faint">
+                  {e.target}
+                </td>
+                <td className="py-2.5">
+                  {/* Status carries an icon and a word, never colour alone */}
+                  <span
+                    className={`inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.1em] uppercase ${
+                      e.status === "below" ? "text-accent" : "text-ink-soft"
+                    }`}
+                  >
+                    <span aria-hidden="true">
+                      {e.status === "below" ? "▲" : "✓"}
+                    </span>
+                    {e.status === "below" ? "Below target" : e.status === "pass" ? "Pass" : "Exceeds"}
+                  </span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {/* Latency stated as measured, with the diagnosis rather than a excuse */}
+        <div className="mt-10 rounded-brand border-l-2 border-accent bg-bg-elev p-6">
+          <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
+            Why latency misses
+          </p>
+          <dl className="mt-4 grid gap-4 sm:grid-cols-3">
+            {[
+              { k: "p95", v: LATENCY_FACTS.p95 },
+              { k: "Mean", v: LATENCY_FACTS.mean },
+              { k: "Target", v: LATENCY_FACTS.target },
+            ].map((x) => (
+              <div key={x.k}>
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+                  {x.k}
+                </dt>
+                <dd className="font-mono text-2xl text-ink">{x.v}</dd>
+              </div>
+            ))}
+          </dl>
+          <dl className="mt-5 grid gap-3 border-t border-line pt-4 text-sm">
+            <div className="flex gap-3">
+              <dt className="w-20 shrink-0 font-mono text-[10px] text-ink-faint uppercase">Cause</dt>
+              <dd className="text-ink-soft">{LATENCY_FACTS.cause}</dd>
+            </div>
+            <div className="flex gap-3">
+              <dt className="w-20 shrink-0 font-mono text-[10px] text-ink-faint uppercase">Fix</dt>
+              <dd className="text-ink">{LATENCY_FACTS.fix}</dd>
+            </div>
+            <div className="flex gap-3">
+              <dt className="w-20 shrink-0 font-mono text-[10px] text-ink-faint uppercase">Context</dt>
+              <dd className="text-ink-soft">{LATENCY_FACTS.context}</dd>
+            </div>
+          </dl>
+        </div>
+      </Section>
+
+      <Section id="cost" label="Cost per query" kicker="$1.19 per 1,000">
+        <BarChart
+          data={COST_BY_AGENT}
+          unit=""
+          decimals={5}
+          caption="Estimated cost by agent, USD"
+        />
+        <p className="mt-8 max-w-measure text-sm text-ink-soft">
+          Search and Graph are effectively free: both retrieve without a
+          generation step. Summarize costs the most because it passes 5 to 8
+          retrieved chunks into the prompt.
+        </p>
       </Section>
 
       {/* Full stack, at the end, linked through to Skills */}
