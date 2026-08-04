@@ -2,12 +2,6 @@
 
 Things blocked on information, credentials, or decisions that are yours. Everything here is deliberately *not* blocking the build; the site is being built so these can be dropped in later.
 
-## Links and artifacts
-
-- [ ] **PodcastIQ repo link.** Currently omitted. Either publish your own repository, or supply the URL you want used. *(Removed 2026-08-02 at your request; the only known repo was on a collaborator's account.)*
-- [ ] **Sage repo.** Sage is live on Cloud Run but has no public repository. A repo would strengthen it, even a cleaned-up one.
-- [ ] **CourtVisionAI / ReflexAI live demos**, if either is deployed anywhere.
-- [ ] **Dashboard screenshots** for the Data projects (IMDb, NYPD, Food Inspection, Meta TradePulse). Since those pipelines run on paid cloud resources and cannot be made publicly live, screenshots are the visual proof.
 
 ## Content you need to write or confirm
 

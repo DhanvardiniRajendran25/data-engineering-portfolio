@@ -132,6 +132,15 @@ export function AgentConsole() {
                     <span className="mt-1 block text-xs leading-snug">
                       {t.query}
                     </span>
+                    {t.provenance === "reconstructed" && (
+                      <span
+                        className={`mt-1 block font-mono text-[8px] tracking-[0.12em] uppercase ${
+                          active ? "text-bg/60" : "text-ink-faint"
+                        }`}
+                      >
+                        reconstructed
+                      </span>
+                    )}
                   </button>
                 </li>
               );
@@ -372,10 +381,19 @@ export function AgentConsole() {
                 </ul>
               )}
 
-              {/* The application's own standing disclaimer */}
-              <p className="mt-4 border-t border-line pt-3 font-mono text-[10px] leading-relaxed text-ink-faint">
-                {APP_DISCLAIMER}
-              </p>
+              {/* Provenance first, then the app's own standing disclaimer */}
+              <div className="mt-4 grid gap-2 border-t border-line pt-3">
+                {trace.provenance === "reconstructed" && (
+                  <p className="font-mono text-[10px] leading-relaxed text-accent">
+                    Reconstructed. No screen capture existed for this agent, so
+                    the response describes its documented behaviour rather than
+                    reproducing a recorded run.
+                  </p>
+                )}
+                <p className="font-mono text-[10px] leading-relaxed text-ink-faint">
+                  {APP_DISCLAIMER}
+                </p>
+              </div>
             </div>
           </div>
         </div>

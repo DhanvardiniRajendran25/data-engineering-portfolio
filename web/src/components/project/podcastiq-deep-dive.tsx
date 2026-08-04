@@ -15,7 +15,7 @@ import {
   STAGES,
   TECH_STACK,
 } from "@/content/projects/podcastiq";
-import { CHANNEL_DRIFT } from "@/content/projects/podcastiq-traces";
+import { CHANNEL_DRIFT, GRAPH_EXPLORER } from "@/content/projects/podcastiq-traces";
 import { AgentConsole } from "./agent-console";
 import { BarChart } from "./bar-chart";
 import { MagnitudeTable } from "./magnitude-table";
@@ -251,6 +251,51 @@ export function PodcastIQDeepDive() {
             </div>
           ))}
         </dl>
+      </Section>
+
+      {/* Second surface of the app: the graph, browsable directly */}
+      <Section id="explorer" label="Graph explorer" kicker="Browsable, not just queryable" wide>
+        <div className="rounded-brand border border-line bg-bg-elev p-6">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-brand-sm border border-line bg-bg px-3 py-2 font-mono text-xs text-ink">
+              {GRAPH_EXPLORER.searchTerm}
+            </span>
+            <span className="font-mono text-[10px] text-ink-faint">
+              {GRAPH_EXPLORER.nodesFound} nodes found &middot; {GRAPH_EXPLORER.loaded}
+            </span>
+          </div>
+
+          {/* Node-type key, matching the explorer's own legend */}
+          <ul className="mt-4 flex flex-wrap gap-4 border-t border-line pt-4">
+            {["Person", "Topic", "Channel", "Episode", "Claim"].map((k) => (
+              <li key={k} className="flex items-center gap-1.5 font-mono text-[10px] text-ink-faint">
+                <span aria-hidden="true" className="h-2 w-2 rounded-full bg-ink/30" />
+                {k}
+              </li>
+            ))}
+          </ul>
+
+          <ul className="mt-5 grid gap-1.5">
+            {GRAPH_EXPLORER.results.map((r) => (
+              <li
+                key={r.label}
+                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line/60 pb-2"
+              >
+                <span className="text-sm text-ink">{r.label}</span>
+                <span className="font-mono text-[10px] whitespace-nowrap text-ink-faint">
+                  {r.kind} &middot; {r.connections.toLocaleString("en-US")} connections
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-5 max-w-measure text-sm text-ink-soft">
+            Searching a person returns every node touching them, ranked by degree.
+            Sam Altman alone carries 601 connections; selecting any claim collapses
+            the view to its own neighbourhood, which is how a single assertion gets
+            traced back to the episode and topic it came from.
+          </p>
+        </div>
       </Section>
 
       <Section id="drift" label="Claim drift" kicker="823 pairs" wide>
