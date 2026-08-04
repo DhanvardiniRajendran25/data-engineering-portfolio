@@ -15,6 +15,7 @@ import {
   STAGES,
   TECH_STACK,
 } from "@/content/projects/podcastiq";
+import { AgentConsole } from "./agent-console";
 import { BarChart } from "./bar-chart";
 import { MagnitudeTable } from "./magnitude-table";
 import { PipelineStepper } from "./pipeline-stepper";
@@ -184,6 +185,19 @@ export function PodcastIQDeepDive() {
             </li>
           ))}
         </ul>
+
+        <div className="mt-12">
+          <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+            Try it
+          </p>
+          <p className="mt-2 max-w-measure text-sm text-ink-soft">
+            Eight queries, one per intent. Each replays the real execution trace:
+            guardrails, routing, agent steps and measured timings.
+          </p>
+          <div className="mt-5">
+            <AgentConsole />
+          </div>
+        </div>
       </Section>
 
       <Section id="architecture" label="Architecture" kicker="Full system" wide>
