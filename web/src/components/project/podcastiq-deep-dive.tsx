@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   AGENTS,
   CORPUS,
@@ -9,8 +10,10 @@ import {
   KPIS,
   LATENCY,
   LATENCY_TARGET,
+  PHASES,
   ROUTER,
   STAGES,
+  TECH_STACK,
 } from "@/content/projects/podcastiq";
 import { BarChart } from "./bar-chart";
 import { MagnitudeTable } from "./magnitude-table";
@@ -19,13 +22,14 @@ import { PipelineStepper } from "./pipeline-stepper";
 function Section({
   id,
   label,
-  lead,
+  kicker,
   children,
   wide = false,
 }: {
   id: string;
   label: string;
-  lead?: string;
+  /** A fragment, not a sentence. */
+  kicker?: string;
   children: React.ReactNode;
   wide?: boolean;
 }) {
@@ -34,8 +38,12 @@ function Section({
       <div className="flex items-baseline gap-4 sm:gap-6">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl">{label}</h2>
         <span aria-hidden="true" className="h-px flex-1 bg-line" />
+        {kicker && (
+          <span className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+            {kicker}
+          </span>
+        )}
       </div>
-      {lead && <p className="mt-4 max-w-measure text-lg text-ink-soft">{lead}</p>}
       <div className="mt-8 lg:mt-10">{children}</div>
     </section>
   );
@@ -44,9 +52,9 @@ function Section({
 export function PodcastIQDeepDive() {
   return (
     <>
-      {/* Corpus scale, compact. Sets the stakes before any explanation. */}
-      <section aria-label="Corpus at a glance" className="shell pt-16 lg:pt-20">
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-8 border-y border-line py-8 sm:grid-cols-3 lg:grid-cols-6">
+      {/* Scale, no commentary */}
+      <section aria-label="Corpus at a glance" className="shell pt-14 lg:pt-16">
+        <dl className="grid grid-cols-3 gap-x-6 gap-y-8 border-y border-line py-8 lg:grid-cols-6">
           {CORPUS.map((s) => (
             <div key={s.label}>
               <dd className="font-mono text-xl text-ink sm:text-2xl">{s.value}</dd>
@@ -56,69 +64,96 @@ export function PodcastIQDeepDive() {
         </dl>
       </section>
 
-      <Section
-        id="problem"
-        label="The problem"
-        lead="Podcasts hold an enormous amount of expert reasoning and none of it is queryable. The audio is the archive."
-      >
-        <div className="grid gap-6 md:grid-cols-3">
+      {/* Problem stated as three impossibilities */}
+      <Section id="problem" label="The problem" kicker="Audio is not queryable">
+        <ul className="grid gap-4 md:grid-cols-3">
           {[
-            {
-              t: "Cannot search it",
-              b: "Every expert view on AI safety across 100 episodes means listening to 100 episodes.",
-            },
-            {
-              t: "Cannot track change",
-              b: "Nothing shows whether a guest revised a 2022 prediction or quietly contradicted it.",
-            },
-            {
-              t: "Cannot attribute it",
-              b: "Claims pass by unverified, with no way to tie one to a specific speaker at scale.",
-            },
+            { x: "Search", y: "100 episodes = 100 hours of listening" },
+            { x: "Track change", y: "No record of a revised prediction" },
+            { x: "Attribute", y: "No link from a claim to a speaker" },
           ].map((c) => (
-            <div key={c.t} className="rounded-brand border border-line bg-bg-elev p-6">
-              <p className="text-ink">{c.t}</p>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{c.b}</p>
-            </div>
+            <li key={c.x} className="rounded-brand border border-line bg-bg-elev p-6">
+              <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.12em] text-ink-faint uppercase">
+                <span aria-hidden="true" className="text-accent">&times;</span>
+                Cannot {c.x}
+              </p>
+              <p className="mt-3 text-sm text-ink-soft">{c.y}</p>
+            </li>
           ))}
-        </div>
+        </ul>
       </Section>
 
-      <Section
-        id="pipeline"
-        label="How it was built"
-        lead="Three phases, eleven stages. Each one carries the decision behind it and what that decision cost."
-        wide
-      >
+      {/* Three-phase overview: the map before the detail */}
+      <Section id="phases" label="Three phases" kicker="11 stages" wide>
+        <ol className="grid gap-4 lg:grid-cols-3">
+          {PHASES.map((p, i) => (
+            <li key={p.id} className="relative rounded-brand border border-line bg-bg-elev p-6">
+              <div className="flex items-baseline gap-3">
+                <span className="font-mono text-3xl text-accent">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <p className="text-xl">{p.label}</p>
+                  <p className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+                    {p.sub}
+                  </p>
+                </div>
+              </div>
+
+              <dl className="mt-5 grid gap-2 border-t border-line pt-4 text-sm">
+                <div className="flex gap-2">
+                  <dt className="w-10 shrink-0 font-mono text-[10px] text-ink-faint uppercase">In</dt>
+                  <dd className="text-ink-soft">{p.from}</dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt className="w-10 shrink-0 font-mono text-[10px] text-ink-faint uppercase">Out</dt>
+                  <dd className="text-ink">{p.to}</dd>
+                </div>
+              </dl>
+
+              <p className="mt-4 font-mono text-[10px] text-ink-faint">
+                {STAGES.filter((s) => s.phase === p.id).length} stages
+              </p>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section id="pipeline" label="Stage by stage" kicker="Decisions, not descriptions" wide>
         <PipelineStepper stages={STAGES} />
       </Section>
 
-      <Section
-        id="agents"
-        label="The agent system"
-        lead="A router classifies intent, then one specialist answers it. Nine agents, eight intents, one chained pair."
-        wide
-      >
-        {/* Router, called out above the specialists it dispatches to */}
-        <div className="rounded-brand border-2 border-accent bg-bg-elev p-6">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <span className="font-mono text-[10px] tracking-[0.18em] text-accent uppercase">
+      <Section id="agents" label="Agent runtime" kicker="1 router, 8 specialists" wide>
+        {/* Router */}
+        <div className="rounded-brand border-2 border-accent bg-bg-elev p-5">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
               Router
             </span>
-            <span aria-hidden="true" className="text-ink-faint">/</span>
             <span className="font-mono text-[10px] text-ink-faint">{ROUTER.model}</span>
             <span aria-hidden="true" className="text-ink-faint">/</span>
             <span className="font-mono text-[10px] text-ink-faint">{ROUTER.example}</span>
           </div>
-          <p className="mt-3 max-w-measure text-ink-soft">{ROUTER.job}</p>
+          <p className="mt-2 text-sm text-ink-soft">{ROUTER.job}</p>
         </div>
 
-        <p
+        {/* Fan-out illustration */}
+        <svg
+          viewBox="0 0 800 44"
+          className="mt-1 h-11 w-full text-line"
           aria-hidden="true"
-          className="py-3 text-center font-mono text-xs text-ink-faint"
+          preserveAspectRatio="none"
         >
-          dispatches to one of eight
-        </p>
+          {[50, 157, 264, 371, 478, 585, 692, 750].map((x) => (
+            <path
+              key={x}
+              d={`M400 0 C400 22 ${x} 22 ${x} 44`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+            />
+          ))}
+        </svg>
 
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {AGENTS.map((a) => (
@@ -127,54 +162,36 @@ export function PodcastIQDeepDive() {
               className="flex flex-col rounded-brand border border-line bg-bg-elev p-5"
             >
               <div className="flex items-baseline justify-between gap-2">
-                <span className="font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
+                <span className="font-mono text-[10px] tracking-[0.12em] text-accent uppercase">
                   {a.intent}
                 </span>
                 {a.latency && (
-                  <span className="font-mono text-[10px] text-ink-faint">
-                    {a.latency}
-                  </span>
+                  <span className="font-mono text-[10px] text-ink-faint">{a.latency}</span>
                 )}
               </div>
 
               <p className="mt-2 text-lg">{a.name}</p>
               <p className="mt-0.5 font-mono text-[11px] text-ink-faint">{a.model}</p>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
-                {a.job}
-              </p>
-
+              <p className="mt-3 flex-1 text-sm text-ink-soft">{a.job}</p>
               <p className="mt-4 border-t border-line pt-3 text-xs text-ink-faint italic">
                 &ldquo;{a.example}&rdquo;
               </p>
-
               {a.chained && (
-                <p className="mt-2 font-mono text-[9px] tracking-[0.14em] text-accent uppercase">
+                <p className="mt-2 font-mono text-[9px] tracking-[0.12em] text-accent uppercase">
                   chained pair
                 </p>
               )}
             </li>
           ))}
         </ul>
-
-        <p className="mt-6 max-w-measure text-sm leading-relaxed text-ink-soft">
-          Search hands off to Summarization and nothing else chains. Keeping every
-          other agent independent means one prompt per job, routing that can be
-          measured directly, and a failure that stays contained instead of
-          cascading.
-        </p>
       </Section>
 
-      <Section
-        id="architecture"
-        label="Architecture"
-        lead="The whole system on one page: warehouse on the left, intelligence layer beneath it, query path on the right."
-        wide
-      >
+      <Section id="architecture" label="Architecture" kicker="Full system" wide>
         <div className="overflow-hidden rounded-brand border border-line bg-white">
           <div className="overflow-x-auto">
             <Image
               src="/PodcastIQ/podcastiq-architecture.svg"
-              alt="PodcastIQ architecture: 25 YouTube channels flow through extraction, quality profiling, Snowflake raw load, dbt staging and 120-second chunking into a curated chunk table, then through speaker attribution, claim extraction, temporal drift analysis and a Neo4j knowledge graph, and finally into a LangGraph router that dispatches to eight specialist agents behind four guardrail layers."
+              alt="PodcastIQ architecture: 25 YouTube channels flow through extraction, quality profiling, Snowflake raw load, dbt staging and 120-second chunking into a curated chunk table, then through speaker attribution, claim extraction, temporal drift analysis and a Neo4j knowledge graph, and finally into a LangGraph router dispatching to eight specialist agents behind four guardrail layers."
               width={1760}
               height={980}
               className="h-auto w-full min-w-[1000px]"
@@ -182,16 +199,11 @@ export function PodcastIQDeepDive() {
           </div>
         </div>
         <p className="mt-3 font-mono text-[10px] tracking-[0.1em] text-ink-faint uppercase">
-          Scroll horizontally to follow the flow
+          Scroll to follow the flow
         </p>
       </Section>
 
-      <Section
-        id="demo"
-        label="Walkthrough"
-        lead="The running application: chat, graph explorer, and channel dashboard."
-        wide
-      >
+      <Section id="demo" label="Walkthrough" kicker="Running application" wide>
         <div className="overflow-hidden rounded-brand border border-line bg-black">
           <div className="aspect-video w-full">
             <iframe
@@ -205,49 +217,32 @@ export function PodcastIQDeepDive() {
         </div>
       </Section>
 
-      <Section
-        id="graph"
-        label="The knowledge graph"
-        lead="Vector search retrieves passages that resemble a query. It cannot answer who appeared with whom, because that is a traversal."
-      >
+      <Section id="graph" label="Knowledge graph" kicker="Traversal, not similarity">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-10">
-          <MagnitudeTable
-            caption="Nodes by type"
-            rows={GRAPH_NODES}
-            total={88823}
-            totalLabel="Total nodes"
-          />
-          <MagnitudeTable
-            caption="Relationships by type"
-            rows={GRAPH_EDGES}
-            total={253740}
-            totalLabel="Total relationships"
-          />
+          <MagnitudeTable caption="Nodes by type" rows={GRAPH_NODES} total={88823} totalLabel="Total" />
+          <MagnitudeTable caption="Relationships by type" rows={GRAPH_EDGES} total={253740} totalLabel="Total" />
         </div>
-        <p className="mt-8 max-w-measure text-sm leading-relaxed text-ink-soft">
-          Confidence lives in the edge type, not a property, so a query picks its
-          own certainty bar:{" "}
-          <span className="font-mono text-xs text-ink">MADE_CLAIM</span> for high,{" "}
-          <span className="font-mono text-xs text-ink">LIKELY_MADE_CLAIM</span> for
-          medium,{" "}
-          <span className="font-mono text-xs text-ink">DISCUSSED_IN</span> where the
-          speaker could not be established.
-        </p>
+
+        {/* Confidence-in-edge-type, as a table rather than a paragraph */}
+        <dl className="mt-10 grid gap-3 sm:grid-cols-3">
+          {[
+            { e: "MADE_CLAIM", c: "High" },
+            { e: "LIKELY_MADE_CLAIM", c: "Medium" },
+            { e: "DISCUSSED_IN", c: "Speaker unknown" },
+          ].map((r) => (
+            <div key={r.e} className="rounded-brand-sm border border-line p-4">
+              <dt className="font-mono text-[11px] break-all text-ink">{r.e}</dt>
+              <dd className="mt-1 text-xs text-ink-faint">{r.c}</dd>
+            </div>
+          ))}
+        </dl>
       </Section>
 
-      <Section
-        id="drift"
-        label="Claim drift"
-        lead="823 pairs where a speaker returned to the same topic 30 days or more later. Nearly half the time their position had moved against itself."
-      >
+      <Section id="drift" label="Claim drift" kicker="823 pairs">
         <BarChart data={DRIFT} caption="Evolution pairs by drift type" />
       </Section>
 
-      <Section
-        id="performance"
-        label="Latency and evaluation"
-        lead="Measured against a 5-second p95 budget, and checked against the live warehouse rather than asserted."
-      >
+      <Section id="performance" label="Latency" kicker="5s p95 budget">
         <BarChart
           data={LATENCY}
           unit="s"
@@ -256,11 +251,11 @@ export function PodcastIQDeepDive() {
           targetLabel="p95 target, 5 seconds"
           caption="Mean latency by agent"
         />
+      </Section>
 
-        <table className="mt-14 w-full border-collapse text-sm">
-          <caption className="sr-only">
-            Domain KPI thresholds and measured results
-          </caption>
+      <Section id="evaluation" label="Evaluation" kicker="7 of 7 passing">
+        <table className="w-full border-collapse text-sm">
+          <caption className="sr-only">Domain KPI thresholds and measured results</caption>
           <thead>
             <tr className="border-b border-line text-left">
               <th scope="col" className="py-2 pr-4 font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
@@ -278,9 +273,7 @@ export function PodcastIQDeepDive() {
             {KPIS.map((k) => (
               <tr key={k.check} className="border-b border-line/60">
                 <td className="py-2.5 pr-4">{k.check}</td>
-                <td className="py-2.5 pr-4 font-mono text-xs text-ink-faint">
-                  {k.threshold}
-                </td>
+                <td className="py-2.5 pr-4 font-mono text-xs text-ink-faint">{k.threshold}</td>
                 <td className="py-2.5 text-right font-mono text-xs tabular-nums text-ink">
                   {k.actual}
                 </td>
@@ -288,12 +281,37 @@ export function PodcastIQDeepDive() {
             ))}
           </tbody>
         </table>
+      </Section>
 
-        <p className="mt-8 max-w-measure text-sm leading-relaxed text-ink-soft">
-          The 8b router ships at 87.5% against the 70b model&rsquo;s 93.75%. Six
-          points of routing accuracy did not justify paying 70b prices on every
-          query, and the whole system runs at $0.0012 per query as a result.
-        </p>
+      {/* Full stack, at the end, linked through to Skills */}
+      <Section id="stack" label="Stack" kicker="Everything used" wide>
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {TECH_STACK.map((g) => (
+            <div key={g.group}>
+              <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+                {g.group}
+              </p>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {g.items.map((i) => (
+                  <li
+                    key={i}
+                    className="rounded-full border border-line bg-bg-elev px-3 py-1 font-mono text-[11px] text-ink-soft"
+                  >
+                    {i}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <Link
+          href="/about#skills"
+          className="mt-10 inline-flex items-center gap-2 rounded-full border border-ink px-5 py-2.5 font-mono text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          See these across every project
+          <span aria-hidden="true">&rarr;</span>
+        </Link>
       </Section>
     </>
   );

@@ -111,6 +111,9 @@ export default async function ProjectPage({
         </div>
       </div>
 
+      {/* Deep-dive projects close with a full grouped stack section, so the
+          duplicate chip row here is dropped for them. */}
+      {!hasDeepDive && (
       <div className="mt-8 flex flex-wrap gap-2">
         {project.stack.map((tech) => (
           <span
@@ -121,6 +124,7 @@ export default async function ProjectPage({
           </span>
         ))}
       </div>
+      )}
 
       {Body && (
         <div className="mt-12 max-w-measure">
