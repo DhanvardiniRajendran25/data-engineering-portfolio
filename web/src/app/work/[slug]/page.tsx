@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { PROJECTS, PROJECT_BODIES, ROLE_LABELS, getProject } from "@/content/work";
 import { ProjectCover } from "@/components/project-cover";
+import { PodcastIQDeepDive } from "@/components/project/podcastiq-deep-dive";
 
 type Params = { slug: string };
 
@@ -31,8 +32,15 @@ export default async function ProjectPage({
   const project = getProject(slug);
   if (!project) notFound();
 
+  // Projects with a bespoke deep dive render that instead of the MDX body.
+  // Declared before the loader below, which reads it.
+  const hasDeepDive = slug === "podcastiq";
+
   const loadBody = PROJECT_BODIES[slug];
-  const Body = loadBody ? (await loadBody()).default : null;
+  const Body =
+    !hasDeepDive && project.hasWriteUp && loadBody
+      ? (await loadBody()).default
+      : null;
 
   const position = PROJECTS.findIndex((p) => p.slug === slug);
   const previous = position > 0 ? PROJECTS[position - 1] : null;
@@ -40,7 +48,8 @@ export default async function ProjectPage({
     position < PROJECTS.length - 1 ? PROJECTS[position + 1] : null;
 
   return (
-    <article className="shell section-y">
+    <article className="section-y">
+      <div className="shell">
       <Link
         href="/work"
         className="font-mono text-[11px] tracking-[0.14em] text-ink-soft uppercase transition-colors hover:text-ink"
@@ -111,19 +120,24 @@ export default async function ProjectPage({
         ))}
       </div>
 
-      <div className="mt-12 max-w-measure">
-        {project.hasWriteUp && Body ? (
+      {Body && (
+        <div className="mt-12 max-w-measure">
           <Body />
-        ) : (
-          <p className="rounded-brand border border-line bg-bg-elev p-6 text-sm text-ink-soft">
-            The full write-up for this project is in progress. The repository
-            above has the code and implementation detail in the meantime.
-          </p>
-        )}
+        </div>
+      )}
+
+      {!project.hasWriteUp && !hasDeepDive && (
+        <p className="mt-12 max-w-measure rounded-brand border border-line bg-bg-elev p-6 text-sm text-ink-soft">
+          The full write-up for this project is in progress. The repository
+          above has the code and implementation detail in the meantime.
+        </p>
+      )}
       </div>
 
+      {hasDeepDive && <PodcastIQDeepDive />}
+
       {project.gallery && project.gallery.length > 0 && (
-        <section aria-label="Project images" className="mt-16 space-y-10">
+        <section aria-label="Project images" className="shell mt-16 space-y-10">
           {project.gallery.map((item) => (
             <figure key={item.src}>
               <div className="overflow-hidden rounded-brand border border-line">
@@ -145,7 +159,7 @@ export default async function ProjectPage({
 
       <nav
         aria-label="Project navigation"
-        className="mt-20 flex flex-wrap justify-between gap-6 border-t border-line pt-8"
+        className="shell mt-20 flex flex-wrap justify-between gap-6 border-t border-line pt-8"
       >
         {previous ? (
           <Link href={`/work/${previous.slug}`} className="group">
