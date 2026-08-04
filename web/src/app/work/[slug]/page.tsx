@@ -99,12 +99,14 @@ export default async function ProjectPage({
         </div>
       </header>
 
-      <div className="mt-10 overflow-hidden rounded-brand border border-line">
-        <div className="aspect-[16/10] w-full">
+      {/* Capped well under the 1600px shell. At full width a 16:10 cover renders
+          about 1600x1000 and pushes the entire write-up below the fold. */}
+      <div className="mt-10 max-w-3xl overflow-hidden rounded-brand border border-line">
+        <div className="aspect-[2/1] w-full">
           <ProjectCover
             project={project}
             priority
-            sizes="(min-width: 1120px) 1120px, 100vw"
+            sizes="(min-width: 768px) 768px, 100vw"
           />
         </div>
       </div>
