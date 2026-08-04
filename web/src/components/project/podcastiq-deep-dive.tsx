@@ -1,14 +1,15 @@
 import Image from "next/image";
 import {
+  AGENTS,
   CORPUS,
+  DEMO_VIDEO_ID,
   DRIFT,
   GRAPH_EDGES,
   GRAPH_NODES,
-  HEADLINE,
   KPIS,
   LATENCY,
   LATENCY_TARGET,
-  RETROSPECTIVE,
+  ROUTER,
   STAGES,
 } from "@/content/projects/podcastiq";
 import { BarChart } from "./bar-chart";
@@ -34,60 +35,45 @@ function Section({
         <h2 className="text-2xl sm:text-3xl lg:text-4xl">{label}</h2>
         <span aria-hidden="true" className="h-px flex-1 bg-line" />
       </div>
-      {lead && <p className="mt-5 max-w-measure text-lg text-ink-soft">{lead}</p>}
+      {lead && <p className="mt-4 max-w-measure text-lg text-ink-soft">{lead}</p>}
       <div className="mt-8 lg:mt-10">{children}</div>
     </section>
-  );
-}
-
-function StatGrid({
-  stats,
-  cols = 4,
-}: {
-  stats: { value: string; label: string; note?: string }[];
-  cols?: 3 | 4;
-}) {
-  return (
-    <dl
-      className={`grid grid-cols-2 gap-x-6 gap-y-8 ${
-        cols === 4 ? "lg:grid-cols-4" : "sm:grid-cols-3"
-      }`}
-    >
-      {stats.map((s) => (
-        <div key={s.label}>
-          {/* Proportional figures, not tabular: these do not align in a column */}
-          <dd className="font-mono text-2xl text-ink sm:text-3xl">{s.value}</dd>
-          <dt className="mt-1 text-sm text-ink-soft">{s.label}</dt>
-          {s.note && (
-            <p className="mt-0.5 text-[11px] text-ink-faint">{s.note}</p>
-          )}
-        </div>
-      ))}
-    </dl>
   );
 }
 
 export function PodcastIQDeepDive() {
   return (
     <>
+      {/* Corpus scale, compact. Sets the stakes before any explanation. */}
+      <section aria-label="Corpus at a glance" className="shell pt-16 lg:pt-20">
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-8 border-y border-line py-8 sm:grid-cols-3 lg:grid-cols-6">
+          {CORPUS.map((s) => (
+            <div key={s.label}>
+              <dd className="font-mono text-xl text-ink sm:text-2xl">{s.value}</dd>
+              <dt className="mt-1 text-xs text-ink-soft">{s.label}</dt>
+            </div>
+          ))}
+        </dl>
+      </section>
+
       <Section
         id="problem"
         label="The problem"
-        lead="Podcasts hold an enormous amount of expert reasoning and none of it is queryable. The audio is the archive, so the knowledge inside it may as well not exist."
+        lead="Podcasts hold an enormous amount of expert reasoning and none of it is queryable. The audio is the archive."
       >
         <div className="grid gap-6 md:grid-cols-3">
           {[
             {
-              t: "You cannot search it",
-              b: "Finding every expert view on AI safety across 100 episodes means listening to 100 episodes. There is no index.",
+              t: "Cannot search it",
+              b: "Every expert view on AI safety across 100 episodes means listening to 100 episodes.",
             },
             {
-              t: "You cannot track change",
-              b: "Nothing tells you whether a guest revised a prediction between 2022 and 2026, doubled down on it, or quietly contradicted it.",
+              t: "Cannot track change",
+              b: "Nothing shows whether a guest revised a 2022 prediction or quietly contradicted it.",
             },
             {
-              t: "You cannot verify it",
-              b: "Claims are asserted in passing and never checked, and there is no way to attribute a specific claim to a specific speaker at scale.",
+              t: "Cannot attribute it",
+              b: "Claims pass by unverified, with no way to tie one to a specific speaker at scale.",
             },
           ].map((c) => (
             <div key={c.t} className="rounded-brand border border-line bg-bg-elev p-6">
@@ -99,37 +85,92 @@ export function PodcastIQDeepDive() {
       </Section>
 
       <Section
-        id="corpus"
-        label="The corpus"
-        lead="A deliberately time-spread corpus, because tracking how a position moves needs range, not volume."
-      >
-        <StatGrid stats={CORPUS} cols={3} />
-        <p className="mt-8 max-w-measure text-sm leading-relaxed text-ink-soft">
-          The first extraction pass sorted by view count and returned almost
-          nothing but 2024 and 2025 episodes, which made temporal analysis
-          impossible. Re-running it stratified by publish date widened the span
-          from 12 months to 44 and is what made drift detection viable at all.
-        </p>
-      </Section>
-
-      <Section
         id="pipeline"
         label="How it was built"
-        lead="Eleven stages from caption files to a guarded answer. Each one carries the decision behind it and what that decision cost."
+        lead="Three phases, eleven stages. Each one carries the decision behind it and what that decision cost."
         wide
       >
         <PipelineStepper stages={STAGES} />
       </Section>
 
       <Section
+        id="agents"
+        label="The agent system"
+        lead="A router classifies intent, then one specialist answers it. Nine agents, eight intents, one chained pair."
+        wide
+      >
+        {/* Router, called out above the specialists it dispatches to */}
+        <div className="rounded-brand border-2 border-accent bg-bg-elev p-6">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="font-mono text-[10px] tracking-[0.18em] text-accent uppercase">
+              Router
+            </span>
+            <span aria-hidden="true" className="text-ink-faint">/</span>
+            <span className="font-mono text-[10px] text-ink-faint">{ROUTER.model}</span>
+            <span aria-hidden="true" className="text-ink-faint">/</span>
+            <span className="font-mono text-[10px] text-ink-faint">{ROUTER.example}</span>
+          </div>
+          <p className="mt-3 max-w-measure text-ink-soft">{ROUTER.job}</p>
+        </div>
+
+        <p
+          aria-hidden="true"
+          className="py-3 text-center font-mono text-xs text-ink-faint"
+        >
+          dispatches to one of eight
+        </p>
+
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {AGENTS.map((a) => (
+            <li
+              key={a.name}
+              className="flex flex-col rounded-brand border border-line bg-bg-elev p-5"
+            >
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
+                  {a.intent}
+                </span>
+                {a.latency && (
+                  <span className="font-mono text-[10px] text-ink-faint">
+                    {a.latency}
+                  </span>
+                )}
+              </div>
+
+              <p className="mt-2 text-lg">{a.name}</p>
+              <p className="mt-0.5 font-mono text-[11px] text-ink-faint">{a.model}</p>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
+                {a.job}
+              </p>
+
+              <p className="mt-4 border-t border-line pt-3 text-xs text-ink-faint italic">
+                &ldquo;{a.example}&rdquo;
+              </p>
+
+              {a.chained && (
+                <p className="mt-2 font-mono text-[9px] tracking-[0.14em] text-accent uppercase">
+                  chained pair
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-6 max-w-measure text-sm leading-relaxed text-ink-soft">
+          Search hands off to Summarization and nothing else chains. Keeping every
+          other agent independent means one prompt per job, routing that can be
+          measured directly, and a failure that stays contained instead of
+          cascading.
+        </p>
+      </Section>
+
+      <Section
         id="architecture"
         label="Architecture"
-        lead="The full system: data engineering ending at the chunk table, AI engineering building the intelligence layer on top, and the query pipeline serving it."
+        lead="The whole system on one page: warehouse on the left, intelligence layer beneath it, query path on the right."
         wide
       >
         <div className="overflow-hidden rounded-brand border border-line bg-white">
-          {/* Intrinsic 1760x980. Sized by width so it scales down cleanly, and
-              scrollable on small screens rather than shrunk to illegibility. */}
           <div className="overflow-x-auto">
             <Image
               src="/PodcastIQ/podcastiq-architecture.svg"
@@ -146,9 +187,28 @@ export function PodcastIQDeepDive() {
       </Section>
 
       <Section
+        id="demo"
+        label="Walkthrough"
+        lead="The running application: chat, graph explorer, and channel dashboard."
+        wide
+      >
+        <div className="overflow-hidden rounded-brand border border-line bg-black">
+          <div className="aspect-video w-full">
+            <iframe
+              src={`https://drive.google.com/file/d/${DEMO_VIDEO_ID}/preview`}
+              title="PodcastIQ application walkthrough"
+              allow="autoplay"
+              allowFullScreen
+              className="h-full w-full"
+            />
+          </div>
+        </div>
+      </Section>
+
+      <Section
         id="graph"
         label="The knowledge graph"
-        lead="Vector search retrieves passages that resemble a query. It cannot answer who appeared with whom, because that is a traversal. Hence a second store."
+        lead="Vector search retrieves passages that resemble a query. It cannot answer who appeared with whom, because that is a traversal."
       >
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-10">
           <MagnitudeTable
@@ -165,35 +225,28 @@ export function PodcastIQDeepDive() {
           />
         </div>
         <p className="mt-8 max-w-measure text-sm leading-relaxed text-ink-soft">
-          Attribution confidence is encoded in the edge type rather than a
-          property, so a query picks its own certainty bar:{" "}
-          <span className="font-mono text-xs text-ink">MADE_CLAIM</span> for high
-          confidence,{" "}
-          <span className="font-mono text-xs text-ink">LIKELY_MADE_CLAIM</span>{" "}
-          for medium, and{" "}
-          <span className="font-mono text-xs text-ink">DISCUSSED_IN</span> where
-          the speaker could not be established at all.
+          Confidence lives in the edge type, not a property, so a query picks its
+          own certainty bar:{" "}
+          <span className="font-mono text-xs text-ink">MADE_CLAIM</span> for high,{" "}
+          <span className="font-mono text-xs text-ink">LIKELY_MADE_CLAIM</span> for
+          medium,{" "}
+          <span className="font-mono text-xs text-ink">DISCUSSED_IN</span> where the
+          speaker could not be established.
         </p>
       </Section>
 
       <Section
         id="drift"
         label="Claim drift"
-        lead="823 pairs where the same speaker returned to the same topic more than 30 days later. Nearly half the time their position had moved against itself."
+        lead="823 pairs where a speaker returned to the same topic 30 days or more later. Nearly half the time their position had moved against itself."
       >
         <BarChart data={DRIFT} caption="Evolution pairs by drift type" />
-        <p className="mt-8 max-w-measure text-sm leading-relaxed text-ink-soft">
-          Contradiction being the largest class is the finding, not a bug: people
-          revise more often than they signal. Drift is computed during the
-          pipeline rather than at query time, which keeps an LLM call out of the
-          request path and lets the temporal agent answer with plain SQL.
-        </p>
       </Section>
 
       <Section
-        id="agents"
-        label="Agents and latency"
-        lead="A router classifies intent, then one specialist answers. Measured against a 5-second p95 budget."
+        id="performance"
+        label="Latency and evaluation"
+        lead="Measured against a 5-second p95 budget, and checked against the live warehouse rather than asserted."
       >
         <BarChart
           data={LATENCY}
@@ -203,21 +256,8 @@ export function PodcastIQDeepDive() {
           targetLabel="p95 target, 5 seconds"
           caption="Mean latency by agent"
         />
-        <p className="mt-8 max-w-measure text-sm leading-relaxed text-ink-soft">
-          Only the web-search fact-check path exceeds the budget, and it does so
-          because of an external round-trip rather than anything in the system.
-          That is why fact-checking is two-stage: a Cortex pre-filter resolves a
-          third of claims without leaving Snowflake, and only genuinely uncertain
-          ones pay the network cost.
-        </p>
-      </Section>
 
-      <Section
-        id="evaluation"
-        label="Evaluation"
-        lead="Six evaluation scripts and seven corpus health checks, run against the live warehouse rather than asserted."
-      >
-        <table className="w-full border-collapse text-sm">
+        <table className="mt-14 w-full border-collapse text-sm">
           <caption className="sr-only">
             Domain KPI thresholds and measured results
           </caption>
@@ -248,51 +288,12 @@ export function PodcastIQDeepDive() {
             ))}
           </tbody>
         </table>
+
         <p className="mt-8 max-w-measure text-sm leading-relaxed text-ink-soft">
-          Router accuracy was measured on 48 labelled queries, six per intent:
-          87.5% on llama3.1-8b against 93.75% on the 70b model. The 8b model
-          ships, because six points of routing accuracy did not justify paying
-          70b prices on every single query.
+          The 8b router ships at 87.5% against the 70b model&rsquo;s 93.75%. Six
+          points of routing accuracy did not justify paying 70b prices on every
+          query, and the whole system runs at $0.0012 per query as a result.
         </p>
-      </Section>
-
-      <Section
-        id="demo"
-        label="Demo"
-        lead="A walkthrough of the running application: chat interface, graph explorer, and channel dashboard."
-      >
-        <a
-          href="https://drive.google.com/file/d/1d0jUIje5mElE8_u1BpUbYwlpnGoE9ZgP/view"
-          target="_blank"
-          rel="noopener"
-          className="inline-flex items-center gap-3 rounded-full border border-ink px-6 py-3 font-mono text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          Watch the walkthrough
-          <span aria-hidden="true">&#8599;</span>
-        </a>
-      </Section>
-
-      <Section
-        id="retrospective"
-        label="What I would do differently"
-        lead="Three things I would change, stated plainly."
-      >
-        <ol className="grid gap-5">
-          {RETROSPECTIVE.map((r, i) => (
-            <li key={i} className="flex gap-5 border-l border-line pl-5">
-              <span className="font-mono text-[10px] text-ink-faint">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <p className="max-w-measure text-sm leading-relaxed text-ink-soft">
-                {r}
-              </p>
-            </li>
-          ))}
-        </ol>
-      </Section>
-
-      <Section id="numbers" label="By the numbers">
-        <StatGrid stats={HEADLINE} />
       </Section>
     </>
   );
