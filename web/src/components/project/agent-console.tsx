@@ -24,6 +24,7 @@ const STEP_MS = 420;
 export function AgentConsole() {
   const [selected, setSelected] = useState(0);
   const [revealed, setRevealed] = useState(0);
+  const [running, setRunning] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
@@ -45,10 +46,12 @@ export function AgentConsole() {
     // With reduced motion, skip the staged reveal entirely.
     if (prefersReducedMotion) {
       setRevealed(next.steps.length + 1);
+      setRunning(false);
       return;
     }
 
     setRevealed(0);
+    setRunning(true);
 
     next.steps.forEach((_, i) => {
       timers.current.push(
@@ -59,7 +62,10 @@ export function AgentConsole() {
     // One extra tick reveals the result block.
     timers.current.push(
       setTimeout(
-        () => setRevealed(next.steps.length + 1),
+        () => {
+          setRevealed(next.steps.length + 1);
+          setRunning(false);
+        },
         STEP_MS * (next.steps.length + 1),
       ),
     );
@@ -72,9 +78,21 @@ export function AgentConsole() {
       {/* Console header */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
         <div className="flex items-center gap-2">
-          <span aria-hidden="true" className="h-2 w-2 rounded-full bg-accent" />
+          <span
+            aria-hidden="true"
+            className={`h-2 w-2 rounded-full bg-accent ${
+              running ? "animate-pulse motion-reduce:animate-none" : ""
+            }`}
+          />
           <span className="font-mono text-[10px] tracking-[0.16em] text-ink-soft uppercase">
             Agent console
+          </span>
+          {/* Status is announced, not colour-only */}
+          <span
+            role="status"
+            className="font-mono text-[10px] tracking-[0.14em] text-accent uppercase"
+          >
+            {running ? "Running" : ""}
           </span>
         </div>
         <span className="font-mono text-[10px] text-ink-faint">
@@ -126,6 +144,16 @@ export function AgentConsole() {
             <p className="font-mono text-xs text-ink">
               <span className="text-accent">&gt;</span> {trace.query}
             </p>
+            {running && (
+              <span className="flex items-center gap-1.5 font-mono text-[10px] tracking-[0.12em] text-ink-faint uppercase">
+                <span aria-hidden="true" className="inline-flex gap-0.5">
+                  <span className="h-1 w-1 animate-pulse rounded-full bg-accent motion-reduce:animate-none" />
+                  <span className="h-1 w-1 animate-pulse rounded-full bg-accent [animation-delay:150ms] motion-reduce:animate-none" />
+                  <span className="h-1 w-1 animate-pulse rounded-full bg-accent [animation-delay:300ms] motion-reduce:animate-none" />
+                </span>
+                executing
+              </span>
+            )}
           </div>
 
           {/* Steps. aria-live so a screen reader hears the trace progress. */}
