@@ -4,21 +4,14 @@ import {
   AGENTS,
   CORPUS,
   DEMO_VIDEO_ID,
-  DRIFT,
-  GRAPH_EDGES,
-  GRAPH_NODES,
   COST_BY_AGENT,
-  EVAL,
-  LATENCY_FACTS,
   PHASES,
   ROUTER,
   STAGES,
   TECH_STACK,
 } from "@/content/projects/podcastiq";
-import { CHANNEL_DRIFT } from "@/content/projects/podcastiq-traces";
 import { AgentConsole } from "./agent-console";
 import { BarChart } from "./bar-chart";
-import { MagnitudeTable } from "./magnitude-table";
 import { PipelineStepper } from "./pipeline-stepper";
 
 function Section({
@@ -229,161 +222,6 @@ export function PodcastIQDeepDive() {
               className="h-full w-full"
             />
           </div>
-        </div>
-      </Section>
-
-      <Section id="graph" label="Knowledge graph" kicker="Traversal, not similarity">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-10">
-          <MagnitudeTable caption="Nodes by type" rows={GRAPH_NODES} total={88823} totalLabel="Total" />
-          <MagnitudeTable caption="Relationships by type" rows={GRAPH_EDGES} total={253740} totalLabel="Total" />
-        </div>
-
-        {/* Confidence-in-edge-type, as a table rather than a paragraph */}
-        <dl className="mt-10 grid gap-3 sm:grid-cols-3">
-          {[
-            { e: "MADE_CLAIM", c: "High" },
-            { e: "LIKELY_MADE_CLAIM", c: "Medium" },
-            { e: "DISCUSSED_IN", c: "Speaker unknown" },
-          ].map((r) => (
-            <div key={r.e} className="rounded-brand-sm border border-line p-4">
-              <dt className="font-mono text-[11px] break-all text-ink">{r.e}</dt>
-              <dd className="mt-1 text-xs text-ink-faint">{r.c}</dd>
-            </div>
-          ))}
-        </dl>
-      </Section>
-
-      <Section id="drift" label="Claim drift" kicker="823 pairs" wide>
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-10">
-          <BarChart data={DRIFT} caption="Evolution pairs by drift type" />
-
-          <div>
-            <p className="font-mono text-[11px] tracking-[0.14em] text-ink-faint uppercase">
-              Contradictions by channel
-            </p>
-            <table className="mt-4 w-full border-collapse text-xs">
-              <caption className="sr-only">
-                Claim evolutions per channel, split by drift type
-              </caption>
-              <thead>
-                <tr className="border-b border-line text-left">
-                  <th scope="col" className="py-2 pr-3 font-mono text-[9px] tracking-[0.12em] text-ink-faint uppercase">
-                    Channel
-                  </th>
-                  <th scope="col" className="py-2 pr-3 text-right font-mono text-[9px] tracking-[0.12em] text-ink-faint uppercase">
-                    Total
-                  </th>
-                  <th scope="col" className="py-2 text-right font-mono text-[9px] tracking-[0.12em] text-ink-faint uppercase">
-                    Contradicted
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {CHANNEL_DRIFT.map((c) => (
-                  <tr key={c.channel} className="border-b border-line/60">
-                    <td className="py-2 pr-3">{c.channel}</td>
-                    <td className="py-2 pr-3 text-right font-mono tabular-nums text-ink-faint">
-                      {c.total}
-                    </td>
-                    <td className="py-2 text-right font-mono tabular-nums text-ink">
-                      {c.contradicted}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-4 max-w-measure text-sm text-ink-soft">
-              The Diary Of A CEO leads at 52 contradictions, close to half its
-              total evolutions. This is the corpus disagreeing with itself,
-              measured.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="performance" label="Measured results" kicker="110 test queries">
-        {/* Scorecard, including what missed. Six evaluation scripts, 17 Apr 2026. */}
-        <table className="w-full border-collapse text-sm">
-          <caption className="sr-only">
-            Evaluation results against target, including dimensions below target
-          </caption>
-          <thead>
-            <tr className="border-b border-line text-left">
-              <th scope="col" className="py-2 pr-4 font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-                Dimension
-              </th>
-              <th scope="col" className="py-2 pr-4 text-right font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-                Measured
-              </th>
-              <th scope="col" className="py-2 pr-4 text-right font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-                Target
-              </th>
-              <th scope="col" className="py-2 font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {EVAL.map((e) => (
-              <tr key={e.dimension} className="border-b border-line/60">
-                <td className="py-2.5 pr-4">{e.dimension}</td>
-                <td className="py-2.5 pr-4 text-right font-mono text-xs tabular-nums text-ink">
-                  {e.result}
-                </td>
-                <td className="py-2.5 pr-4 text-right font-mono text-xs tabular-nums text-ink-faint">
-                  {e.target}
-                </td>
-                <td className="py-2.5">
-                  {/* Status carries an icon and a word, never colour alone */}
-                  <span
-                    className={`inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.1em] uppercase ${
-                      e.status === "below" ? "text-accent" : "text-ink-soft"
-                    }`}
-                  >
-                    <span aria-hidden="true">
-                      {e.status === "below" ? "▲" : "✓"}
-                    </span>
-                    {e.status === "below" ? "Below target" : e.status === "pass" ? "Pass" : "Exceeds"}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Latency stated as measured, with the diagnosis rather than a excuse */}
-        <div className="mt-10 rounded-brand border-l-2 border-accent bg-bg-elev p-6">
-          <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
-            Why latency misses
-          </p>
-          <dl className="mt-4 grid gap-4 sm:grid-cols-3">
-            {[
-              { k: "p95", v: LATENCY_FACTS.p95 },
-              { k: "Mean", v: LATENCY_FACTS.mean },
-              { k: "Target", v: LATENCY_FACTS.target },
-            ].map((x) => (
-              <div key={x.k}>
-                <dt className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-                  {x.k}
-                </dt>
-                <dd className="font-mono text-2xl text-ink">{x.v}</dd>
-              </div>
-            ))}
-          </dl>
-          <dl className="mt-5 grid gap-3 border-t border-line pt-4 text-sm">
-            <div className="flex gap-3">
-              <dt className="w-20 shrink-0 font-mono text-[10px] text-ink-faint uppercase">Cause</dt>
-              <dd className="text-ink-soft">{LATENCY_FACTS.cause}</dd>
-            </div>
-            <div className="flex gap-3">
-              <dt className="w-20 shrink-0 font-mono text-[10px] text-ink-faint uppercase">Fix</dt>
-              <dd className="text-ink">{LATENCY_FACTS.fix}</dd>
-            </div>
-            <div className="flex gap-3">
-              <dt className="w-20 shrink-0 font-mono text-[10px] text-ink-faint uppercase">Context</dt>
-              <dd className="text-ink-soft">{LATENCY_FACTS.context}</dd>
-            </div>
-          </dl>
         </div>
       </Section>
 
