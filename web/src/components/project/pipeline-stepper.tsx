@@ -223,9 +223,9 @@ export function PipelineStepper({ stages }: { stages: Stage[] }) {
           </dl>
 
           <div className="mt-4 border-t border-line pt-4">
-            <dt className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+            <p className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
               Because
-            </dt>
+            </p>
             <ul className="mt-2 grid gap-1.5">
               {stage.decision.because.map((b) => (
                 <li key={b} className="flex gap-2 text-sm text-ink-soft">
@@ -237,9 +237,9 @@ export function PipelineStepper({ stages }: { stages: Stage[] }) {
           </div>
 
           <div className="mt-4 border-t border-line pt-4">
-            <dt className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+            <p className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
               Cost
-            </dt>
+            </p>
             <p className="mt-1.5 flex gap-2 text-sm text-ink-soft">
               <span aria-hidden="true" className="text-ink-faint">&minus;</span>
               {stage.decision.cost}
