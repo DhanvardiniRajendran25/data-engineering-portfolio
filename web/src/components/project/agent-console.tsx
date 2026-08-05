@@ -8,6 +8,12 @@ import {
   TRACES,
   type Trace,
 } from "@/content/projects/podcastiq-traces";
+import {
+  CHANNELS,
+  DEEP_DIVE,
+  NEIGHBOURHOOD,
+  NODE_COLOURS,
+} from "@/content/projects/podcastiq-dashboard";
 
 /**
  * Replays recorded runs through the 9-agent system.
@@ -30,7 +36,7 @@ export function AgentConsole() {
   const [selected, setSelected] = useState(0);
   const [revealed, setRevealed] = useState(0);
   const [running, setRunning] = useState(false);
-  const [view, setView] = useState<"chat" | "graph">("chat");
+  const [view, setView] = useState<"chat" | "graph" | "dashboard">("chat");
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
@@ -105,6 +111,7 @@ export function AgentConsole() {
           {([
             ["chat", "Chat"],
             ["graph", "Graph"],
+            ["dashboard", "Dashboard"],
           ] as const).map(([id, label]) => {
             const current = view === id;
             return (
@@ -430,7 +437,7 @@ export function AgentConsole() {
         </div>
       </div>
       </div>
-      ) : (
+      ) : view === "graph" ? (
         /* Graph view, from the explorer capture. Same window, second surface of
            the app, so the graph reads as browsable rather than only reachable
            through an agent. */
@@ -491,10 +498,182 @@ export function AgentConsole() {
 
           <p className="mt-5 text-sm text-ink-soft">
             Searching a person returns every node touching them, ranked by degree.
-            Sam Altman alone carries 601 connections; selecting a claim collapses
-            the view to its own neighbourhood, which is how one assertion gets
-            traced back to the episode and topic it came from.
+            Sam Altman alone carries 601 connections. Selecting a claim collapses
+            the view to its own neighbourhood:
           </p>
+
+          {/* One claim's neighbourhood, as the explorer drew it. Node positions
+              come from the capture rather than a live force simulation: this is
+              the rendered result, not a re-run of the layout. */}
+          <figure className="mt-4 overflow-hidden rounded-brand border border-line bg-bg-elev">
+            <figcaption className="border-b border-line px-4 py-2 font-mono text-[10px] tracking-[0.12em] text-accent uppercase">
+              Neighbourhood of: {NEIGHBOURHOOD.focus}
+              <span className="ml-2 text-ink-faint normal-case">
+                {NEIGHBOURHOOD.summary}
+              </span>
+            </figcaption>
+            <svg
+              viewBox="0 0 100 100"
+              role="img"
+              aria-label={`Graph neighbourhood of the claim ${NEIGHBOURHOOD.focus} linking it to the episode it came from and the topic it belongs to.`}
+              className="h-72 w-full"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {NEIGHBOURHOOD.edges.map(([a, b]) => {
+                const from = NEIGHBOURHOOD.nodes.find((n) => n.id === a);
+                const to = NEIGHBOURHOOD.nodes.find((n) => n.id === b);
+                if (!from || !to) return null;
+                return (
+                  <line
+                    key={`${a}-${b}`}
+                    x1={from.x}
+                    y1={from.y}
+                    x2={to.x}
+                    y2={to.y}
+                    stroke="currentColor"
+                    strokeWidth="0.4"
+                    className="text-ink-faint"
+                  />
+                );
+              })}
+              {NEIGHBOURHOOD.nodes.map((n) => (
+                <g key={n.id}>
+                  <circle
+                    cx={n.x}
+                    cy={n.y}
+                    r={n.kind === "Claim" ? 2.6 : 4}
+                    fill={NODE_COLOURS[n.kind]}
+                  />
+                  <text
+                    x={n.x}
+                    y={n.y + (n.kind === "Claim" ? 7 : 8.5)}
+                    textAnchor="middle"
+                    fontSize="3.1"
+                    fill="currentColor"
+                    className="font-mono text-ink-soft"
+                  >
+                    {n.label}
+                  </text>
+                </g>
+              ))}
+            </svg>
+          </figure>
+        </div>
+      ) : (
+        /* Dashboard view, from the capture. */
+        <div
+          id="console-view-dashboard"
+          role="tabpanel"
+          aria-labelledby="tab-dashboard"
+          className="p-5 sm:p-6"
+        >
+          <p className="font-display text-lg text-ink">Channel Dashboard</p>
+          <p className="mt-1 text-xs text-ink-soft">
+            Episode coverage, top topics, and guest networks per channel.
+          </p>
+
+          <p className="mt-6 font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
+            All channels, overview
+          </p>
+          <div className="mt-3 max-h-80 overflow-y-auto rounded-brand border border-line">
+            <table className="w-full border-collapse text-xs">
+              <caption className="sr-only">
+                All 25 channels with genre, episode count and coverage window
+              </caption>
+              <thead className="sticky top-0 bg-bg-elev">
+                <tr className="text-left">
+                  <th scope="col" className="px-3 py-2 font-mono text-[9px] tracking-[0.12em] text-accent uppercase">
+                    Channel
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-mono text-[9px] tracking-[0.12em] text-accent uppercase">
+                    Genre
+                  </th>
+                  <th scope="col" className="px-3 py-2 text-right font-mono text-[9px] tracking-[0.12em] text-accent uppercase">
+                    Episodes
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-mono text-[9px] tracking-[0.12em] text-accent uppercase">
+                    Coverage
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {CHANNELS.map((ch) => (
+                  <tr key={ch.channel} className="border-t border-line/60">
+                    <td className="px-3 py-2 text-ink">{ch.channel}</td>
+                    <td className="px-3 py-2 text-ink-soft">{ch.genre}</td>
+                    <td className="px-3 py-2 text-right font-mono tabular-nums text-accent">
+                      {ch.episodes}
+                    </td>
+                    <td className="px-3 py-2 font-mono text-[10px] whitespace-nowrap text-ink-faint">
+                      {ch.from} &rarr; {ch.to}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 font-mono text-[10px] text-ink-faint">
+            25 channels, summing to 286 episodes
+          </p>
+
+          <p className="mt-8 font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
+            Channel deep dive
+          </p>
+          <div className="mt-3 rounded-brand border border-line bg-bg-elev p-4">
+            <p className="text-sm text-ink">{DEEP_DIVE.channel}</p>
+            <dl className="mt-4 grid grid-cols-3 gap-3">
+              {[
+                [String(DEEP_DIVE.episodes), "Episodes"],
+                [DEEP_DIVE.firstEpisode, "First episode"],
+                [DEEP_DIVE.latestEpisode, "Latest episode"],
+              ].map(([v, k]) => (
+                <div key={k} className="rounded-brand-sm border border-line bg-bg p-3 text-center">
+                  <dd className="font-display text-base text-ink">{v}</dd>
+                  <dt className="mt-0.5 font-mono text-[9px] tracking-[0.1em] text-ink-faint uppercase">
+                    {k}
+                  </dt>
+                </div>
+              ))}
+            </dl>
+
+            <p className="mt-6 font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
+              Top topics
+            </p>
+            <ul className="mt-3 grid gap-1.5">
+              {DEEP_DIVE.topics.map((t) => (
+                <li key={t.label} className="grid grid-cols-[6.5rem_1fr] items-center gap-3">
+                  <span className="truncate text-right font-mono text-[10px] text-ink-soft">
+                    {t.label}
+                  </span>
+                  <span
+                    className="h-3 rounded-sm bg-accent"
+                    style={{ width: `${(t.value / 810) * 100}%` }}
+                  />
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 font-mono text-[9px] text-ink-faint">
+              Ranking exact. Magnitudes read off the dashboard chart, so
+              approximate.
+            </p>
+
+            <p className="mt-6 font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
+              Notable guests
+            </p>
+            <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {DEEP_DIVE.guests.map((g) => (
+                <li key={g} className="rounded-brand-sm border border-line bg-bg p-3 text-center">
+                  <span
+                    aria-hidden="true"
+                    className="mx-auto grid h-7 w-7 place-items-center rounded-full bg-accent-soft font-mono text-[11px] text-accent"
+                  >
+                    {g.charAt(0)}
+                  </span>
+                  <span className="mt-2 block text-[11px] text-ink">{g}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
     </div>
