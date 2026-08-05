@@ -32,6 +32,18 @@ const SOCIAL_LINKS = [
   },
 ];
 
+/**
+ * Text reveals move, they do not fade.
+ *
+ * The staggered entrance previously animated opacity from 0. Because
+ * useReducedMotion() cannot know the preference during SSR, that ships
+ * opacity:0 in the server HTML, and any frame sampled before the animation
+ * finishes has text at ~1.1:1 against the background. Animating transform only
+ * removes the failure mode: an element that has not moved yet is still legible.
+ *
+ * The portrait below keeps its fade, since an image cannot become unreadable
+ * text.
+ */
 export function Hero() {
   const prefersReducedMotion = useReducedMotion();
 
@@ -43,9 +55,8 @@ export function Hero() {
   };
 
   const item: Variants = {
-    hidden: prefersReducedMotion ? {} : { opacity: 0, y: 16 },
+    hidden: prefersReducedMotion ? {} : { y: 16 },
     show: {
-      opacity: 1,
       y: 0,
       transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
     },
@@ -96,6 +107,8 @@ export function Hero() {
       </motion.div>
 
       <motion.div
+        // Fade is fine here: this block is the portrait, and an image at
+        // partial opacity cannot become unreadable text.
         initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}

@@ -37,12 +37,13 @@ for (const route of ROUTES) {
     await page.goto(route);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-      // Third-party iframe content is out of scope. axe reaches into the
-      // embedded Drive player and flags Google's own markup (an aria-label on a
-      // plain div), which is not ours to fix. Excluding it keeps the suite
-      // measuring this site rather than someone else's, and is scoped to that
-      // one origin so a genuine violation in our own iframes still fails.
+      // Third-party embed content is out of scope. axe reaches inside the Drive
+      // and YouTube players and flags their own markup: an aria-label on a plain
+      // div, an unlabelled avatar button, aria-level on an anchor. None of it is
+      // ours to fix. Both origins are named explicitly rather than excluding
+      // every iframe, so a genuine violation in an iframe we author still fails.
       .exclude('iframe[src*="drive.google.com"]')
+      .exclude('iframe[src*="youtube-nocookie.com"]')
       .analyze();
     expect(results.violations).toEqual([]);
   });
@@ -52,12 +53,13 @@ for (const route of ROUTES) {
     await page.goto(route);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-      // Third-party iframe content is out of scope. axe reaches into the
-      // embedded Drive player and flags Google's own markup (an aria-label on a
-      // plain div), which is not ours to fix. Excluding it keeps the suite
-      // measuring this site rather than someone else's, and is scoped to that
-      // one origin so a genuine violation in our own iframes still fails.
+      // Third-party embed content is out of scope. axe reaches inside the Drive
+      // and YouTube players and flags their own markup: an aria-label on a plain
+      // div, an unlabelled avatar button, aria-level on an anchor. None of it is
+      // ours to fix. Both origins are named explicitly rather than excluding
+      // every iframe, so a genuine violation in an iframe we author still fails.
       .exclude('iframe[src*="drive.google.com"]')
+      .exclude('iframe[src*="youtube-nocookie.com"]')
       .analyze();
     expect(results.violations).toEqual([]);
   });

@@ -2,14 +2,12 @@ import Link from "next/link";
 import {
   AGENTS,
   CAPABILITIES,
-  CONFIDENCE_CODE,
-  CONFIDENCE_TIERS,
   DECISIONS,
-  PRINCIPLES,
-  RESPONSE_FIELDS,
   SCALE,
   TECH_STACK,
 } from "@/content/projects/courtvision";
+import { YOUTUBE_ID } from "@/content/projects/courtvision-traces";
+import { CourtvisionConsole } from "./courtvision-console";
 
 function Section({
   id,
@@ -133,43 +131,30 @@ export function CourtvisionDeepDive() {
         </p>
       </Section>
 
-      {/* The most interesting engineering decision on the project */}
-      <Section id="confidence" label="Confidence" kicker="Observed, not claimed">
-        <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:gap-10">
-          <div>
-            <p className="max-w-measure text-sm leading-relaxed text-ink-soft">
-              Confidence is computed from how many sources grounded the answer,
-              never asked of the model. A model reporting its own confidence is
-              both unreliable and biased upward, and on a scouting answer an
-              overconfident wrong number is worse than an admitted gap.
-            </p>
-            <pre
-              tabIndex={0}
-              className="mt-5 overflow-x-auto rounded-brand border border-line bg-bg-elev p-5 font-mono text-[11px] leading-relaxed text-ink-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
-            >
-              {CONFIDENCE_CODE}
-            </pre>
+      <Section id="demo" label="Walkthrough" kicker="Running application" wide>
+        <div className="overflow-hidden rounded-brand border border-line bg-black">
+          <div className="aspect-video w-full">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}`}
+              title="CourtVision AI walkthrough"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="h-full w-full"
+            />
           </div>
+        </div>
 
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-              Sources to score
-            </p>
-            <ul className="mt-3 grid gap-2">
-              {CONFIDENCE_TIERS.map((t) => (
-                <li
-                  key={t.sources}
-                  className="flex items-center justify-between gap-4 rounded-brand-sm border border-line bg-bg-elev px-4 py-3"
-                >
-                  <span className="text-sm text-ink-soft">{t.sources}</span>
-                  <span className="font-mono text-sm text-ink">{t.score}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 text-xs text-ink-faint">
-              A heuristic, not a calibrated probability. It counts sources, it
-              does not judge them.
-            </p>
+        <div className="mt-10">
+          <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+            Try it
+          </p>
+          <p className="mt-2 max-w-measure text-sm text-ink-soft">
+            All three surfaces, replaying real captured runs. The Simulator tab is
+            the one to click: calling zone defense replays what the session
+            actually did next.
+          </p>
+          <div className="mt-5">
+            <CourtvisionConsole />
           </div>
         </div>
       </Section>
@@ -235,42 +220,6 @@ export function CourtvisionDeepDive() {
             </div>
           ))}
         </div>
-      </Section>
-
-      <Section id="response" label="The response" kicker="One structured payload">
-        <ul className="flex flex-wrap gap-2">
-          {RESPONSE_FIELDS.map((f) => (
-            <li
-              key={f}
-              className="rounded-full border border-line bg-bg-elev px-3 py-1.5 font-mono text-[11px] text-ink-soft"
-            >
-              {f}
-            </li>
-          ))}
-        </ul>
-        <p className="mt-6 max-w-measure text-sm text-ink-soft">
-          A single call returns the answer, the evidence behind it, the searches
-          that produced that evidence, what to ask next, and the live court state.
-          Returning the search queries alongside the answer is what makes a claim
-          checkable rather than trusted.
-        </p>
-      </Section>
-
-      <Section id="principles" label="Principles" kicker="6 constraints held" wide>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {PRINCIPLES.map((p) => (
-            <div key={p.title} className="rounded-brand border border-line bg-bg-elev p-5">
-              <p className="text-ink">{p.title}</p>
-              <p className="mt-2 text-sm text-ink-soft">{p.what}</p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 max-w-measure text-sm text-ink-soft">
-          The last one is a constraint, not a virtue. An in-memory store and no
-          database were correct inside a $25 budget and a hackathon deadline, and
-          would be wrong in production. Worth saying plainly rather than leaving a
-          reviewer to assume it was an oversight.
-        </p>
       </Section>
 
       <Section id="stack" label="Stack" kicker="Everything used" wide>

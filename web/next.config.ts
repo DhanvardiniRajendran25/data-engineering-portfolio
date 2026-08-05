@@ -44,11 +44,12 @@ const csp = [
   `object-src 'none'`,
   `base-uri 'self'`,
   `form-action 'self'`,
-  // The PodcastIQ walkthrough is embedded from Google Drive. Without this,
-  // `default-src 'self'` blocks the iframe outright and the player renders
-  // blank with a console CSP violation. Scoped to Drive only; nothing else may
-  // be framed.
-  `frame-src https://drive.google.com`,
+  // Walkthrough embeds: Drive hosts PodcastIQ's, youtube-nocookie hosts
+  // CourtVision's. Without this, `default-src 'self'` blocks both iframes and
+  // the players render blank with a console CSP violation. Scoped to these two
+  // origins only; nothing else may be framed. nocookie rather than youtube.com
+  // so an embed does not set tracking cookies for visitors who never play it.
+  `frame-src https://drive.google.com https://www.youtube-nocookie.com`,
   // This site may not be framed by anyone (clickjacking). Distinct from
   // frame-src above, which controls what this site is allowed to embed.
   `frame-ancestors 'none'`,
