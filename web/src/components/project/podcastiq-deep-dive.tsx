@@ -196,7 +196,12 @@ export function PodcastIQDeepDive() {
 
       <Section id="architecture" label="Architecture" kicker="Full system" wide>
         <div className="overflow-hidden rounded-brand border border-line bg-white">
-          <div className="overflow-x-auto">
+          <div
+        role="region"
+        aria-label="PodcastIQ architecture diagram"
+        tabIndex={0}
+        className="overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+      >
             <Image
               src="/PodcastIQ/podcastiq-architecture.svg"
               alt="PodcastIQ architecture: 25 YouTube channels flow through extraction, quality profiling, Snowflake raw load, dbt staging and 120-second chunking into a curated chunk table, then through speaker attribution, claim extraction, temporal drift analysis and a Neo4j knowledge graph, and finally into a LangGraph router dispatching to eight specialist agents behind four guardrail layers."

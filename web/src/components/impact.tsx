@@ -54,9 +54,20 @@ const container: Variants = {
   show: { transition: { staggerChildren: 0.08 } },
 };
 
+/**
+ * Scroll reveals move, they do not fade.
+ *
+ * `initial={{ opacity: 0 }}` bakes opacity:0 into the server-rendered HTML,
+ * because useReducedMotion() cannot know the user's preference during SSR. Any
+ * element still below the fold therefore ships transparent, and if whileInView
+ * has not fired the text is invisible to sighted users and reads at 1.04:1 to
+ * axe. Animating transform only removes the failure mode outright: a transform
+ * cannot make text unreadable, so the worst case is an element that has not
+ * moved yet rather than one that cannot be read.
+ */
 const item: Variants = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { y: 14 },
+  show: { y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
 };
 
 export function Impact() {

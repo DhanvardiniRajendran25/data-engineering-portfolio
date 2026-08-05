@@ -163,8 +163,12 @@
     --bg: #0d0f13;
     --bg-elev: #14171d;
     --ink: #f2efe9;
-    --ink-soft: #a8b0bd;
-    --ink-faint: #737d8a;
+    /* Both lightened to clear 4.5:1 against the console's own surfaces.
+       ink-faint was #737d8a at 4.29:1 on bg-elev, which fails for the small
+       mono metadata it labels. The console rebinds tokens, so it needs its
+       own contrast check rather than inheriting the page theme's. */
+    --ink-soft: #b6bec9;
+    --ink-faint: #98a2b0;
     --line: rgba(242, 239, 233, 0.14);
     --accent: #ef7360;
     --accent-soft: rgba(239, 115, 96, 0.16);

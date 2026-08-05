@@ -10,13 +10,38 @@ import AxeBuilder from "@axe-core/playwright";
  * floor, not a substitute for a manual screen reader pass.
  */
 
-const ROUTES = ["/", "/work", "/about", "/contact", "/work/sage"];
+/**
+ * Every route with a distinct rendering pattern, not a sample.
+ *
+ * All four deep dives are included deliberately. Each introduces something the
+ * others do not: PodcastIQ has the agent console, whose `.console-surface`
+ * rebinds the theme tokens to a fixed dark palette that nothing else exercises;
+ * DocuParse and IMDb each carry a large inline architecture SVG; IMDb also has
+ * tables with proportional bars. Testing one deep dive and assuming the rest
+ * match is how the console's palette went unchecked.
+ */
+const ROUTES = [
+  "/",
+  "/work",
+  "/about",
+  "/contact",
+  "/work/podcastiq",
+  "/work/sage",
+  "/work/docuparse",
+  "/work/imdb-analytics",
+];
 
 for (const route of ROUTES) {
   test(`${route} has no detectable a11y violations (light)`, async ({ page }) => {
     await page.goto(route);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      // Third-party iframe content is out of scope. axe reaches into the
+      // embedded Drive player and flags Google's own markup (an aria-label on a
+      // plain div), which is not ours to fix. Excluding it keeps the suite
+      // measuring this site rather than someone else's, and is scoped to that
+      // one origin so a genuine violation in our own iframes still fails.
+      .exclude('iframe[src*="drive.google.com"]')
       .analyze();
     expect(results.violations).toEqual([]);
   });
@@ -26,6 +51,12 @@ for (const route of ROUTES) {
     await page.goto(route);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      // Third-party iframe content is out of scope. axe reaches into the
+      // embedded Drive player and flags Google's own markup (an aria-label on a
+      // plain div), which is not ours to fix. Excluding it keeps the suite
+      // measuring this site rather than someone else's, and is scoped to that
+      // one origin so a genuine violation in our own iframes still fails.
+      .exclude('iframe[src*="drive.google.com"]')
       .analyze();
     expect(results.violations).toEqual([]);
   });

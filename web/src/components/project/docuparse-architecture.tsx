@@ -174,7 +174,12 @@ export function DocuparseArchitecture() {
 
   return (
     <figure className="m-0 overflow-hidden rounded-brand border border-line bg-bg-elev">
-      <div className="overflow-x-auto">
+      <div
+        role="region"
+        aria-label="DocuParse architecture diagram"
+        tabIndex={0}
+        className="overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+      >
         <svg
           viewBox="0 0 1760 800"
           role="img"

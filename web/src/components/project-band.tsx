@@ -13,6 +13,17 @@ import { ProjectCover } from "./project-cover";
  * keyboard focus, never hover alone. Below `lg` the layout stacks and the
  * detail is always visible, since touch devices have no hover.
  */
+/**
+ * Scroll reveals move, they do not fade.
+ *
+ * `initial={{ opacity: 0 }}` bakes opacity:0 into the server-rendered HTML,
+ * because useReducedMotion() cannot know the user's preference during SSR. Any
+ * element still below the fold therefore ships transparent, and if whileInView
+ * has not fired the text is invisible to sighted users and reads at 1.04:1 to
+ * axe. Animating transform only removes the failure mode outright: a transform
+ * cannot make text unreadable, so the worst case is an element that has not
+ * moved yet rather than one that cannot be read.
+ */
 export function ProjectBand({
   project,
   index,
@@ -25,8 +36,8 @@ export function ProjectBand({
 
   return (
     <motion.div
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={prefersReducedMotion ? false : { y: 24 }}
+      whileInView={{ y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     >

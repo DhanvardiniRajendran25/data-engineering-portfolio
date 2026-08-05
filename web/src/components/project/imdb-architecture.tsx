@@ -149,7 +149,12 @@ export function ImdbArchitecture() {
 
   return (
     <figure className="m-0 overflow-hidden rounded-brand border border-line bg-bg-elev">
-      <div className="overflow-x-auto">
+      <div
+        role="region"
+        aria-label="IMDb Analytics architecture diagram"
+        tabIndex={0}
+        className="overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+      >
         <svg
           viewBox="0 0 1700 940"
           role="img"

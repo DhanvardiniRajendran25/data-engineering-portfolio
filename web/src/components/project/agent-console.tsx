@@ -223,26 +223,33 @@ export function AgentConsole() {
               return (
                 <li
                   key={s.label}
-                  className={`rounded-brand-sm border px-4 py-3 transition-all duration-300 motion-reduce:transition-none ${
-                    shown
-                      ? "border-line bg-bg opacity-100"
-                      : "border-line/40 bg-bg opacity-30"
+                  className={`rounded-brand-sm border bg-bg px-4 py-3 transition-colors duration-300 motion-reduce:transition-none ${
+                    shown ? "border-line" : "border-line/40"
                   }`}
                 >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="flex items-baseline gap-2 text-sm text-ink">
-                      <span className="font-mono text-[10px] text-ink-faint">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      {s.label}
-                    </span>
-                    <span className="shrink-0 font-mono text-[10px] tabular-nums text-ink-faint">
-                      {s.ms < 1000 ? `${s.ms}ms` : `${(s.ms / 1000).toFixed(1)}s`}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-xs text-ink-soft">{s.detail}</p>
+                  {/* Rendered only once revealed. Dimming it instead put text
+                      at 1.44:1, which axe correctly flags: invisible-but-present
+                      text is worse than absent text. */}
+                  {shown ? (
+                    <>
+                      <div className="flex items-baseline justify-between gap-3">
+                        <span className="flex items-baseline gap-2 text-sm text-ink">
+                          <span className="font-mono text-[10px] text-ink-faint">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          {s.label}
+                        </span>
+                        <span className="shrink-0 font-mono text-[10px] tabular-nums text-ink-faint">
+                          {s.ms < 1000 ? `${s.ms}ms` : `${(s.ms / 1000).toFixed(1)}s`}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-ink-soft">{s.detail}</p>
+                    </>
+                  ) : (
+                    <div aria-hidden="true" className="h-[2.35rem]" />
+                  )}
                   {s.code && shown && (
-                    <pre className="mt-2 overflow-x-auto rounded-brand-sm border border-line bg-bg-elev p-3 font-mono text-[10px] leading-relaxed text-ink-soft">
+                    <pre tabIndex={0} className="mt-2 overflow-x-auto rounded-brand-sm border border-line bg-bg-elev p-3 font-mono text-[10px] leading-relaxed text-ink-soft">
                       {s.code}
                     </pre>
                   )}
@@ -252,11 +259,10 @@ export function AgentConsole() {
           </ol>
 
           {/* Result */}
-          <div
-            className={`mt-4 transition-opacity duration-500 motion-reduce:transition-none ${
-              resultVisible ? "opacity-100" : "opacity-0"
-            }`}
-          >
+          {/* Not rendered until visible, rather than opacity-0: transparent text
+              is still in the accessibility tree and still measured for contrast. */}
+          {resultVisible && (
+          <div className="mt-4">
             <div className="rounded-brand border-l-2 border-accent bg-bg p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
@@ -434,6 +440,7 @@ export function AgentConsole() {
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
       </div>
@@ -515,10 +522,16 @@ export function AgentConsole() {
             <svg
               viewBox="0 0 100 100"
               role="img"
-              aria-label={`Graph neighbourhood of the claim ${NEIGHBOURHOOD.focus} linking it to the episode it came from and the topic it belongs to.`}
+              aria-labelledby="nbhd-title"
+              aria-describedby="nbhd-desc"
               className="h-72 w-full"
               preserveAspectRatio="xMidYMid meet"
             >
+              <title id="nbhd-title">Claim neighbourhood</title>
+              <desc id="nbhd-desc">
+                The claim {NEIGHBOURHOOD.focus} linked to the episode it came from
+                and the topic it belongs to. Three nodes, three edges.
+              </desc>
               {NEIGHBOURHOOD.edges.map(([a, b]) => {
                 const from = NEIGHBOURHOOD.nodes.find((n) => n.id === a);
                 const to = NEIGHBOURHOOD.nodes.find((n) => n.id === b);
