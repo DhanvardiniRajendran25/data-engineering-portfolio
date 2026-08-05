@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import {
   APP_DISCLAIMER,
+  GRAPH_EXPLORER,
   TRACES,
   type Trace,
 } from "@/content/projects/podcastiq-traces";
@@ -29,6 +30,7 @@ export function AgentConsole() {
   const [selected, setSelected] = useState(0);
   const [revealed, setRevealed] = useState(0);
   const [running, setRunning] = useState(false);
+  const [view, setView] = useState<"chat" | "graph">("chat");
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
@@ -82,7 +84,6 @@ export function AgentConsole() {
        read as embedded software rather than more content, and it matches how
        the real PodcastIQ application looks. */
     <div className="console-surface overflow-hidden rounded-[18px] bg-bg ring-1 ring-black/20 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.55)]">
-      <div>
       {/* Title bar, mirroring the application's own header */}
       <div className="flex items-center justify-between gap-4 border-b border-line bg-bg-elev px-5 py-3">
         <div className="flex items-center gap-2">
@@ -92,25 +93,44 @@ export function AgentConsole() {
               <path d="M5 11a7 7 0 0 0 14 0M12 18v4" />
             </svg>
           </span>
-          <span className="font-display text-sm text-ink">
-            Podcast<span className="text-accent italic">IQ</span>
+          {/* Sans, not the display serif: Playfair's italic capital I and Q
+              render as "1" and "2" at this size, so the wordmark read PodcastI2. */}
+          <span className="font-body text-sm font-semibold tracking-tight text-ink">
+            Podcast<span className="text-accent">IQ</span>
           </span>
         </div>
-        <nav aria-label="Application views" className="flex items-center gap-4">
-          {["Chat", "Graph", "Dashboard"].map((v, i) => (
-            <span
-              key={v}
-              aria-current={i === 0 ? "true" : undefined}
-              className={`font-mono text-[10px] tracking-[0.1em] uppercase ${
-                i === 0 ? "text-accent" : "text-ink-faint"
-              }`}
-            >
-              {v}
-            </span>
-          ))}
-        </nav>
+        {/* Real tabs. Dashboard is absent on purpose: no capture exists for it,
+            and a tab that does nothing is worse than one that is not there. */}
+        <div role="tablist" aria-label="Application views" className="flex items-center gap-1">
+          {([
+            ["chat", "Chat"],
+            ["graph", "Graph"],
+          ] as const).map(([id, label]) => {
+            const current = view === id;
+            return (
+              <button
+                key={id}
+                role="tab"
+                type="button"
+                id={`tab-${id}`}
+                aria-selected={current}
+                aria-controls={`console-view-${id}`}
+                onClick={() => setView(id)}
+                className={`rounded-full px-3 py-1 font-mono text-[10px] tracking-[0.1em] uppercase transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                  current
+                    ? "bg-accent-soft text-accent"
+                    : "text-ink-faint hover:text-ink"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
+      {view === "chat" ? (
+      <div id="console-view-chat" role="tabpanel" aria-labelledby="tab-chat">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-2.5">
         <div className="flex items-center gap-2">
           <span
@@ -410,6 +430,73 @@ export function AgentConsole() {
         </div>
       </div>
       </div>
+      ) : (
+        /* Graph view, from the explorer capture. Same window, second surface of
+           the app, so the graph reads as browsable rather than only reachable
+           through an agent. */
+        <div id="console-view-graph" role="tabpanel" aria-labelledby="tab-graph" className="p-5 sm:p-6">
+          <p className="font-display text-lg text-ink">Knowledge Graph Explorer</p>
+          <p className="mt-1 text-xs text-ink-soft">
+            Relationships between speakers, topics, episodes, channels and claims.
+          </p>
+
+          <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5">
+            {[
+              ["25", "Channels"],
+              ["286", "Episodes"],
+              ["466", "Persons"],
+              ["3,786", "Topics"],
+              ["84,260", "Claims"],
+            ].map(([v, k]) => (
+              <div key={k} className="rounded-brand-sm border border-line bg-bg-elev p-3">
+                <dd className="font-mono text-lg text-ink">{v}</dd>
+                <dt className="mt-0.5 font-mono text-[9px] tracking-[0.12em] text-ink-faint uppercase">
+                  {k}
+                </dt>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <span className="rounded-brand-sm border border-accent/50 bg-bg-elev px-3 py-2 font-mono text-xs text-ink">
+              {GRAPH_EXPLORER.searchTerm}
+            </span>
+            <span className="font-mono text-[10px] text-ink-faint">
+              {GRAPH_EXPLORER.nodesFound} nodes found &middot; {GRAPH_EXPLORER.loaded}
+            </span>
+          </div>
+
+          <ul className="mt-4 flex flex-wrap gap-4 border-t border-line pt-4">
+            {["Person", "Topic", "Channel", "Episode", "Claim"].map((k) => (
+              <li key={k} className="flex items-center gap-1.5 font-mono text-[10px] text-ink-faint">
+                <span aria-hidden="true" className="h-2 w-2 rounded-full bg-ink/40" />
+                {k}
+              </li>
+            ))}
+          </ul>
+
+          <ul className="mt-4 grid gap-1.5">
+            {GRAPH_EXPLORER.results.map((r) => (
+              <li
+                key={r.label}
+                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line/60 pb-2"
+              >
+                <span className="text-sm text-ink">{r.label}</span>
+                <span className="font-mono text-[10px] whitespace-nowrap text-ink-faint">
+                  {r.kind} &middot; {r.connections.toLocaleString("en-US")} connections
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-5 text-sm text-ink-soft">
+            Searching a person returns every node touching them, ranked by degree.
+            Sam Altman alone carries 601 connections; selecting a claim collapses
+            the view to its own neighbourhood, which is how one assertion gets
+            traced back to the episode and topic it came from.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
