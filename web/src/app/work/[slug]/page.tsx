@@ -7,6 +7,7 @@ import { ProjectCover } from "@/components/project-cover";
 import { PodcastIQDeepDive } from "@/components/project/podcastiq-deep-dive";
 import { SageDeepDive } from "@/components/project/sage-deep-dive";
 import { DocuparseDeepDive } from "@/components/project/docuparse-deep-dive";
+import { ImdbDeepDive } from "@/components/project/imdb-deep-dive";
 
 type Params = { slug: string };
 
@@ -37,7 +38,10 @@ export default async function ProjectPage({
   // Projects with a bespoke deep dive render that instead of the MDX body.
   // Declared before the loader below, which reads it.
   const hasDeepDive =
-    slug === "podcastiq" || slug === "sage" || slug === "docuparse";
+    slug === "podcastiq" ||
+    slug === "sage" ||
+    slug === "docuparse" ||
+    slug === "imdb-analytics";
 
   const loadBody = PROJECT_BODIES[slug];
   const Body =
@@ -146,6 +150,7 @@ export default async function ProjectPage({
       {slug === "podcastiq" && <PodcastIQDeepDive />}
       {slug === "sage" && <SageDeepDive />}
       {slug === "docuparse" && <DocuparseDeepDive />}
+      {slug === "imdb-analytics" && <ImdbDeepDive />}
 
       {project.gallery && project.gallery.length > 0 && (
         <section aria-label="Project images" className="shell mt-16 space-y-10">
