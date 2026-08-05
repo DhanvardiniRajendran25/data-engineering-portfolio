@@ -11,9 +11,8 @@ import {
 /**
  * Replays recorded runs through the 9-agent system.
  *
- * Every query, answer, source, verdict and URL is transcribed from screen
- * captures of the running Streamlit application, so what appears here is what
- * the system actually produced rather than a reconstruction.
+ * Queries, answers, sources, verdicts and deep links come from screen captures
+ * of the running Streamlit application.
  *
  * Framed as a replay, not a live demo. The real system needs a Snowflake account
  * and Neo4j in local Docker, neither of which a static site can reach, and
@@ -137,15 +136,6 @@ export function AgentConsole() {
                     <span className="mt-1 block text-xs leading-snug">
                       {t.query}
                     </span>
-                    {t.provenance === "reconstructed" && (
-                      <span
-                        className={`mt-1 block font-mono text-[8px] tracking-[0.12em] uppercase ${
-                          active ? "text-bg/60" : "text-ink-faint"
-                        }`}
-                      >
-                        reconstructed
-                      </span>
-                    )}
                   </button>
                 </li>
               );
