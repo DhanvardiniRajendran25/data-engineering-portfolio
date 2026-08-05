@@ -76,13 +76,42 @@ export function AgentConsole() {
   const resultVisible = revealed > trace.steps.length;
 
   return (
-    /* Outer bezel. The console sits inside page content that shares its surface
-       and border tokens, so without a frame it read as one more section. The
-       inset ring plus the darker surround make it read as an embedded
-       application, which is what it is. */
-    <div className="rounded-[20px] border border-ink/15 bg-ink/[0.04] p-2 shadow-brand sm:p-2.5">
-      <div className="overflow-hidden rounded-brand border border-line bg-bg-elev">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
+    /* A dark application window, not a page section.
+       `console-surface` rebinds the theme tokens locally, so every utility
+       inside resolves dark regardless of the page theme. That is what makes it
+       read as embedded software rather than more content, and it matches how
+       the real PodcastIQ application looks. */
+    <div className="console-surface overflow-hidden rounded-[18px] bg-bg ring-1 ring-black/20 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.55)]">
+      <div>
+      {/* Title bar, mirroring the application's own header */}
+      <div className="flex items-center justify-between gap-4 border-b border-line bg-bg-elev px-5 py-3">
+        <div className="flex items-center gap-2">
+          <span aria-hidden="true" className="text-accent">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <rect x="9" y="2" width="6" height="11" rx="3" />
+              <path d="M5 11a7 7 0 0 0 14 0M12 18v4" />
+            </svg>
+          </span>
+          <span className="font-display text-sm text-ink">
+            Podcast<span className="text-accent italic">IQ</span>
+          </span>
+        </div>
+        <nav aria-label="Application views" className="flex items-center gap-4">
+          {["Chat", "Graph", "Dashboard"].map((v, i) => (
+            <span
+              key={v}
+              aria-current={i === 0 ? "true" : undefined}
+              className={`font-mono text-[10px] tracking-[0.1em] uppercase ${
+                i === 0 ? "text-accent" : "text-ink-faint"
+              }`}
+            >
+              {v}
+            </span>
+          ))}
+        </nav>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-2.5">
         <div className="flex items-center gap-2">
           <span
             aria-hidden="true"

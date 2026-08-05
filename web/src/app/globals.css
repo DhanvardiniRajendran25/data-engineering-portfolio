@@ -150,6 +150,27 @@
     background: #fffdf8;
   }
 
+  /*
+   * Console surface.
+   *
+   * Re-declares the theme tokens locally, so every token-based utility inside
+   * (bg-bg-elev, text-ink, border-line) resolves dark without touching a single
+   * child class. Fixed rather than theme-following on purpose: the point is that
+   * the console does not share a surface with the page around it, and it matches
+   * how the real PodcastIQ application actually looks.
+   */
+  .console-surface {
+    --bg: #0d0f13;
+    --bg-elev: #14171d;
+    --ink: #f2efe9;
+    --ink-soft: #a8b0bd;
+    --ink-faint: #737d8a;
+    --line: rgba(242, 239, 233, 0.14);
+    --accent: #ef7360;
+    --accent-soft: rgba(239, 115, 96, 0.16);
+    color-scheme: dark;
+  }
+
   /* Narrower shell for reading/scanning pages. */
   .shell-content {
     margin-inline: auto;
