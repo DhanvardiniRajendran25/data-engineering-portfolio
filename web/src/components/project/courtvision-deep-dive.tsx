@@ -132,7 +132,24 @@ export function CourtvisionDeepDive() {
       </Section>
 
       <Section id="demo" label="Walkthrough" kicker="Running application" wide>
-        <div className="overflow-hidden rounded-brand border border-line bg-black">
+        <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+          Try it
+        </p>
+        <p className="mt-2 max-w-measure text-sm text-ink-soft">
+          All three surfaces, replaying real captured runs. The Simulator tab is
+          the one to click: calling zone defense replays what the session actually
+          did next.
+        </p>
+        <div className="mt-5">
+          <CourtvisionConsole />
+        </div>
+
+        {/* Video sits under the console: the interactive replay is the thing
+            worth reaching first, and the recording backs it up. */}
+        <p className="mt-14 font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+          Full walkthrough
+        </p>
+        <div className="mt-5 overflow-hidden rounded-brand border border-line bg-black">
           <div className="aspect-video w-full">
             <iframe
               src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}`}
@@ -141,20 +158,6 @@ export function CourtvisionDeepDive() {
               allowFullScreen
               className="h-full w-full"
             />
-          </div>
-        </div>
-
-        <div className="mt-10">
-          <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
-            Try it
-          </p>
-          <p className="mt-2 max-w-measure text-sm text-ink-soft">
-            All three surfaces, replaying real captured runs. The Simulator tab is
-            the one to click: calling zone defense replays what the session
-            actually did next.
-          </p>
-          <div className="mt-5">
-            <CourtvisionConsole />
           </div>
         </div>
       </Section>

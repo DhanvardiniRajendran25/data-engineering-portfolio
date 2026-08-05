@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { BasketballCourt, type BallPosition } from "./basketball-court";
+import { RunSteps } from "./run-steps";
 import {
   COACH_DECISIONS,
   CONFIDENCE_OBSERVATION,
@@ -25,6 +27,41 @@ import {
  * to demonstrate that the coach decision actually changes the outcome rather than
  * just appearing in the log.
  */
+
+/**
+ * What each surface does before it answers. Named after the real pipeline stages
+ * from the project README, so the readout describes the actual system rather
+ * than inventing a loading animation.
+ */
+const PIPELINES: Record<string, string[]> = {
+  scout: [
+    "Loading session history",
+    "Injecting coach context",
+    "Google Search grounding",
+    "Gemini 2.5 Flash generating",
+    "Extracting grounding metadata",
+    "Scoring confidence from sources",
+  ],
+  tape: [
+    "Reading tape, 21.5 MB",
+    "Gemini 2.5 Pro watching",
+    "Seeking focus timestamp 0:23",
+    "Composing tactical breakdown",
+  ],
+  sim: [
+    "Loading real player stats",
+    "Applying coach decision",
+    "Gemini reasoning over game state",
+    "Advancing possessions",
+    "Generating play-by-play",
+  ],
+};
+
+/** Where the ball sits on the court, per captured state. */
+const BALL: Record<string, BallPosition> = {
+  before: { x: 200, y: 125 },
+  after: { x: 200, y: 46 },
+};
 
 const PLAY_MARK: Record<string, string> = {
   score: "●",
@@ -61,6 +98,15 @@ export function CourtvisionConsole() {
   const [view, setView] = useState<"scout" | "tape" | "sim">("scout");
   const [turns, setTurns] = useState(1);
   const [zoneCalled, setZoneCalled] = useState(false);
+  // Bumped on every action so the readout replays; `busy` gates the result so
+  // output never appears before the pipeline that produced it has finished.
+  const [runKey, setRunKey] = useState(0);
+  const [busy, setBusy] = useState(true);
+
+  function rerun() {
+    setBusy(true);
+    setRunKey((n) => n + 1);
+  }
 
   const sim = zoneCalled ? SIM_AFTER : SIM_BEFORE;
 
@@ -95,7 +141,10 @@ export function CourtvisionConsole() {
                 id={`cv-tab-${id}`}
                 aria-selected={current}
                 aria-controls={`cv-view-${id}`}
-                onClick={() => setView(id)}
+                onClick={() => {
+                  setView(id);
+                  rerun();
+                }}
                 className={`rounded-full px-3 py-1 font-mono text-[10px] tracking-[0.1em] uppercase transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                   current ? "bg-accent-soft text-accent" : "text-ink-faint hover:text-ink"
                 }`}
@@ -123,8 +172,17 @@ export function CourtvisionConsole() {
             ))}
           </ul>
 
+          <div className="mt-5">
+            <RunSteps
+              steps={PIPELINES.scout}
+              key={`scout-${runKey}-${turns}`}
+              onDone={() => setBusy(false)}
+            />
+          </div>
+
           <div className="mt-5 grid gap-5">
-            {SCOUT_TURNS.slice(0, turns).map((t) => (
+            {!busy &&
+              SCOUT_TURNS.slice(0, turns).map((t) => (
               <div key={t.question}>
                 <p className="ml-auto w-fit rounded-brand-sm bg-accent-soft px-3 py-2 text-right text-xs text-ink">
                   {t.question}
@@ -180,19 +238,22 @@ export function CourtvisionConsole() {
                     </ul>
                   )}
                 </div>
-              </div>
-            ))}
+                </div>
+              ))}
           </div>
 
-          {turns < SCOUT_TURNS.length ? (
+          {!busy && turns < SCOUT_TURNS.length ? (
             <button
               type="button"
-              onClick={() => setTurns((n) => n + 1)}
+              onClick={() => {
+                setTurns((n) => n + 1);
+                rerun();
+              }}
               className="mt-5 rounded-full border border-accent px-4 py-2 font-mono text-[10px] tracking-[0.12em] text-accent uppercase transition-colors hover:bg-accent hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               Ask the follow-up &rarr;
             </button>
-          ) : (
+          ) : !busy ? (
             /* The badge disagreed with the model. That is the point. */
             <div className="mt-5 rounded-brand border-l-2 border-accent bg-bg-elev p-4">
               <p className="font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
@@ -206,7 +267,7 @@ export function CourtvisionConsole() {
                 {CONFIDENCE_OBSERVATION.why}
               </p>
             </div>
-          )}
+          ) : null}
         </div>
       )}
 
@@ -239,6 +300,13 @@ export function CourtvisionConsole() {
               </div>
             </div>
 
+            {busy ? (
+              <RunSteps
+                steps={PIPELINES.tape}
+                key={`tape-${runKey}`}
+                onDone={() => setBusy(false)}
+              />
+            ) : (
             <div className="rounded-brand border border-line bg-bg-elev p-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
@@ -253,6 +321,7 @@ export function CourtvisionConsole() {
               </p>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft">{TAPE_RUN.answer}</p>
             </div>
+            )}
           </div>
 
           <p className="mt-5 max-w-measure text-xs leading-relaxed text-ink-faint">
@@ -292,12 +361,38 @@ export function CourtvisionConsole() {
             </p>
           )}
 
-          <div className="mt-4">
-            <p className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-              Play-by-play
-            </p>
-            <div className="mt-3">
-              <Plays plays={sim.plays} />
+          <div className="mt-4 grid gap-5 lg:grid-cols-[minmax(0,22rem)_1fr]">
+            <div>
+              <div className="overflow-hidden rounded-brand border border-line">
+                <BasketballCourt
+                  ball={zoneCalled ? BALL.after : BALL.before}
+                  label={`Court with the ball in ${
+                    zoneCalled ? "Auburn" : "Duke"
+                  } possession at ${sim.clock}`}
+                />
+              </div>
+              <p className="mt-2 font-mono text-[10px] text-ink-faint">
+                Ball position follows possession
+              </p>
+            </div>
+
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+                Play-by-play
+              </p>
+              {busy ? (
+                <div className="mt-3">
+                  <RunSteps
+                    steps={PIPELINES.sim}
+                    key={`sim-${runKey}-${zoneCalled}`}
+                    onDone={() => setBusy(false)}
+                  />
+                </div>
+              ) : (
+                <div className="mt-3 max-h-[19rem] overflow-y-auto pr-1">
+                  <Plays plays={sim.plays} />
+                </div>
+              )}
             </div>
           </div>
 
@@ -312,7 +407,11 @@ export function CourtvisionConsole() {
                   <li key={d}>
                     <button
                       type="button"
-                      onClick={() => isZone && setZoneCalled(true)}
+                      onClick={() => {
+                        if (!isZone) return;
+                        setZoneCalled(true);
+                        rerun();
+                      }}
                       aria-pressed={isZone ? zoneCalled : undefined}
                       disabled={!isZone || zoneCalled}
                       title={isZone ? undefined : "Only the captured decision can be replayed"}
