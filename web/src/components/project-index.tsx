@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { PROJECTS, ROLE_LABELS, type Role } from "@/content/work";
 import { ProjectBand } from "./project-band";
 
@@ -11,18 +11,20 @@ const FILTERS: { key: "all" | Role; label: string }[] = [
   { key: "systems", label: ROLE_LABELS.systems },
 ];
 
-function isRole(value: string | null): value is Role {
-  return value === "data" || value === "ai" || value === "systems";
-}
 
-export function ProjectIndex() {
+/**
+ * `active` arrives as a prop resolved on the server from the URL, rather than
+ * being read here with useSearchParams.
+ *
+ * useSearchParams forces this component (and everything it renders) to be
+ * client-only, which meant the server sent an empty page: no projects for a
+ * crawler that does not execute JS, nothing at all with JS disabled, and a
+ * visible pop-in on load. Resolving the filter server-side means the correct
+ * list is in the HTML on first byte. The URL is still the source of truth, so
+ * filtered views stay shareable and Back still steps through filters.
+ */
+export function ProjectIndex({ active = "all" }: { active?: "all" | Role }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // Filter state lives in the URL so a filtered view is shareable and the
-  // browser back button steps through filters as the user expects.
-  const raw = searchParams.get("role");
-  const active: "all" | Role = isRole(raw) ? raw : "all";
 
   const visible =
     active === "all"
