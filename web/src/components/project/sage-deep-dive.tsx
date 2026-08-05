@@ -1,20 +1,18 @@
 import Link from "next/link";
 import {
   ATTACKS,
-  CONFLICTS,
   DEFENCES,
   FAMILIES,
   LAYERS,
   LIVE_URL,
-  ORGS,
   PHASES,
   RESULTS,
   SAMPLE,
   SCALE,
   TECH_STACK,
-  TOOLS,
 } from "@/content/projects/sage";
 import { PhaseStepper } from "./phase-stepper";
+import { SageArchitecture } from "./sage-architecture";
 
 function Section({
   id,
@@ -62,6 +60,23 @@ export function SageDeepDive() {
           ))}
         </dl>
       </section>
+
+      <Section id="demo" label="Try it" kicker="Live deployment">
+        <a
+          href={LIVE_URL}
+          target="_blank"
+          rel="noopener"
+          className="inline-flex items-center gap-3 rounded-full border border-ink px-6 py-3 font-mono text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          Open SAGE
+          <span aria-hidden="true">&#8599;</span>
+        </a>
+        <p className="mt-4 max-w-measure text-sm text-ink-soft">
+          Load one of the five demo organisations, or upload your own policy
+          documents. Then try an edge case: &ldquo;Can I store encrypted customer
+          data on my personal laptop since it is encrypted?&rdquo;
+        </p>
+      </Section>
 
       <Section id="problem" label="The problem" kicker="Policy is unreadable">
         <ul className="grid gap-4 md:grid-cols-3">
@@ -114,6 +129,10 @@ export function SageDeepDive() {
 
       <Section id="phases" label="Five phases" kicker="Prompt to production" wide>
         <PhaseStepper phases={PHASES} />
+      </Section>
+
+      <Section id="architecture" label="Architecture" kicker="Full request path" wide>
+        <SageArchitecture />
       </Section>
 
       {/* The signature section: defence in depth, in execution order */}
@@ -194,93 +213,6 @@ export function SageDeepDive() {
             </ul>
           </div>
         </div>
-      </Section>
-
-      <Section id="agent" label="Agent and conflicts" kicker="4 tools, 5 rules" wide>
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
-              Tools the agent calls
-            </p>
-            <ul className="mt-3 grid gap-2">
-              {TOOLS.map((t) => (
-                <li key={t.name} className="rounded-brand-sm border border-line bg-bg-elev p-4">
-                  <p className="font-mono text-xs text-ink">{t.name}</p>
-                  <p className="mt-1 text-sm text-ink-soft">{t.what}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
-              Named policy conflicts
-            </p>
-            <ul className="mt-3 grid gap-2">
-              {CONFLICTS.map((c) => (
-                <li key={c.id} className="flex gap-3 rounded-brand-sm border border-line bg-bg-elev p-4">
-                  <span className="shrink-0 font-mono text-[10px] text-accent">
-                    {c.id}
-                  </span>
-                  <span className="text-sm text-ink-soft">{c.what}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 max-w-measure text-sm text-ink-soft">
-              Two policies that each apply, and contradict. Surfaced before the
-              final answer rather than resolved silently, because the honest output
-              is that a tension exists.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="orgs" label="Multi-organisation" kicker="5 types, 15 policies" wide>
-        <table className="w-full border-collapse text-sm">
-          <caption className="sr-only">
-            Supported organisation types with their demo org and built-in policies
-          </caption>
-          <thead>
-            <tr className="border-b border-line text-left">
-              {["Type", "Demo org", "Built-in policies"].map((h) => (
-                <th key={h} scope="col" className="py-2 pr-4 font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {ORGS.map((o) => (
-              <tr key={o.type} className="border-b border-line/60">
-                <td className="py-2.5 pr-4 text-ink">{o.type}</td>
-                <td className="py-2.5 pr-4 font-mono text-xs text-ink-soft">{o.org}</td>
-                <td className="py-2.5 text-ink-soft">{o.policies}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p className="mt-6 max-w-measure text-sm text-ink-soft">
-          The system prompt is built per organisation type, so reasoning rules and
-          the critical checklist change with the domain. Any company can also
-          upload its own PDF or text policies and be indexed on the spot.
-        </p>
-      </Section>
-
-      <Section id="demo" label="Try it" kicker="Live deployment">
-        <a
-          href={LIVE_URL}
-          target="_blank"
-          rel="noopener"
-          className="inline-flex items-center gap-3 rounded-full border border-ink px-6 py-3 font-mono text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          Open SAGE
-          <span aria-hidden="true">&#8599;</span>
-        </a>
-        <p className="mt-4 max-w-measure text-sm text-ink-soft">
-          Load one of the five demo organisations, or upload your own policy
-          documents. Then try an edge case: &ldquo;Can I store encrypted customer
-          data on my personal laptop since it is encrypted?&rdquo;
-        </p>
       </Section>
 
       <Section id="results" label="Results" kicker="Target against actual">
