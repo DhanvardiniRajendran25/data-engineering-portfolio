@@ -1,9 +1,5 @@
 import Link from "next/link";
 import {
-  ATTACKS,
-  DEFENCES,
-  FAMILIES,
-  LAYERS,
   LIVE_URL,
   PHASES,
   RESULTS,
@@ -133,86 +129,6 @@ export function SageDeepDive() {
 
       <Section id="architecture" label="Architecture" kicker="Full request path" wide>
         <SageArchitecture />
-      </Section>
-
-      {/* The signature section: defence in depth, in execution order */}
-      <Section id="security" label="Security pipeline" kicker="8 layers" wide>
-        <ol className="grid gap-2">
-          {LAYERS.map((l, i) => (
-            <li
-              key={l.id}
-              className="grid items-baseline gap-x-4 gap-y-1 rounded-brand-sm border border-line bg-bg-elev px-4 py-3 sm:grid-cols-[3rem_14rem_1fr]"
-            >
-              <span className="font-mono text-xs text-accent">{l.id}</span>
-              <span className="font-mono text-xs text-ink">{l.name}</span>
-              <span className="text-sm text-ink-soft">{l.what}</span>
-              {i < LAYERS.length - 1 && <span className="sr-only">then</span>}
-            </li>
-          ))}
-        </ol>
-        <p className="mt-6 max-w-measure text-sm text-ink-soft">
-          Regex alone misses semantic attacks like authority pretexts. A
-          prompt-level identity lock catches what patterns do not. Post-generation
-          citation checks catch what both miss. Every layer is also a place a
-          legitimate query can be wrongly blocked, which is why the false-positive
-          rate is tracked alongside the block rate.
-        </p>
-      </Section>
-
-      <Section id="attacks" label="Adversarial testing" kicker="37 vectors, 0 through" wide>
-        <div className="grid gap-4 lg:grid-cols-3">
-          {ATTACKS.map((a) => (
-            <div key={a.id} className="rounded-brand border border-line bg-bg-elev p-5">
-              <div className="flex items-baseline gap-2">
-                <span className="font-mono text-[10px] tracking-[0.14em] text-accent">
-                  {a.id}
-                </span>
-                <p className="text-base">{a.name}</p>
-              </div>
-              <p className="mt-3 text-sm text-ink-soft">{a.how}</p>
-              <p className="mt-4 border-t border-line pt-3">
-                <span className="font-mono text-[10px] tracking-[0.12em] text-ink-faint uppercase">
-                  Before the fix
-                </span>
-                <span className="mt-1 block text-sm text-accent">{a.before}</span>
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-10 grid gap-10 lg:grid-cols-2">
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
-              9 attack families, 52 patterns
-            </p>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {FAMILIES.map((f) => (
-                <li
-                  key={f}
-                  className="rounded-full border border-line px-3 py-1 text-[11px] text-ink-soft"
-                >
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
-              6 defensive measures
-            </p>
-            <ul className="mt-3 grid gap-1.5">
-              {DEFENCES.map((d) => (
-                <li key={d.id} className="flex gap-3 text-sm">
-                  <span className="w-12 shrink-0 font-mono text-[10px] text-accent">
-                    {d.id}
-                  </span>
-                  <span className="text-ink-soft">{d.what}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
       </Section>
 
       <Section id="results" label="Results" kicker="Target against actual">
