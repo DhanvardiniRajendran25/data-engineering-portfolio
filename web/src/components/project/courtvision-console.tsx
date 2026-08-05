@@ -5,13 +5,14 @@ import { BasketballCourt, type BallPosition } from "./basketball-court";
 import { RunSteps } from "./run-steps";
 import {
   COACH_DECISIONS,
-  CONFIDENCE_OBSERVATION,
   SCOUT_SUGGESTIONS,
   SCOUT_TURNS,
   SIM_AFTER,
   SIM_BEFORE,
   SIM_SETUP,
+  SURFACES,
   TAPE_RUN,
+  TAPE_SOURCE,
 } from "@/content/projects/courtvision-traces";
 
 /**
@@ -95,7 +96,7 @@ function Plays({ plays }: { plays: typeof SIM_BEFORE.plays }) {
 }
 
 export function CourtvisionConsole() {
-  const [view, setView] = useState<"scout" | "tape" | "sim">("scout");
+  const [view, setView] = useState<"home" | "scout" | "tape" | "sim">("home");
   const [turns, setTurns] = useState(1);
   const [zoneCalled, setZoneCalled] = useState(false);
   // Bumped on every action so the readout replays; `busy` gates the result so
@@ -128,6 +129,7 @@ export function CourtvisionConsole() {
 
         <div role="tablist" aria-label="Application views" className="flex items-center gap-1">
           {([
+            ["home", "Home"],
             ["scout", "Scout"],
             ["tape", "Game Tape"],
             ["sim", "Simulator"],
@@ -155,6 +157,75 @@ export function CourtvisionConsole() {
           })}
         </div>
       </div>
+
+      {/* ---------------- Home ---------------- */}
+      {view === "home" && (
+        <div id="cv-view-home" role="tabpanel" aria-labelledby="cv-tab-home" className="p-6 sm:p-8">
+          <div className="text-center">
+            <p aria-hidden="true" className="text-3xl">
+              &#127936;
+            </p>
+            <p className="mt-3 font-display text-2xl text-ink sm:text-3xl">
+              CourtVision <span className="text-accent">AI</span>
+            </p>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-ink-soft">
+              Your AI coaching staff. Scout, analyze, and simulate before tip-off.
+            </p>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <span className="rounded-full border border-line px-3 py-1 font-mono text-[10px] text-ink-soft">
+                Powered by Google Gemini 2.5 Flash
+              </span>
+              <span className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1 font-mono text-[10px] text-ink-soft">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
+                backend online
+              </span>
+            </div>
+          </div>
+
+          <ul className="mt-8 grid gap-4 lg:grid-cols-3">
+            {SURFACES.map((s) => (
+              <li
+                key={s.id}
+                className={`relative flex flex-col rounded-brand border bg-bg-elev p-5 ${
+                  s.mostUsed ? "border-accent" : "border-line"
+                }`}
+              >
+                {s.mostUsed && (
+                  <span className="absolute -top-2.5 right-4 rounded-full bg-accent px-2 py-0.5 font-mono text-[9px] tracking-[0.1em] text-bg uppercase">
+                    Most used
+                  </span>
+                )}
+                <p className="text-base text-ink">{s.name}</p>
+                <p className="mt-2 flex-1 text-xs leading-relaxed text-ink-soft">{s.blurb}</p>
+                <ul className="mt-4 flex flex-wrap gap-1.5">
+                  {s.tags.map((tag) => (
+                    <li
+                      key={tag}
+                      className="rounded-full border border-line px-2 py-0.5 font-mono text-[9px] text-ink-faint"
+                    >
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setView(s.id);
+                    rerun();
+                  }}
+                  className={`mt-4 rounded-full px-4 py-2 font-mono text-[10px] tracking-[0.12em] uppercase transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                    s.mostUsed
+                      ? "bg-accent text-bg hover:opacity-90"
+                      : "border border-line text-ink-soft hover:border-ink hover:text-ink"
+                  }`}
+                >
+                  Launch
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* ---------------- Scout ---------------- */}
       {view === "scout" && (
@@ -253,20 +324,6 @@ export function CourtvisionConsole() {
             >
               Ask the follow-up &rarr;
             </button>
-          ) : !busy ? (
-            /* The badge disagreed with the model. That is the point. */
-            <div className="mt-5 rounded-brand border-l-2 border-accent bg-bg-elev p-4">
-              <p className="font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
-                Observed in this run
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-ink-soft">
-                The badge read{" "}
-                <span className="font-mono text-ink">{CONFIDENCE_OBSERVATION.badge}</span> while the
-                model&rsquo;s own confidence note claimed{" "}
-                <span className="font-mono text-ink">{CONFIDENCE_OBSERVATION.modelSaid}</span>.{" "}
-                {CONFIDENCE_OBSERVATION.why}
-              </p>
-            </div>
           ) : null}
         </div>
       )}
@@ -291,11 +348,19 @@ export function CourtvisionConsole() {
                   Coach message
                 </p>
                 <p className="mt-2 text-sm text-ink">{TAPE_RUN.question}</p>
-                <p className="mt-3 flex items-center gap-2 font-mono text-[10px] text-ink-faint">
+                <p className="mt-3 flex flex-wrap items-center gap-2 font-mono text-[10px] text-ink-faint">
                   Focus timestamp
-                  <span className="rounded-full border border-accent px-2 py-0.5 text-accent">
-                    @ {TAPE_RUN.focusTimestamp}
-                  </span>
+                  {/* Deep-links the source clip at the exact second the coach
+                      asked about, so the answer is checkable against the tape. */}
+                  <a
+                    href={`https://www.youtube.com/watch?v=${TAPE_SOURCE.youtubeId}&t=${TAPE_SOURCE.seconds}s`}
+                    target="_blank"
+                    rel="noopener"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-accent px-2 py-0.5 text-accent transition-colors hover:bg-accent hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  >
+                    <span aria-hidden="true">&#9654;</span>
+                    @ {TAPE_RUN.focusTimestamp} on YouTube
+                  </a>
                 </p>
               </div>
             </div>
@@ -323,6 +388,25 @@ export function CourtvisionConsole() {
             </div>
             )}
           </div>
+
+          {!busy && (
+            <div className="mt-5">
+              <p className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+                Source clip, cued to {TAPE_RUN.focusTimestamp}
+              </p>
+              <div className="mt-3 overflow-hidden rounded-brand border border-line bg-black">
+                <div className="aspect-video w-full">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${TAPE_SOURCE.youtubeId}?start=${TAPE_SOURCE.seconds}`}
+                    title={`${TAPE_SOURCE.title}, cued to ${TAPE_RUN.focusTimestamp}`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="h-full w-full"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           <p className="mt-5 max-w-measure text-xs leading-relaxed text-ink-faint">
             The timestamp is the interesting part. Asking about 0:23 specifically means
