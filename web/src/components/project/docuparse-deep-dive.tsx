@@ -2,9 +2,7 @@ import Link from "next/link";
 import {
   ASSURANCE,
   BUILD_BENEFITS,
-  CODELABS_URL,
   COST_COMPARISON,
-  DEMO_VIDEO_ID,
   QUALITY,
   SCALE,
   STAGES,
@@ -60,30 +58,6 @@ export function DocuparseDeepDive() {
           ))}
         </dl>
       </section>
-
-      {/* Demo first, matching the pattern set on SAGE */}
-      <Section id="demo" label="Walkthrough" kicker="Pipeline in action" wide>
-        <div className="overflow-hidden rounded-brand border border-line bg-black">
-          <div className="aspect-video w-full">
-            <iframe
-              src={`https://drive.google.com/file/d/${DEMO_VIDEO_ID}/preview`}
-              title="DocuParse pipeline walkthrough"
-              allow="autoplay"
-              allowFullScreen
-              className="h-full w-full"
-            />
-          </div>
-        </div>
-        <a
-          href={CODELABS_URL}
-          target="_blank"
-          rel="noopener"
-          className="mt-6 inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 font-mono text-[11px] tracking-[0.14em] text-ink-soft uppercase transition-colors hover:border-ink hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          Read the implementation guide
-          <span aria-hidden="true">&#8599;</span>
-        </a>
-      </Section>
 
       <Section id="problem" label="The problem" kicker="Filings resist parsing">
         <ul className="grid gap-4 md:grid-cols-3">
