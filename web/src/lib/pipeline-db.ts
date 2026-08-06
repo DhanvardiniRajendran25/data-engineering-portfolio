@@ -48,6 +48,10 @@ export type PipelineSnapshot = {
   }[];
   daily: { day: string; violations: number }[];
   monthly: { month: string; violations: number; inspections: number }[];
+  monthlyByCity: { month: string; city: string; violations: number }[];
+  weekday: { weekday: number; inspections: number }[];
+  zipScatter: { zip: string; city: string; establishments: number; violations: number }[];
+  storage: { bytes: number; limitBytes: number };
   topViolations: { description: string; city: string; count: number }[];
   hotspots: { zip: string; city: string; violations: number; establishments: number }[];
   outcomes: { result: string; count: number }[];
@@ -120,6 +124,7 @@ export async function readSnapshot(): Promise<
     // wait and none.
     const [
       runRows, totalRows, cityRows, dailyRows, monthlyRows,
+      monthlyCityRows, weekdayRows, zipScatterRows, storageRows,
       topViolationRows, hotspotRows, outcomeRows, severityRows,
       profileRows, rejectRows, stageRows, historyRows,
     ] = await Promise.all([
@@ -146,9 +151,10 @@ export async function readSnapshot(): Promise<
             from fact_inspection_violations
            group by city order by count(*) desc`,
 
+      // 26 weeks so the calendar heatmap has a full half-year of columns.
       sql`select inspection_date as day, count(*) as violations
             from fact_inspection_violations
-           where inspection_date >= current_date - interval '90 days'
+           where inspection_date >= current_date - interval '182 days'
            group by inspection_date order by inspection_date`,
 
       // Violation frequency trend, the workbook's third view.
@@ -157,6 +163,35 @@ export async function readSnapshot(): Promise<
                  count(distinct (city || inspection_id)) as inspections
             from fact_inspection_violations
            group by 1 order by 1`,
+
+      // Same series split by city, for the stacked view. Kept separate from the
+      // total above rather than derived from it, so the stack and the total can
+      // never disagree by a rounding step.
+      sql`select to_char(date_trunc('month', inspection_date), 'YYYY-MM') as month,
+                 city, count(*) as violations
+            from fact_inspection_violations
+           group by 1, 2 order by 1, 2`,
+
+      sql`select d.weekday, count(distinct (f.city || f.inspection_id)) as inspections
+            from fact_inspection_violations f
+            join dim_date d on d.date_key = f.date_key
+           group by d.weekday order by d.weekday`,
+
+      // Enough points for the scatter to show a shape rather than a handful of
+      // dots. Capped so the payload stays small.
+      sql`select l.zip, l.city,
+                 count(distinct f.establishment_key) as establishments,
+                 count(*) as violations
+            from fact_inspection_violations f
+            join dim_location l on l.location_key = f.location_key
+           where l.zip is not null and l.zip <> '00000'
+           group by l.zip, l.city
+          having count(distinct f.establishment_key) >= 5
+           order by count(*) desc limit 160`,
+
+      // The free tier is the constraint that shaped the whole design, so it is
+      // on the dashboard rather than in a footnote.
+      sql`select pg_database_size(current_database()) as bytes`,
 
       // Violation frequency and severity, the workbook's third view.
       sql`select v.description, v.city, count(*) as count
@@ -253,6 +288,26 @@ export async function readSnapshot(): Promise<
         violations: num(r.violations),
         inspections: num(r.inspections),
       })),
+      monthlyByCity: monthlyCityRows.map((r) => ({
+        month: String(r.month),
+        city: String(r.city),
+        violations: num(r.violations),
+      })),
+      weekday: weekdayRows.map((r) => ({
+        weekday: num(r.weekday),
+        inspections: num(r.inspections),
+      })),
+      zipScatter: zipScatterRows.map((r) => ({
+        zip: String(r.zip),
+        city: String(r.city),
+        establishments: num(r.establishments),
+        violations: num(r.violations),
+      })),
+      storage: {
+        bytes: num(storageRows[0]?.bytes),
+        // Neon free tier, the constraint the rolling window exists to respect.
+        limitBytes: 512 * 1024 * 1024,
+      },
       topViolations: topViolationRows.map((r) => ({
         description: String(r.description),
         city: String(r.city),

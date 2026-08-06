@@ -18,6 +18,18 @@
      scrollbar and form-control rendering from prefers-color-scheme, so a
      dark-OS visitor got dark scrollbars framing a cream page. */
   color-scheme: light;
+
+  /* Categorical series colours for the live dashboard, one per city.
+     Not eyeballed: these were run through the OKLab validator for lightness
+     band, chroma floor, colourblind separation and contrast against the
+     elevated surface. Dark's steps below are separately chosen and separately
+     validated, not a lightened flip of these, because a flipped ramp leaves
+     the lightness band. Every series is also direct-labelled, since the
+     blue/green pair separates poorly under tritanopia. */
+  --viz-1: #c2453d;
+  --viz-2: #2563c9;
+  --viz-3: #1f8a5c;
+
   --bg: #f8f5ef;
   --bg-elev: #fffdf8;
   --ink: #1a2230;
@@ -33,6 +45,13 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
+
+  /* Separately validated against the dark elevated surface, not lightened
+     from the light steps. */
+  --viz-1: #e0685f;
+  --viz-2: #6690e0;
+  --viz-3: #45a276;
+
   --bg: #11151c;
   --bg-elev: #19202a;
   --ink: #ece7dd;

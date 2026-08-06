@@ -2,6 +2,15 @@
 
 import { useEffect, useState } from "react";
 import type { PipelineSnapshot, PipelineUnavailable } from "@/lib/pipeline-db";
+import {
+  CITY_LABEL,
+  CITY_ORDER,
+  CalendarHeatmap,
+  StackedMonthly,
+  StorageMeter,
+  WeekdayBars,
+  ZipScatter,
+} from "./pipeline-charts";
 
 /**
  * Live dashboard for the running pipeline.
@@ -22,12 +31,6 @@ import type { PipelineSnapshot, PipelineUnavailable } from "@/lib/pipeline-db";
  */
 
 type Snapshot = PipelineSnapshot | PipelineUnavailable;
-
-const CITY_LABEL: Record<string, string> = {
-  chicago: "Chicago",
-  nyc: "New York City",
-  dallas: "Dallas",
-};
 
 /** Dallas stopped publishing in Feb 2024. Labelled, never hidden. */
 const FROZEN = new Set(["dallas"]);
@@ -112,48 +115,6 @@ function Bar({
   );
 }
 
-function MonthlyChart({
-  data,
-}: {
-  data: { month: string; violations: number }[];
-}) {
-  if (data.length < 2) return null;
-  const max = Math.max(...data.map((d) => d.violations), 1);
-  const w = 100 / data.length;
-  const peak = data.reduce((a, b) => (b.violations > a.violations ? b : a));
-
-  return (
-    <div>
-      <svg
-        viewBox="0 0 100 30"
-        preserveAspectRatio="none"
-        role="img"
-        aria-label={`Violations per month across ${data.length} months. Peak ${fmt(peak.violations)} in ${peak.month}.`}
-        className="h-28 w-full"
-      >
-        {data.map((d, i) => {
-          const h = (d.violations / max) * 28;
-          return (
-            <rect
-              key={d.month}
-              x={i * w}
-              y={30 - h}
-              width={Math.max(w - 0.5, 0.4)}
-              height={h}
-              className="fill-accent/70"
-            />
-          );
-        })}
-      </svg>
-      <div className="mt-2 flex justify-between font-mono text-[10px] text-ink-faint">
-        <span>{data[0].month}</span>
-        <span>peak {fmt(max)}</span>
-        <span>{data[data.length - 1].month}</span>
-      </div>
-    </div>
-  );
-}
-
 function Skeleton() {
   return (
     <div
@@ -220,8 +181,9 @@ export function LivePipelinePanel() {
 
   const snap = data as PipelineSnapshot;
   const {
-    run, totals, cities, monthly, topViolations, hotspots,
-    outcomes, severity, stages, profile, rejects, history,
+    run, totals, cities, daily, monthlyByCity, weekday, zipScatter,
+    storage, topViolations, hotspots, outcomes, severity, stages, profile,
+    rejects, history,
   } = snap;
 
   if (totals.violations === 0) {
@@ -232,6 +194,12 @@ export function LivePipelinePanel() {
       />
     );
   }
+
+  // Canonical order, filtered to what is actually loaded. Ordering by row
+  // count instead would repaint every series whenever the ranking changed.
+  const presentCities = CITY_ORDER.filter((c) =>
+    cities.some((row) => row.city === c),
+  ) as string[];
 
   const dallasProfile = profile.filter(
     (p) => p.city === "dallas" && p.column.startsWith("violation"),
@@ -368,9 +336,46 @@ export function LivePipelinePanel() {
           </p>
         </Block>
 
-        {monthly.length > 1 && (
-          <Block label="Violation frequency" kicker={`${monthly.length} months`} span>
-            <MonthlyChart data={monthly} />
+        {monthlyByCity.length > 1 && (
+          <Block label="Violations by month" kicker="stacked by city" span>
+            <StackedMonthly data={monthlyByCity} cities={presentCities} />
+          </Block>
+        )}
+
+        {daily.length > 14 && (
+          <Block label="Inspection activity" kicker="26 weeks, one cell per day" span>
+            <CalendarHeatmap data={daily} />
+            <p className="mt-4 max-w-measure text-xs text-ink-faint">
+              The weekly rhythm is visible without being told about it: rows six
+              and seven are near empty because inspectors work weekdays.
+            </p>
+          </Block>
+        )}
+
+        {zipScatter.length > 8 && (
+          <Block label="Violations against establishments" kicker="one dot per ZIP">
+            <ZipScatter data={zipScatter} cities={presentCities} />
+            <p className="mt-4 text-xs text-ink-faint">
+              A ZIP high on the vertical axis but left on the horizontal has few
+              establishments generating many violations, which is a different
+              problem from a dense district generating many in total.
+            </p>
+          </Block>
+        )}
+
+        {weekday.length > 2 && (
+          <Block label="Inspections by weekday" kicker="whole warehouse">
+            <WeekdayBars data={weekday} />
+            <p className="mt-4 text-xs text-ink-faint">
+              One series, so one colour. Shading the bars by their own height
+              would re-encode length as hue and say nothing new.
+            </p>
+          </Block>
+        )}
+
+        {storage.bytes > 0 && (
+          <Block label="Warehouse size" kicker="against the free tier">
+            <StorageMeter bytes={storage.bytes} limitBytes={storage.limitBytes} />
           </Block>
         )}
 
