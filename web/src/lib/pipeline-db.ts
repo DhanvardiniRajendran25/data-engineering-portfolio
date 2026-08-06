@@ -51,6 +51,8 @@ export type PipelineSnapshot = {
   monthlyByCity: { month: string; city: string; violations: number }[];
   weekday: { weekday: number; inspections: number }[];
   zipScatter: { zip: string; city: string; establishments: number; violations: number }[];
+  geo: { city: string; lat: number; lon: number; violations: number }[];
+  cityRows: { city: string; rows: number }[];
   storage: { bytes: number; limitBytes: number };
   topViolations: { description: string; city: string; count: number }[];
   hotspots: { zip: string; city: string; violations: number; establishments: number }[];
@@ -124,7 +126,7 @@ export async function readSnapshot(): Promise<
     // wait and none.
     const [
       runRows, totalRows, cityRows, dailyRows, monthlyRows,
-      monthlyCityRows, weekdayRows, zipScatterRows, storageRows,
+      monthlyCityRows, weekdayRows, zipScatterRows, geoRows, cityRowsRows, storageRows,
       topViolationRows, hotspotRows, outcomeRows, severityRows,
       profileRows, rejectRows, stageRows, historyRows,
     ] = await Promise.all([
@@ -188,6 +190,29 @@ export async function readSnapshot(): Promise<
            group by l.zip, l.city
           having count(distinct f.establishment_key) >= 5
            order by count(*) desc limit 160`,
+
+      // Coordinates for the map, rounded to a ~1km grid and aggregated. Sending
+      // 400,000 raw points to a browser to draw 400,000 overlapping dots would
+      // be slower and less readable than sending the grid.
+      sql`select l.city,
+                 round(l.latitude::numeric, 2) as lat,
+                 round(l.longitude::numeric, 2) as lon,
+                 count(*) as violations
+            from fact_inspection_violations f
+            join dim_location l on l.location_key = f.location_key
+           where l.latitude is not null and l.longitude is not null
+             -- Belt and braces against the 0,0 placeholders NYC publishes.
+             -- The ingest job now rejects them, but rows loaded before that
+             -- fix are still in the warehouse and one of them is enough to
+             -- stretch a map from the equator to Manhattan.
+             and abs(l.latitude) > 0.01 and abs(l.longitude) > 0.01
+           group by 1, 2, 3
+          having count(*) >= 3
+           order by count(*) desc limit 1400`,
+
+      // Row share per city, for the storage composition bar.
+      sql`select city, count(*) as rows from fact_inspection_violations
+           group by city`,
 
       // The free tier is the constraint that shaped the whole design, so it is
       // on the dashboard rather than in a footnote.
@@ -302,6 +327,16 @@ export async function readSnapshot(): Promise<
         city: String(r.city),
         establishments: num(r.establishments),
         violations: num(r.violations),
+      })),
+      geo: geoRows.map((r) => ({
+        city: String(r.city),
+        lat: num(r.lat),
+        lon: num(r.lon),
+        violations: num(r.violations),
+      })),
+      cityRows: cityRowsRows.map((r) => ({
+        city: String(r.city),
+        rows: num(r.rows),
       })),
       storage: {
         bytes: num(storageRows[0]?.bytes),

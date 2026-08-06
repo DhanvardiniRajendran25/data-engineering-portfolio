@@ -6,6 +6,11 @@ import {
   CITY_LABEL,
   CITY_ORDER,
   CalendarHeatmap,
+  CompositionBar,
+  DecayCurve,
+  DotMap,
+  DotPlot,
+  SeverityStacks,
   StackedMonthly,
   StorageMeter,
   WeekdayBars,
@@ -80,41 +85,6 @@ function Block({
   );
 }
 
-/** Horizontal proportional bar. Used anywhere a ranking needs weight. */
-function Bar({
-  label,
-  sub,
-  value,
-  max,
-  right,
-}: {
-  label: string;
-  sub?: string;
-  value: number;
-  max: number;
-  right: string;
-}) {
-  return (
-    <li className="grid min-w-0 gap-1.5">
-      <div className="flex min-w-0 items-baseline justify-between gap-4">
-        <span className="min-w-0 flex-1 truncate text-sm text-ink" title={label}>
-          {label}
-          {sub && (
-            <span className="ml-2 font-mono text-[10px] text-ink-faint">{sub}</span>
-          )}
-        </span>
-        <span className="shrink-0 font-mono text-xs text-ink-soft">{right}</span>
-      </div>
-      <span aria-hidden="true" className="block h-1.5 rounded-full bg-ink/[0.07]">
-        <span
-          className="block h-1.5 rounded-full bg-accent"
-          style={{ width: `${Math.max((value / max) * 100, 0.6)}%` }}
-        />
-      </span>
-    </li>
-  );
-}
-
 function Skeleton() {
   return (
     <div
@@ -182,7 +152,7 @@ export function LivePipelinePanel() {
   const snap = data as PipelineSnapshot;
   const {
     run, totals, cities, daily, monthlyByCity, weekday, zipScatter,
-    storage, topViolations, hotspots, outcomes, severity, stages, profile,
+    geo, cityRows, storage, topViolations, hotspots, outcomes, severity, stages, profile,
     rejects, history,
   } = snap;
 
@@ -201,12 +171,16 @@ export function LivePipelinePanel() {
     cities.some((row) => row.city === c),
   ) as string[];
 
-  const dallasProfile = profile.filter(
-    (p) => p.city === "dallas" && p.column.startsWith("violation"),
-  );
-  const maxViolation = Math.max(...topViolations.map((v) => v.count), 1);
-  const maxHotspot = Math.max(...hotspots.map((h) => h.violations), 1);
-  const maxOutcome = Math.max(...outcomes.map((o) => o.count), 1);
+  // Numeric block order, not the alphabetical order the column names sort in.
+  // "violation10" sorts before "violation2" as a string, which is how the
+  // sparsity chart ended up displaying its blocks scrambled.
+  const dallasPoints = profile
+    .filter((p) => p.city === "dallas" && /^violation\d+_description$/.test(p.column))
+    .map((p) => ({
+      n: Number(p.column.replace(/\D/g, "")),
+      pct: 100 - p.nullPct,
+    }))
+    .sort((a, b) => a.n - b.n);
   const stageTotals = ["bronze", "silver", "gold"].map((stage) => ({
     stage,
     rows: stages.filter((s) => s.stage === stage).reduce((a, b) => a + b.rows, 0),
@@ -376,126 +350,112 @@ export function LivePipelinePanel() {
         {storage.bytes > 0 && (
           <Block label="Warehouse size" kicker="against the free tier">
             <StorageMeter bytes={storage.bytes} limitBytes={storage.limitBytes} />
+            {cityRows.length > 1 && (
+              <div className="mt-7 border-t border-line pt-6">
+                <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+                  Row share by city
+                </p>
+                <div className="mt-4">
+                  <CompositionBar
+                    items={presentCities
+                      .map((c) => ({
+                        label: CITY_LABEL[c] ?? c,
+                        value: cityRows.find((r) => r.city === c)?.rows ?? 0,
+                      }))
+                      .filter((r) => r.value > 0)}
+                  />
+                </div>
+              </div>
+            )}
           </Block>
         )}
 
         {topViolations.length > 0 && (
           <Block label="Most frequent violations" kicker="top 8">
-            <ul className="grid gap-3.5">
-              {topViolations.map((v) => (
-                <Bar
-                  key={`${v.city}-${v.description}`}
-                  label={v.description}
-                  sub={CITY_LABEL[v.city] ?? v.city}
-                  value={v.count}
-                  max={maxViolation}
-                  right={fmt(v.count)}
-                />
-              ))}
-            </ul>
-          </Block>
-        )}
-
-        {hotspots.length > 0 && (
-          <Block label="Geographic hotspots" kicker="violations by ZIP">
-            <ul className="grid gap-3.5">
-              {hotspots.map((h) => (
-                <Bar
-                  key={`${h.city}-${h.zip}`}
-                  label={h.zip}
-                  sub={`${CITY_LABEL[h.city] ?? h.city} · ${fmt(h.establishments)} establishments`}
-                  value={h.violations}
-                  max={maxHotspot}
-                  right={fmt(h.violations)}
-                />
-              ))}
-            </ul>
-          </Block>
-        )}
-
-        {outcomes.length > 0 && (
-          <Block label="Inspection outcomes" kicker="distinct inspections">
-            <ul className="grid gap-3.5">
-              {outcomes.map((o) => (
-                <Bar
-                  key={o.result}
-                  label={o.result}
-                  value={o.count}
-                  max={maxOutcome}
-                  right={fmt(o.count)}
-                />
-              ))}
-            </ul>
-          </Block>
-        )}
-
-        {severity.some((s) => s.critical + s.notCritical > 0) && (
-          <Block label="Severity" kicker="where the source grades it">
-            <ul className="grid gap-4">
-              {severity.map((s) => {
-                const known = s.critical + s.notCritical;
-                if (known === 0) {
-                  return (
-                    <li key={s.city} className="text-sm">
-                      <span className="text-ink">
-                        {CITY_LABEL[s.city] ?? s.city}
-                      </span>
-                      <span className="ml-2 text-xs text-ink-faint">
-                        not graded per violation by this source
-                      </span>
-                    </li>
-                  );
-                }
-                const pct = (s.critical / known) * 100;
-                return (
-                  <li key={s.city} className="grid gap-1.5">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-sm text-ink">
-                        {CITY_LABEL[s.city] ?? s.city}
-                      </span>
-                      <span className="font-mono text-xs text-accent">
-                        {pct.toFixed(1)}% critical
-                      </span>
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      className="block h-1.5 rounded-full bg-ink/[0.07]"
-                    >
-                      <span
-                        className="block h-1.5 rounded-full bg-accent"
-                        style={{ width: `${Math.max(pct, 0.6)}%` }}
-                      />
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-            <p className="mt-4 text-xs text-ink-faint">
-              Not normalised across cities. Chicago grades establishment risk,
-              NYC flags violations critical, Dallas assigns point deductions.
-              These are not the same measurement and forcing them onto one scale
-              would invent a comparison the sources do not support.
+            <DotPlot
+              items={topViolations.map((v) => ({
+                label: v.description,
+                sub: CITY_LABEL[v.city] ?? v.city,
+                value: v.count,
+              }))}
+            />
+            <p className="mt-5 text-xs text-ink-faint">
+              A dot on a rule rather than a filled bar. These labels are long
+              enough that eight full-width bars become the loudest thing on the
+              page for no extra information.
             </p>
           </Block>
         )}
 
-        {dallasProfile.length > 0 && (
-          <Block label="Dallas block sparsity" kicker="measured this run">
-            <ul className="grid gap-3">
-              {dallasProfile.map((p) => (
-                <Bar
-                  key={p.column}
-                  label={p.column.replace("_description", "")}
-                  value={100 - p.nullPct}
-                  max={100}
-                  right={`${(100 - p.nullPct).toFixed(1)}%`}
-                />
+        {geo.length > 0 && (
+          <Block label="Geographic clustering" kicker="plotted by coordinate" span>
+            <DotMap points={geo} cities={presentCities} />
+            <p className="mt-5 max-w-measure text-xs text-ink-faint">
+              Actual latitude and longitude, aggregated to a roughly 1km grid so
+              the browser draws a few hundred dots instead of 400,000
+              overlapping ones. Dot size is violation count. Dallas has
+              coordinates at all only because they are nested inside a
+              lat_long object rather than published as plain columns, and were
+              being dropped until this was noticed.
+            </p>
+          </Block>
+        )}
+
+        {hotspots.length > 0 && (
+          <Block label="Densest ZIPs" kicker="top 10">
+            <ol className="grid gap-2.5">
+              {hotspots.map((h, i) => (
+                <li
+                  key={`${h.city}-${h.zip}`}
+                  className="grid grid-cols-[1.5rem_4.5rem_1fr_auto] items-baseline gap-3 border-b border-line/50 pb-2 text-sm last:border-0"
+                >
+                  <span className="font-mono text-[10px] text-ink-faint">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="font-mono text-xs text-ink">{h.zip}</span>
+                  <span className="truncate text-xs text-ink-soft">
+                    {CITY_LABEL[h.city] ?? h.city} · {fmt(h.establishments)} establishments
+                  </span>
+                  <span className="font-mono text-xs text-accent">
+                    {fmt(h.violations)}
+                  </span>
+                </li>
               ))}
-            </ul>
-            <p className="mt-4 text-xs text-ink-faint">
-              Percentage populated. This is what decides how many of the 25
-              blocks the unpivot touches, recomputed every run rather than
-              trusting a threshold written down once.
+            </ol>
+          </Block>
+        )}
+
+        {outcomes.length > 0 && (
+          <Block label="Inspection outcomes" kicker="share of inspections">
+            <CompositionBar
+              items={outcomes.map((o) => ({ label: o.result, value: o.count }))}
+              caption="Part-to-whole, so one stacked bar rather than eight separate ones. Ranked by size, which is a real order, so the ramp is one hue stepped light to dark instead of eight competing colours."
+            />
+          </Block>
+        )}
+
+        {severity.length > 0 && (
+          <Block label="Severity" kicker="where the source grades it">
+            <SeverityStacks data={severity} />
+            <p className="mt-5 text-xs text-ink-faint">
+              Not normalised across cities, and the ungraded share is drawn
+              rather than omitted. Chicago grades establishment risk, NYC flags
+              violations critical, Dallas assigns point deductions. Forcing
+              those onto one scale would invent a comparison the sources do not
+              support.
+            </p>
+          </Block>
+        )}
+
+        {dallasPoints.length > 3 && (
+          <Block label="Dallas block sparsity" kicker="measured this run">
+            <DecayCurve points={dallasPoints} threshold={1} />
+            <p className="mt-5 text-xs text-ink-faint">
+              An ordered sequence, so a curve. Rendered as ranked bars this read
+              as violation10, violation17, violation1, violation25, which is
+              alphabetical order and throws away the only thing the series is
+              about. The shape is what decides how many of the 25 blocks the
+              unpivot touches, recomputed every run.
             </p>
           </Block>
         )}

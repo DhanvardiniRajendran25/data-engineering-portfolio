@@ -415,3 +415,365 @@ export function StorageMeter({
     </div>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* Dot plot. For ranked categories with long names, where a full bar    */
+/* is a lot of ink to say what a dot on a rule says as clearly.         */
+/* ------------------------------------------------------------------ */
+
+export function DotPlot({
+  items,
+}: {
+  items: { label: string; sub?: string; value: number }[];
+}) {
+  const max = Math.max(...items.map((i) => i.value), 1);
+
+  return (
+    <ul className="grid gap-4">
+      {items.map((it) => (
+        <li key={`${it.sub}-${it.label}`} className="grid min-w-0 gap-2">
+          <div className="flex min-w-0 items-baseline justify-between gap-4">
+            <span className="min-w-0 flex-1 truncate text-sm text-ink" title={it.label}>
+              {it.label}
+              {it.sub && (
+                <span className="ml-2 font-mono text-[10px] text-ink-faint">
+                  {it.sub}
+                </span>
+              )}
+            </span>
+            <span className="shrink-0 font-mono text-xs text-ink">
+              {fmt(it.value)}
+            </span>
+          </div>
+          {/* Hairline rule to the dot: position carries the magnitude, the rule
+              only guides the eye there. Less ink than a filled bar for the
+              same reading. */}
+          <span aria-hidden="true" className="relative block h-2">
+            <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-line" />
+            <span
+              className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-accent"
+              style={{ left: `calc(${(it.value / max) * 100}% - 4px)` }}
+            />
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Composition bar. One horizontal 100% stack for part-to-whole,        */
+/* rather than N separate bars that make the reader add up the shares.  */
+/* ------------------------------------------------------------------ */
+
+const RAMP = [1, 0.78, 0.6, 0.46, 0.35, 0.26, 0.19, 0.13];
+
+const rampStep = (i: number) =>
+  `color-mix(in oklab, var(--accent) ${(RAMP[Math.min(i, RAMP.length - 1)] ?? 0.13) * 100}%, transparent)`;
+
+export function CompositionBar({
+  items,
+  caption,
+}: {
+  items: { label: string; value: number }[];
+  caption?: string;
+}) {
+  const total = items.reduce((a, b) => a + b.value, 0);
+  if (total === 0) return null;
+
+  return (
+    <div>
+      {/* An ordered share, so one hue stepped light to dark rather than eight
+          categorical colours. These categories do have a natural order: they
+          are ranked by size, and the ramp encodes that rank. */}
+      <div className="flex h-7 w-full gap-[2px] overflow-hidden rounded-full">
+        {items.map((it, i) => (
+          <span
+            key={it.label}
+            className="h-7"
+            style={{
+              width: `${(it.value / total) * 100}%`,
+              backgroundColor: rampStep(i),
+            }}
+            title={`${it.label}: ${fmt(it.value)}`}
+          />
+        ))}
+      </div>
+
+      <ul className="mt-5 grid gap-2.5">
+        {items.map((it, i) => (
+          <li key={it.label} className="flex min-w-0 items-baseline gap-3">
+            <span
+              aria-hidden="true"
+              className="block h-2.5 w-2.5 shrink-0 rounded-[2px]"
+              style={{ backgroundColor: rampStep(i) }}
+            />
+            <span
+              className="min-w-0 flex-1 truncate text-sm text-ink-soft"
+              title={it.label}
+            >
+              {it.label}
+            </span>
+            <span className="shrink-0 font-mono text-xs text-ink">
+              {((it.value / total) * 100).toFixed(1)}%
+            </span>
+            <span className="w-16 shrink-0 text-right font-mono text-xs text-ink-faint">
+              {fmt(it.value)}
+            </span>
+          </li>
+        ))}
+      </ul>
+      {caption && <p className="mt-4 text-xs text-ink-faint">{caption}</p>}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Severity as a stacked composition per city, so "not graded" is a     */
+/* visible third state rather than a missing bar.                       */
+/* ------------------------------------------------------------------ */
+
+export function SeverityStacks({
+  data,
+}: {
+  data: { city: string; critical: number; notCritical: number; unknown: number }[];
+}) {
+  return (
+    <ul className="grid gap-5">
+      {data.map((s) => {
+        const total = s.critical + s.notCritical + s.unknown;
+        if (total === 0) return null;
+        const graded = s.critical + s.notCritical;
+        const pct = (n: number) => (n / total) * 100;
+
+        return (
+          <li key={s.city} className="grid gap-2">
+            <div className="flex items-baseline justify-between gap-4">
+              <span className="text-sm text-ink">
+                {CITY_LABEL[s.city] ?? s.city}
+              </span>
+              <span className="font-mono text-xs text-ink-soft">
+                {graded === 0
+                  ? "not graded per violation"
+                  : `${((s.critical / graded) * 100).toFixed(1)}% critical of graded`}
+              </span>
+            </div>
+            <div className="flex h-6 w-full gap-[2px] overflow-hidden rounded-full">
+              {s.critical > 0 && (
+                <span
+                  className="h-6 bg-accent"
+                  style={{ width: `${pct(s.critical)}%` }}
+                  title={`Critical: ${fmt(s.critical)}`}
+                />
+              )}
+              {s.notCritical > 0 && (
+                <span
+                  className="h-6"
+                  style={{
+                    width: `${pct(s.notCritical)}%`,
+                    backgroundColor:
+                      "color-mix(in oklab, var(--accent) 34%, transparent)",
+                  }}
+                  title={`Not critical: ${fmt(s.notCritical)}`}
+                />
+              )}
+              {s.unknown > 0 && (
+                <span
+                  className="h-6 bg-ink/[0.08]"
+                  style={{ width: `${pct(s.unknown)}%` }}
+                  title={`Not graded by this source: ${fmt(s.unknown)}`}
+                />
+              )}
+            </div>
+          </li>
+        );
+      })}
+
+      <li className="flex flex-wrap gap-x-5 gap-y-2 pt-1">
+        {[
+          ["Critical", "var(--accent)"],
+          ["Not critical", "color-mix(in oklab, var(--accent) 34%, transparent)"],
+          ["Not graded by source", "color-mix(in oklab, var(--ink) 8%, transparent)"],
+        ].map(([label, color]) => (
+          <span key={label} className="flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              className="block h-2.5 w-2.5 rounded-[2px]"
+              style={{ backgroundColor: color }}
+            />
+            <span className="font-mono text-[10px] text-ink-faint">{label}</span>
+          </span>
+        ))}
+      </li>
+    </ul>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Decay curve. Block sparsity is an ORDERED sequence 1..25, so it is   */
+/* an area chart. Rendering it as ranked bars threw the order away, and */
+/* the order is the whole finding.                                      */
+/* ------------------------------------------------------------------ */
+
+export function DecayCurve({
+  points,
+  threshold = 1,
+}: {
+  points: { n: number; pct: number }[];
+  /** Percent-populated line below which a block stops being worth unpivoting. */
+  threshold?: number;
+}) {
+  if (points.length < 4) return null;
+
+  const sorted = [...points].sort((a, b) => a.n - b.n);
+  const lastN = sorted[sorted.length - 1].n;
+  const W = 100;
+  const H = 40;
+  const x = (n: number) => (lastN === 1 ? 0 : ((n - 1) / (lastN - 1)) * W);
+  const y = (pct: number) => H - (pct / 100) * H;
+
+  const line = sorted
+    .map((p, i) => `${i === 0 ? "M" : "L"} ${x(p.n)} ${y(p.pct)}`)
+    .join(" ");
+  const area = `${line} L ${x(lastN)} ${H} L ${x(sorted[0].n)} ${H} Z`;
+
+  const crossing = sorted.find((p) => p.pct < threshold);
+
+  return (
+    <div>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        preserveAspectRatio="none"
+        role="img"
+        aria-label={`Percentage populated across violation blocks 1 to ${lastN}, falling from ${sorted[0].pct.toFixed(1)} percent to ${sorted[sorted.length - 1].pct.toFixed(2)} percent.${crossing ? ` Drops below ${threshold} percent at block ${crossing.n}.` : ""}`}
+        className="h-44 w-full"
+      >
+        <path d={area} fill="var(--accent)" fillOpacity="0.16" />
+        <path
+          d={line}
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="2"
+          vectorEffect="non-scaling-stroke"
+        />
+        {crossing && (
+          <line
+            x1={x(crossing.n)}
+            y1="0"
+            x2={x(crossing.n)}
+            y2={H}
+            stroke="var(--ink-faint)"
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          />
+        )}
+      </svg>
+
+      <div className="mt-2 flex justify-between font-mono text-[10px] text-ink-faint">
+        <span>block 1 · {sorted[0].pct.toFixed(0)}%</span>
+        {crossing && (
+          <span className="text-ink-soft">
+            crosses {threshold}% at block {crossing.n}
+          </span>
+        )}
+        <span>
+          block {lastN} · {sorted[sorted.length - 1].pct.toFixed(2)}%
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Dot map. Real coordinates, one dot per roughly 1km grid cell.        */
+/* ------------------------------------------------------------------ */
+
+export function DotMap({
+  points,
+  cities,
+}: {
+  points: { city: string; lat: number; lon: number; violations: number }[];
+  cities: string[];
+}) {
+  const present = cities.filter((c) => points.some((p) => p.city === c));
+  if (present.length === 0) return null;
+
+  return (
+    <div>
+      <Legend cities={present} />
+      {/* Small multiples, one panel per city. Three cities on one pair of axes
+          would be three tiny clusters separated by empty space, because on a
+          map position means something and these places are far apart. */}
+      <div className="mt-5 grid gap-5 sm:grid-cols-3">
+        {present.map((city) => {
+          const pts = points.filter((p) => p.city === city);
+
+          // Extent from the 1st to 99th percentile, not min to max. A single
+          // mis-geocoded point is enough to stretch the frame until every real
+          // one collapses into a corner, which is what a lone 0,0 in the NYC
+          // feed did. Percentiles make the frame robust to that class of bad
+          // row no matter what is already stored.
+          const pct = (values: number[], q: number) => {
+            const sorted = [...values].sort((a, b) => a - b);
+            const i = Math.min(
+              sorted.length - 1,
+              Math.max(0, Math.round(q * (sorted.length - 1))),
+            );
+            return sorted[i];
+          };
+          const lats = pts.map((p) => p.lat);
+          const lons = pts.map((p) => p.lon);
+          const minLat = pct(lats, 0.01);
+          const maxLat = pct(lats, 0.99);
+          const minLon = pct(lons, 0.01);
+          const maxLon = pct(lons, 0.99);
+          const maxV = Math.max(...pts.map((p) => p.violations), 1);
+
+          const spanLat = maxLat - minLat || 0.01;
+          const spanLon = maxLon - minLon || 0.01;
+          const W = 100;
+          const H = 100;
+          const PAD = 6;
+          // Clamped, because a percentile extent by definition leaves ~2% of
+          // points outside it and an unclamped projection would draw them
+          // beyond the panel border.
+          const clamp = (v: number) => Math.min(1, Math.max(0, v));
+          const px = (lon: number) =>
+            PAD + clamp((lon - minLon) / spanLon) * (W - PAD * 2);
+          const py = (lat: number) =>
+            H - PAD - clamp((lat - minLat) / spanLat) * (H - PAD * 2);
+
+          return (
+            <figure key={city} className="m-0">
+              <svg
+                viewBox={`0 0 ${W} ${H}`}
+                role="img"
+                aria-label={`${CITY_LABEL[city] ?? city}: ${pts.length} locations plotted by coordinate. Dot size is violation count, up to ${fmt(maxV)}.`}
+                className="w-full rounded-brand-sm border border-line"
+              >
+                {pts.map((p, i) => (
+                  <circle
+                    key={`${p.lat}-${p.lon}-${i}`}
+                    cx={px(p.lon)}
+                    cy={py(p.lat)}
+                    r={0.9 + (p.violations / maxV) * 2.2}
+                    fill={CITY_COLOR[city]}
+                    fillOpacity="0.45"
+                    stroke="var(--bg-elev)"
+                    strokeWidth="0.15"
+                  >
+                    <title>{fmt(p.violations)} violations</title>
+                  </circle>
+                ))}
+              </svg>
+              <figcaption className="mt-2 flex items-baseline justify-between font-mono text-[10px] text-ink-faint">
+                <span>{CITY_LABEL[city] ?? city}</span>
+                <span>{fmt(pts.length)} cells</span>
+              </figcaption>
+            </figure>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
