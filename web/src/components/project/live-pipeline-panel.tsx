@@ -153,7 +153,7 @@ export function LivePipelinePanel() {
   const {
     run, totals, cities, daily, monthlyByCity, weekday, zipScatter,
     geo, cityRows, storage, topViolations, hotspots, outcomes, severity, stages, profile,
-    rejects, history,
+    rejects, history, risk,
   } = snap;
 
   if (totals.violations === 0) {
@@ -434,8 +434,50 @@ export function LivePipelinePanel() {
           </Block>
         )}
 
+        {risk.length > 0 && (
+          <Block label="How each city grades danger" kicker="its own scale">
+            <ul className="grid gap-6">
+              {presentCities
+                .filter((c) => risk.some((r) => r.city === c))
+                .map((c) => {
+                  const rows = risk.filter((r) => r.city === c);
+                  const total = rows.reduce((a, b) => a + b.inspections, 0);
+                  return (
+                    <li key={c}>
+                      <p className="font-mono text-[11px] text-ink-soft">
+                        {CITY_LABEL[c] ?? c}
+                        <span className="ml-2 text-ink-faint">
+                          {c === "chicago"
+                            ? "establishment risk tier"
+                            : "inspection letter grade"}
+                        </span>
+                      </p>
+                      <div className="mt-3">
+                        <CompositionBar
+                          items={rows.map((r) => ({
+                            label: r.risk,
+                            value: r.inspections,
+                          }))}
+                        />
+                      </div>
+                      <p className="mt-2 font-mono text-[10px] text-ink-faint">
+                        {total.toLocaleString("en-US")} inspections
+                      </p>
+                    </li>
+                  );
+                })}
+            </ul>
+            <p className="mt-6 max-w-measure text-xs text-ink-faint">
+              This is why the per-violation chart below is empty for Chicago. It
+              does grade danger, but at the establishment rather than the
+              violation, so there is no per-violation value to show. Dallas
+              grades neither and issues point deductions instead.
+            </p>
+          </Block>
+        )}
+
         {severity.length > 0 && (
-          <Block label="Severity" kicker="where the source grades it">
+          <Block label="Severity per violation" kicker="where the source grades it">
             <SeverityStacks data={severity} />
             <p className="mt-5 text-xs text-ink-faint">
               Not normalised across cities, and the ungraded share is drawn

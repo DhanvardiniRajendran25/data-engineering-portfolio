@@ -45,13 +45,16 @@ export function FoodInspectionDeepDive() {
       </Section>
 
       {/* The mismatch is the entire problem, so it leads. */}
-      <Section id="problem" label="The problem" kicker="Same domain, no shared shape" wide>
-        <div className="grid gap-4 lg:grid-cols-2">
+      <Section id="problem" label="The problem" kicker="Three shapes, no shared schema" wide>
+        <div className="grid gap-4 lg:grid-cols-3">
           {CITIES.map((c) => (
-            <div key={c.city} className="rounded-brand border border-line bg-bg-elev p-6">
-              <div className="flex items-baseline justify-between gap-4">
+            <div
+              key={c.city}
+              className="flex flex-col rounded-brand border border-line bg-bg-elev p-6"
+            >
+              <div className="flex items-baseline justify-between gap-3">
                 <p className="text-xl">{c.city}</p>
-                <span className="rounded-full border border-accent px-3 py-0.5 font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
+                <span className="shrink-0 rounded-full border border-accent px-3 py-0.5 font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
                   {c.shape}
                 </span>
               </div>
@@ -61,6 +64,16 @@ export function FoodInspectionDeepDive() {
                 Violations arrive as
               </p>
               <p className="mt-1.5 text-sm text-ink">{c.violations}</p>
+
+              <p className="mt-4 font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+                Severity
+              </p>
+              <p className="mt-1.5 text-sm text-ink">{c.severity}</p>
+
+              <p className="mt-4 font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+                Needs
+              </p>
+              <p className="mt-1.5 font-mono text-sm text-accent">{c.transform}</p>
 
               <ul className="mt-5 grid gap-1.5 border-t border-line pt-4">
                 {c.quirks.map((q) => (
@@ -77,15 +90,17 @@ export function FoodInspectionDeepDive() {
         </div>
 
         <p className="mt-6 max-w-measure text-sm leading-relaxed text-ink-soft">
-          Both cities publish restaurant inspections. Neither publishes them the
+          Three cities publish restaurant inspections. No two publish them the
           same way. Chicago packs every violation into one delimited string,
-          Dallas spreads them across 25 numbered columns, and nothing about
-          reading one helps you read the other. Every design choice below follows
-          from that.
+          Dallas spreads them across 25 numbered columns, New York already
+          emits one row per violation, and nothing about reading one helps you
+          read another. They do not even measure danger at the same level:
+          Chicago grades the establishment, New York grades the violation,
+          Dallas assigns points. Every design choice below follows from that.
         </p>
       </Section>
 
-      <Section id="architecture" label="Architecture" kicker="Two lanes, one join" wide>
+      <Section id="architecture" label="Architecture" kicker="Three lanes, one join" wide>
         <FoodInspectionArchitecture />
       </Section>
 
