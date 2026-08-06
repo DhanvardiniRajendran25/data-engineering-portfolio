@@ -55,6 +55,41 @@ export function CourtvisionDeepDive() {
         </dl>
       </section>
 
+      {/* Demo first.
+          This sat at position 4, below the problem, what-it-does and the three
+          agents. The console is the only thing on the page a reader can
+          operate, so it leads; the sections beneath it explain how it works. */}
+      <Section id="demo" label="See it run" kicker="Recorded runs, then the video" wide>
+        <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+          Try it
+        </p>
+        <p className="mt-2 max-w-measure text-sm text-ink-soft">
+          All three surfaces, replaying real captured runs. The Simulator tab is
+          the one to click: calling zone defense replays what the session actually
+          did next.
+        </p>
+        <div className="mt-5">
+          <CourtvisionConsole />
+        </div>
+
+        {/* Video sits under the console: the interactive replay is the thing
+            worth reaching first, and the recording backs it up. */}
+        <p className="mt-14 font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+          Full walkthrough
+        </p>
+        <div className="mt-5 overflow-hidden rounded-brand border border-line bg-black">
+          <div className="aspect-video w-full">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}`}
+              title="CourtVision AI walkthrough"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="h-full w-full"
+            />
+          </div>
+        </div>
+      </Section>
+
       <Section id="problem" label="The problem" kicker="Vague scouting is useless">
         <div className="rounded-brand border border-line bg-bg-elev p-6 sm:p-8">
           <div className="grid gap-6 sm:grid-cols-2 sm:gap-10">
@@ -129,37 +164,6 @@ export function CourtvisionDeepDive() {
           single endpoint. The three stay independent modules on one app rather
           than one agent doing everything, so each has one prompt and one job.
         </p>
-      </Section>
-
-      <Section id="demo" label="Walkthrough" kicker="Running application" wide>
-        <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
-          Try it
-        </p>
-        <p className="mt-2 max-w-measure text-sm text-ink-soft">
-          All three surfaces, replaying real captured runs. The Simulator tab is
-          the one to click: calling zone defense replays what the session actually
-          did next.
-        </p>
-        <div className="mt-5">
-          <CourtvisionConsole />
-        </div>
-
-        {/* Video sits under the console: the interactive replay is the thing
-            worth reaching first, and the recording backs it up. */}
-        <p className="mt-14 font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
-          Full walkthrough
-        </p>
-        <div className="mt-5 overflow-hidden rounded-brand border border-line bg-black">
-          <div className="aspect-video w-full">
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}`}
-              title="CourtVision AI walkthrough"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="h-full w-full"
-            />
-          </div>
-        </div>
       </Section>
 
       <Section id="decisions" label="Decisions" kicker="5 named tradeoffs" wide>

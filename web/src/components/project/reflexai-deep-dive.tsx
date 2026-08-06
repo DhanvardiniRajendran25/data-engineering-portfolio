@@ -25,6 +25,51 @@ export function ReflexaiDeepDive() {
         </dl>
       </section>
 
+      {/* Demo first. This page had no demo section at all despite the app being
+          deployed and public, so the only route to it was the small header
+          button. A live URL is the strongest evidence on any project page and
+          it should not be the easiest thing to miss. */}
+      <Section id="demo" label="Try it" kicker="Live deployment" wide>
+        <div className="rounded-brand border-2 border-accent bg-bg-elev p-6 sm:p-8">
+          <div className="flex flex-wrap items-start justify-between gap-6">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
+                Running now
+              </p>
+              <p className="mt-2 max-w-measure text-sm text-ink-soft">
+                Pick a ticker. The app pulls the financial statements, runs the
+                four risk diagnostics, and retrieves against the reflexivity
+                corpus separately before it writes anything.
+              </p>
+            </div>
+            <a
+              href="https://reflex-ai-ai-powered-stock-and-macr.vercel.app/"
+              target="_blank"
+              rel="noopener"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full border border-ink bg-ink px-5 py-2.5 font-mono text-[11px] tracking-[0.14em] text-bg uppercase transition-colors hover:bg-accent hover:border-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              Open the app
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+
+          <dl className="mt-7 grid gap-5 border-t border-line pt-6 sm:grid-cols-3">
+            {[
+              ["Ask it", "Whether a balance sheet survives stress"],
+              ["Not", "Whether the stock goes up"],
+              ["Watch for", "Where the two lanes disagree"],
+            ].map(([k, v]) => (
+              <div key={k}>
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-ink-faint uppercase">
+                  {k}
+                </dt>
+                <dd className="mt-1 text-sm text-ink">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </Section>
+
       {/* The premise is the project. Lead with the question, not the stack. */}
       <Section id="premise" label="The premise" kicker="A different question">
         <div className="rounded-brand border border-line bg-bg-elev p-6 sm:p-8">

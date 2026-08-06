@@ -66,11 +66,13 @@ export const metadata: Metadata = {
  * tracks the active theme instead of forcing one appearance on both.
  */
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8f5ef" },
-    { media: "(prefers-color-scheme: dark)", color: "#11151c" },
-  ],
-  colorScheme: "light dark",
+  // A single light value, because the page itself now always opens light.
+  // These two entries were keyed on prefers-color-scheme, which the browser
+  // resolves against the OS rather than against our data-theme attribute, so a
+  // dark-mode phone painted dark chrome above a cream page on every first
+  // visit. `color-scheme` is set per theme in globals.css instead, which does
+  // follow the attribute.
+  themeColor: "#f8f5ef",
 };
 
 /** Schema.org Person, so search engines can attribute the work correctly. */
