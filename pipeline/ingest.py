@@ -53,6 +53,10 @@ MAX_PAGES_PER_CITY = 40
 
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "schema.sql")
 
+# Arbitrary but fixed. Any concurrent ingestion must use the same number for the
+# lock to mean anything.
+ADVISORY_LOCK = 831147
+
 
 # ---------------------------------------------------------------------------
 # Source definitions
@@ -83,12 +87,29 @@ CITIES: dict[str, dict[str, Any]] = {
         "shape": "wide",
         # Frozen since 2024-02-29. Loaded once, then a no-op forever.
         "live": False,
+        "frozen_end": date(2024, 2, 29),
     },
 }
 
 
 def window_start() -> date:
+    """Rolling window for cities that are still publishing."""
     return date.today() - timedelta(days=WINDOW_MONTHS * 31)
+
+
+def city_window_start(city_key: str) -> date:
+    """Window start for one city.
+
+    A single global rolling window silently erased Dallas. Its last inspection
+    is 2024-02-29 and the 24-month window now begins 2024-07-23, so every Dallas
+    row fell outside it: the fetch returned nothing and the prune would have
+    deleted the lane even if it had loaded. A frozen source is anchored to its
+    own final date instead, so it keeps its last 24 months permanently.
+    """
+    cfg = CITIES[city_key]
+    if cfg["live"]:
+        return window_start()
+    return cfg["frozen_end"] - timedelta(days=WINDOW_MONTHS * 31)
 
 
 # ---------------------------------------------------------------------------
@@ -214,13 +235,17 @@ def transform_chicago(row: dict[str, Any]) -> tuple[list[Violation], str | None]
     if not raw:
         # A clean inspection is a real outcome, not a reject. Recorded with a
         # sentinel violation so pass rates stay computable.
+        # critical stays None, not False. Chicago does not grade individual
+        # violations at all, so a False here is not "this was not critical", it
+        # is a guess. It also made the dashboard report Chicago as 0.0% critical
+        # rather than correctly saying the source does not grade them.
         return [
             {
                 **base,
                 "violation_seq": 0,
                 "code": None,
                 "description": "No violations cited",
-                "critical": False,
+                "critical": None,
             }
         ], None
 
@@ -303,7 +328,7 @@ def transform_dallas(row: dict[str, Any]) -> tuple[list[Violation], str | None]:
 
     if not out:
         out.append({**base, "violation_seq": 0, "code": None,
-                    "description": "No violations cited", "critical": False})
+                    "description": "No violations cited", "critical": None})
     return out, None
 
 
@@ -412,19 +437,39 @@ def ensure_schema(conn: psycopg.Connection) -> None:
 
 def upsert_dimension(cur, table: str, key_col: str, natural_key: str,
                      columns: dict[str, Any], cache: dict[str, int]) -> int:
+    """Get-or-create a dimension row.
+
+    DO NOTHING then SELECT, rather than DO UPDATE. The previous version used a
+    no-op `do update set natural_key = excluded.natural_key` purely to make
+    RETURNING fire on conflict, which takes a row-level write lock on every
+    existing dimension row it touches. Two overlapping runs then deadlocked on
+    dim_establishment, each holding rows the other wanted.
+
+    DO NOTHING takes no write lock when the row already exists, so the common
+    case (an establishment seen a thousand times) is now a cheap read.
+    """
     if natural_key in cache:
         return cache[natural_key]
+
     names = ", ".join(["natural_key", *columns.keys()])
     placeholders = ", ".join(["%s"] * (1 + len(columns)))
     cur.execute(
         f"""
         insert into {table} ({names}) values ({placeholders})
-        on conflict (natural_key) do update set natural_key = excluded.natural_key
+        on conflict (natural_key) do nothing
         returning {key_col}
         """,
         [natural_key, *columns.values()],
     )
-    key = cur.fetchone()[key_col]
+    row = cur.fetchone()
+    if row is None:
+        # Already present, inserted by an earlier batch or an earlier run.
+        cur.execute(
+            f"select {key_col} from {table} where natural_key = %s", (natural_key,)
+        )
+        row = cur.fetchone()
+
+    key = row[key_col]
     cache[natural_key] = key
     return key
 
@@ -502,13 +547,20 @@ def load_violations(cur, violations: list[Violation], job_id: str,
 
 
 def prune(cur, job_id: str) -> int:
-    """Drop anything outside the rolling window. This is what keeps the free
-    tier viable indefinitely rather than for the first few months."""
-    cur.execute(
-        "delete from fact_inspection_violations where inspection_date < %s",
-        (window_start(),),
-    )
-    removed = cur.rowcount or 0
+    """Drop anything outside each city's own window.
+
+    Per city, not global. A single global cutoff would delete the entire Dallas
+    lane on the run that loaded it, because its newest row predates the rolling
+    window that the two live cities sit inside.
+    """
+    removed = 0
+    for city_key in CITIES:
+        cur.execute(
+            "delete from fact_inspection_violations "
+            "where city = %s and inspection_date < %s",
+            (city_key, city_window_start(city_key)),
+        )
+        removed += cur.rowcount or 0
     # Keep the last 60 runs of observability data; the panel shows far fewer.
     cur.execute(
         """
@@ -539,6 +591,19 @@ def run() -> int:
     conn = connect()
     try:
         ensure_schema(conn)
+
+        # Exactly one ingestion at a time, enforced by the database rather than
+        # by whoever is starting jobs. The workflow has a concurrency group, but
+        # that does not stop a local run overlapping a scheduled one, which is
+        # how two processes ended up deadlocking on dim_establishment. An
+        # advisory lock is held for the session and released automatically if
+        # the process dies, so a crash cannot leave it stuck.
+        with conn.cursor() as cur:
+            cur.execute("select pg_try_advisory_lock(%s) as got", (ADVISORY_LOCK,))
+            if not cur.fetchone()["got"]:
+                print("another ingestion holds the lock; exiting without work.")
+                return 0
+        conn.commit()
         with conn.cursor() as cur:
             cur.execute(
                 """
@@ -575,14 +640,13 @@ def run() -> int:
             # the window. Re-reading the final day is deliberate: Socrata can
             # amend same-day records, and the fact table upserts, so overlap is
             # cheap and a gap is not.
+            floor = city_window_start(city_key)
             mark = watermarks.get(city_key)
             # Rewind a week before the watermark. Socrata amends recent records
             # after first publication, so resuming exactly at the high-water
             # mark silently misses late edits. The fact table upserts, so the
             # overlap costs a little time and nothing else.
-            since = (
-                max(mark - timedelta(days=7), window_start()) if mark else window_start()
-            )
+            since = max(mark - timedelta(days=7), floor) if mark else floor
 
             print(f"[{city_key}] fetching from {since} ...", flush=True)
             city_rows = 0
