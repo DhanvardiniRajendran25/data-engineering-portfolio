@@ -29,3 +29,7 @@ pipeline/.env
 # The one file the site actually uses (podcastiq-architecture.svg) stays in
 # web/public/PodcastIQ/.
 project-source/
+
+# Playwright writes a root-level test-results/ when run from the repo root
+# rather than from web/. Ignored here as well as in web/.gitignore.
+test-results/
