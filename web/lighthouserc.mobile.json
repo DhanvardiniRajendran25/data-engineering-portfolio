@@ -1,0 +1,36 @@
+{
+  "//": "Mobile companion to lighthouserc.json. The desktop config sets preset=desktop, which runs unthrottled and flatters the site, hiding exactly the regressions that hurt real visitors. No preset is set here on purpose: mobile emulation with simulated slow 4G and 4x CPU throttling is Lighthouse's default, and there is no 'mobile' preset name (valid values are perf, experimental and desktop). That default is the closest available proxy for a mid-tier Android. Budgets are looser than desktop because the throttling is real, not because standards drop: they exist to catch regressions against this measured baseline.",
+  "//2": "Performance and timing budgets are warn, not error, on purpose. They could not be verified locally: chrome-launcher hits an EPERM on temp cleanup on Windows, so no report is produced. Rather than gate CI on guessed thresholds, these report numbers on the first Ubuntu run and should be promoted to error once that measured baseline exists. Accessibility and SEO stay as error because they are absolute, already at 100 on desktop, and independently verified by 96 axe tests across three engines.",
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run start",
+      "startServerReadyPattern": "Ready in",
+      "url": [
+        "http://localhost:3000/",
+        "http://localhost:3000/work",
+        "http://localhost:3000/about",
+        "http://localhost:3000/contact",
+        "http://localhost:3000/work/sage"
+      ],
+      "numberOfRuns": 2
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.8 }],
+        "categories:accessibility": ["error", { "minScore": 1 }],
+        "categories:best-practices": ["warn", { "minScore": 0.95 }],
+        "categories:seo": ["error", { "minScore": 1 }],
+
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 4000 }],
+        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 600 }],
+
+        "uses-responsive-images": ["error", { "maxLength": 0 }],
+        "modern-image-formats": ["error", { "maxLength": 0 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

@@ -4,8 +4,11 @@ node_modules/
 *.log
 
 # private source material (NOT for publishing)
-assets/project_files/
-content/
+# Both anchored with a leading slash so they match only at the repo root. An
+# unanchored `content/` also matched `web/src/content/`, which is application
+# source, and silently kept every project content file out of the repo.
+/assets/project_files/
+/content/
 
 # OS
 .DS_Store
@@ -15,3 +18,14 @@ Thumbs.db
 CLAUDE.md
 TASKS.md
 .claude/
+
+# python pipeline
+pipeline/__pycache__/
+pipeline/.env
+
+# Project source material: technical docs, decks, profiling reports.
+# Kept out of web/public so it is not deployed or reachable by URL, and out of
+# the repo because it is 12MB of working documents with no build dependency.
+# The one file the site actually uses (podcastiq-architecture.svg) stays in
+# web/public/PodcastIQ/.
+project-source/

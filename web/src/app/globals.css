@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens (ported from ../../../css/styles.css) ---------- */
+:root {
+  /* Single shared shell width. Header, hero, impact, and footer all use this
+     via `max-w-page` so their left/right edges line up at every viewport.
+     1600px keeps a 1920px monitor feeling used (not a narrow centered island)
+     while still capping sensibly on ultra-wide displays. */
+  --maxw: 1600px;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --accent: #c2453d;
+  --accent-soft: rgba(194, 69, 61, 0.12);
+}
+
+[data-theme="light"] {
+  --bg: #f8f5ef;
+  --bg-elev: #fffdf8;
+  --ink: #1a2230;
+  --ink-soft: #4a5566;
+  /* AA-compliant. Was #8a93a3 at 2.85:1, below even the 3:1 large-text
+     floor, and this token labels small mono metadata that needs 4.5:1. */
+  --ink-faint: #6a717e;
+  --line: rgba(26, 34, 48, 0.12);
+  --accent: #c2453d;
+  --accent-soft: rgba(194, 69, 61, 0.1);
+  --shadow: 0 18px 50px -20px rgba(26, 34, 48, 0.3);
+}
+
+[data-theme="dark"] {
+  --bg: #11151c;
+  --bg-elev: #19202a;
+  --ink: #ece7dd;
+  --ink-soft: #aab2bf;
+  /* AA-compliant. Was #6c7686 at 3.57:1 against bg-elev. */
+  --ink-faint: #7e8795;
+  --line: rgba(236, 231, 221, 0.12);
+  --accent: #e0685f;
+  --accent-soft: rgba(224, 104, 95, 0.14);
+  --shadow: 0 22px 60px -22px rgba(0, 0, 0, 0.65);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-body: var(--font-geist), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-brand: 16px;
+  --radius-brand-sm: 10px;
+  --shadow-brand: var(--shadow);
+  --ease-brand: var(--ease);
+
+  /* Two-tier width system.
+     `page`    = outer rail. Nav, tables, diagrams, stat grids, image bleed.
+     `measure` = reading measure. ALL body prose, so line length stays
+                 comfortable no matter how wide the display is.
+     Using one width for both is what made the layout read as a narrow
+     centered island on large monitors. Keep them distinct. */
+  --container-page: 1600px;
+  /* Middle tier for text-dense pages (About, project bodies). 1600px is
+     right for the nav rail and image-led layouts, but it stretches lists and
+     rows so far apart that related items stop reading as related. */
+  --container-content: 1120px;
+  --container-measure: 68ch;
+
+  --spacing-gutter: clamp(1.25rem, 4vw, 4rem);
+
+  /* Fluid type scale.
+     Every size interpolates continuously between a small-screen floor and a
+     large-screen ceiling, so text is correct at 320px, at 768px, and at
+     2560px without a breakpoint jump at any width in between. The rem term
+     in each clamp keeps the size responsive to browser font-size settings;
+     a pure-vw expression would ignore user zoom preferences entirely. */
+  --text-display: clamp(2.25rem, 1.35rem + 4.5vw, 4.5rem);
+  --text-h1: clamp(1.875rem, 1.35rem + 2.6vw, 3.25rem);
+  --text-h2: clamp(1.5rem, 1.25rem + 1.25vw, 2.25rem);
+  --text-h3: clamp(1.25rem, 1.13rem + 0.6vw, 1.5rem);
+  --text-body-lg: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition:
+      background 0.4s var(--ease),
+      color 0.4s var(--ease);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+@layer components {
+  /* The single shared shell. Every top-level section uses this so their
+     left/right edges align at every viewport. Previously each component
+     repeated `mx-auto max-w-page px-gutter` by hand, and the header drifted
+     out of sync with the body, which is what produced the misaligned
+     narrow-island layout. */
+  .shell {
+    margin-inline: auto;
+    max-width: var(--container-page);
+    padding-inline: var(--gutter);
+    width: 100%;
+  }
+
+  /*
+   * Constant light plate behind third-party logos.
+   *
+   * Most brand marks (AWS, Springer, IEEE, university seals) are dark ink
+   * drawn for white backgrounds, so on the dark theme they disappear into
+   * it. Inverting is not an option either, since several are colour-bearing.
+   * Keeping the plate light in both themes is what the brands expect and is
+   * legible either way. Warm white rather than pure white so it does not
+   * glare against the light theme's ivory background.
+   */
+  .logo-plate {
+    background: #fffdf8;
+  }
+
+  /*
+   * Console surface.
+   *
+   * Re-declares the theme tokens locally, so every token-based utility inside
+   * (bg-bg-elev, text-ink, border-line) resolves dark without touching a single
+   * child class. Fixed rather than theme-following on purpose: the point is that
+   * the console does not share a surface with the page around it, and it matches
+   * how the real PodcastIQ application actually looks.
+   */
+  .console-surface {
+    --bg: #0d0f13;
+    --bg-elev: #14171d;
+    --ink: #f2efe9;
+    /* Both lightened to clear 4.5:1 against the console's own surfaces.
+       ink-faint was #737d8a at 4.29:1 on bg-elev, which fails for the small
+       mono metadata it labels. The console rebinds tokens, so it needs its
+       own contrast check rather than inheriting the page theme's. */
+    --ink-soft: #b6bec9;
+    --ink-faint: #98a2b0;
+    --line: rgba(242, 239, 233, 0.14);
+    --accent: #ef7360;
+    --accent-soft: rgba(239, 115, 96, 0.16);
+    color-scheme: dark;
+  }
+
+  /* Narrower shell for reading/scanning pages. */
+  .shell-content {
+    margin-inline: auto;
+    max-width: var(--container-content);
+    padding-inline: var(--gutter);
+    width: 100%;
+  }
+
+  /* Standard vertical rhythm for page sections. Fluid rather than stepped at
+     two breakpoints, so the rhythm is proportionate at every width instead of
+     jumping at 640px and 1024px. */
+  .section-y {
+    padding-block: clamp(3rem, 1.5rem + 5vw, 6rem);
+  }
+
+  /*
+   * Translucent surface (nav pill, mobile menu).
+   *
+   * Defined once here rather than repeating `bg-bg-elev/90 backdrop-blur` at
+   * each call site, because the fallbacks below have to apply everywhere the
+   * effect is used, and a utility-string copy would inevitably miss one.
+   */
+  .glass {
+    background: color-mix(in srgb, var(--bg-elev) 90%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  /* Some users disable transparency at OS level for legibility or motion
+     sensitivity. Honour that by going fully opaque. */
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      background: var(--bg-elev);
+      backdrop-filter: none;
+    }
+  }
+
+  /*
+   * Windows High Contrast / forced-colors.
+   *
+   * This design leans heavily on low-opacity borders (--line is 12% ink).
+   * Forced-colors overrides author colours with a system palette, and those
+   * translucent borders flatten into the background, so cards and dividers
+   * would vanish. Rebinding the token to a system colour keeps every border
+   * that uses it visible, without touching individual components.
+   */
+  @media (forced-colors: active) {
+    :root,
+    [data-theme="light"],
+    [data-theme="dark"] {
+      --line: CanvasText;
+    }
+
+    .glass {
+      background: Canvas;
+      backdrop-filter: none;
+    }
+
+    .logo-plate {
+      background: Canvas;
+    }
+  }
+
+  /* prefers-reduced-motion is respected globally; the `.motion` class is only
+     added by the bootstrap script in layout.tsx when the user allows motion,
+     so animation code should gate on `.motion` rather than assuming it's present. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
