@@ -721,12 +721,16 @@ export function DotMap({
             );
             return sorted[i];
           };
+          // 2nd to 98th, not 1st to 99th. Dallas has a genuine scatter of
+          // outlying establishments across the wider metro, and trimming only
+          // 1% per end left the core of the city occupying a quarter of its
+          // panel while four dots held the corners.
           const lats = pts.map((p) => p.lat);
           const lons = pts.map((p) => p.lon);
-          const minLat = pct(lats, 0.01);
-          const maxLat = pct(lats, 0.99);
-          const minLon = pct(lons, 0.01);
-          const maxLon = pct(lons, 0.99);
+          const minLat = pct(lats, 0.02);
+          const maxLat = pct(lats, 0.98);
+          const minLon = pct(lons, 0.02);
+          const maxLon = pct(lons, 0.98);
           const maxV = Math.max(...pts.map((p) => p.violations), 1);
 
           const spanLat = maxLat - minLat || 0.01;
