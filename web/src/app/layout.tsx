@@ -28,8 +28,13 @@ const playfairDisplay = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
+  // Tab title is the name alone. A browser tab truncates to roughly 20
+  // characters, so the role never survived anyway: the tab read "Dhanvardini
+  // Rajendran, Data, A..." and the descriptor cost nothing but clutter.
+  // The Open Graph and Twitter titles below deliberately keep the role, since
+  // a link preview has room for it and a bare name there says very little.
   title: {
-    default: `${SITE.name}, ${SITE.role}`,
+    default: SITE.name,
     template: `%s · ${SITE.name}`,
   },
   description: SITE.description,
