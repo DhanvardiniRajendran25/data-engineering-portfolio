@@ -38,12 +38,37 @@ export const CITIES = [
   },
 ];
 
-/** Profiling findings, which is what made the transformation selective. */
+/**
+ * Profiling findings.
+ *
+ * These are measured against the live Socrata feeds, not carried over from the
+ * original write-up. The original claimed Dallas violation blocks beyond number
+ * five were "over 99% null", which the live data does not support: block 5 is
+ * 49% populated and block 6 is 40%. The 99% threshold is not reached until
+ * block 17. The corrected figures are below, and the live panel recomputes them
+ * on every run rather than trusting this file.
+ */
 export const FINDINGS = [
-  { finding: "Dallas violation columns beyond Violation 5", detail: "Over 99% null", action: "Unpivot only the populated blocks" },
-  { finding: "Chicago violation strings", detail: "Pipe-separated free text", action: "Regex parse into code, description, comment" },
-  { finding: "ZIP codes", detail: "Stored as floats", action: "Cast and zero-pad" },
-  { finding: "Dates and scores", detail: "Mixed formats across datasets", action: "Normalise per city before union" },
+  {
+    finding: "Dallas violation block sparsity",
+    detail: "92% populated at block 1, 13% at block 10, under 1% from block 17",
+    action: "Unpivot only blocks that carry data, per row",
+  },
+  {
+    finding: "Chicago violation strings",
+    detail: "Pipe-separated free text, 4.8 violations per inspection on average",
+    action: "Regex parse into code, description, comment",
+  },
+  {
+    finding: "ZIP codes",
+    detail: "Stored as floats, arriving as 60614.0",
+    action: "Cast, strip non-digits, zero-pad to five",
+  },
+  {
+    finding: "NYC sentinel dates",
+    detail: "Never-inspected records carry 1900-01-01",
+    action: "Reject, rather than record a century-old inspection",
+  },
 ];
 
 export type Stage = {
@@ -94,11 +119,11 @@ export const STAGES: Stage[] = [
       chose: "Profile to decide what not to process",
       over: ["Transform every column defensively"],
       because: [
-        "Dallas blocks past Violation 5 are over 99% null",
-        "Unpivoting all 25 would multiply rows for almost no data",
+        "Dallas block density falls from 92% to under 1% across 25 columns",
+        "Unpivoting every block would multiply rows for mostly empty columns",
         "Profiling turned a guess about cost into a measurement",
       ],
-      cost: "A sparse block could gain data later and be silently skipped.",
+      cost: "Recomputed every run, because a threshold set once goes stale silently.",
     },
     output: [{ value: "4", label: "findings acted on" }],
   },

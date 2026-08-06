@@ -10,6 +10,7 @@ import {
 } from "@/content/projects/food-inspection";
 import { StageStepper } from "./stage-stepper";
 import { FoodInspectionArchitecture } from "./food-inspection-architecture";
+import { LivePipelinePanel } from "./live-pipeline-panel";
 import { ProjectSection as Section } from "./project-section";
 
 export function FoodInspectionDeepDive() {
@@ -25,6 +26,23 @@ export function FoodInspectionDeepDive() {
           ))}
         </dl>
       </section>
+
+      {/* Demo first, and here the demo is real infrastructure rather than a
+          replay. Every other console on this site is honest about being a
+          recording; this one is a scheduled job writing to a database that the
+          page reads on load. */}
+      <Section id="live" label="Running now" kicker="Not a replay" wide>
+        <p className="max-w-measure text-sm leading-relaxed text-ink-soft">
+          The architecture below was built on Azure and Snowflake, which cannot
+          be left running for a portfolio. So it was rebuilt on free
+          infrastructure and pointed at the same problem, plus a third city. A
+          GitHub Actions job ingests Chicago, New York and Dallas twice a day
+          into Neon Postgres. These numbers come from that database.
+        </p>
+        <div className="mt-8">
+          <LivePipelinePanel />
+        </div>
+      </Section>
 
       {/* The mismatch is the entire problem, so it leads. */}
       <Section id="problem" label="The problem" kicker="Same domain, no shared shape" wide>
