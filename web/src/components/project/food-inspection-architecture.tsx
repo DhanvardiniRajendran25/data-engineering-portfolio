@@ -72,11 +72,16 @@ const LANES: Lane[] = [
   },
 ];
 
+/**
+ * Measured against the live feed, not quoted from the original write-up. That
+ * claimed everything past block 5 was "over 99% null"; the data says block 5 is
+ * still 49% populated and the 99% line is not crossed until block 17.
+ */
 const PROFILE_FINDINGS = [
-  "Blocks past Violation 5:",
-  "over 99% null",
+  "Block 1: 92% populated",
+  "Block 10: 13% · block 17: <1%",
   "ZIP codes stored as floats",
-  "Dates in mixed formats",
+  "NYC sentinel date 1900-01-01",
   "Scores typed inconsistently",
 ];
 

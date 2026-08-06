@@ -1,22 +1,92 @@
-name: data-pipeline
+name: food-inspection-pipeline
 
-# Manual trigger only until Phase 5 ships with a real dataset and a
-# DATABASE_URL repo secret. Once that lands, uncomment the schedule
-# below to run on a cadence (e.g. every 6 hours).
+# Twice daily. Chicago and NYC publish continuously but not by the minute, so
+# a tighter cadence would burn Neon compute hours to re-read the same rows.
+#
+# The keepalive job below exists because GitHub disables scheduled workflows on
+# repositories with no commit activity for 60 days. A portfolio repo goes quiet,
+# and the failure mode is silent: the panel would just start reading "89d ago"
+# with nothing in the logs to explain it.
 on:
+  schedule:
+    - cron: "0 7,19 * * *"
   workflow_dispatch: {}
-  # schedule:
-  #   - cron: "0 */6 * * *"
+
+# Two runs overlapping would fight over the same upserts and the same watermark.
+concurrency:
+  group: food-inspection-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
 
 jobs:
   ingest:
     runs-on: ubuntu-latest
+    # Generous, because a cold Neon compute plus three cities is minutes, but
+    # bounded so a hung request cannot burn the monthly Actions allowance.
+    timeout-minutes: 45
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pipeline/requirements.txt
+
       - run: pip install -r pipeline/requirements.txt
-      - run: python pipeline/ingest.py
+
+      - name: Run ingestion
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          # The DIRECT endpoint, not the pooler. This job runs multi-statement
+          # transactions and bulk upserts, which a transaction pooler handles
+          # badly.
+          DATABASE_URL_DIRECT: ${{ secrets.DATABASE_URL_DIRECT }}
+          SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
+        run: python -u pipeline/ingest.py
+
+      # Records that the schedule fired, which is also what keeps GitHub from
+      # disabling it. Writes to a file nothing else reads, so it can never
+      # conflict with real work.
+      - name: Record heartbeat
+        if: always()
+        run: |
+          mkdir -p .github/state
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .github/state/last-pipeline-run.txt
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/state/last-pipeline-run.txt
+          git diff --staged --quiet || git commit -m "chore: pipeline heartbeat [skip ci]"
+          git push || echo "heartbeat push skipped"
+
+  # A failed run must be noticeable. GitHub emails the actor on a failed
+  # scheduled workflow, but only the person who last touched the schedule, and
+  # it is easy to filter away. This makes the failure visible in the repo itself.
+  alert:
+    needs: ingest
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Open or update a failure issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "Food inspection pipeline is failing";
+            const url = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const { data: open } = await github.rest.issues.listForRepo({
+              ...context.repo, state: "open", labels: "pipeline",
+            });
+            const body = `The scheduled ingestion failed.\n\nRun: ${url}\n\nThe live panel on /work/food-inspection will keep showing the last successful run until this is fixed.`;
+            if (open.length > 0) {
+              await github.rest.issues.createComment({
+                ...context.repo, issue_number: open[0].number, body,
+              });
+            } else {
+              await github.rest.issues.create({
+                ...context.repo, title, body, labels: ["pipeline"],
+              });
+            }
