@@ -8,6 +8,7 @@ import {
   SCALE,
   TECH_STACK,
 } from "@/content/projects/reflexai";
+import { ReflexaiArchitecture } from "./reflexai-architecture";
 import { ProjectSection as Section } from "./project-section";
 
 export function ReflexaiDeepDive() {
@@ -92,6 +93,10 @@ export function ReflexaiDeepDive() {
           in separate retrieval paths is what stops a framework quote coming back
           as though it were a figure, and it is what makes the reasoning auditable.
         </p>
+      </Section>
+
+      <Section id="architecture" label="Architecture" kicker="Two lanes, one join" wide>
+        <ReflexaiArchitecture />
       </Section>
 
       <Section id="risk" label="Risk diagnostics" kicker="4 named dimensions">

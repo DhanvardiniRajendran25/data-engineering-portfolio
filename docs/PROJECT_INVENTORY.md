@@ -8,17 +8,27 @@ The old static site linked **almost none** of the real repositories, even though
 
 ## Featured set (9) — order as displayed
 
+Order below is the current display order in `web/src/content/work/meta.ts`, which
+is the single source of truth for the work index, the homepage selection and
+prev/next navigation.
+
 | # | Project | Repo | Live | Lens |
 |---|---|---|---|---|
 | 1 | **PodcastIQ** | [`PodcastIQ`](https://github.com/DhanvardiniRajendran25/PodcastIQ) | — | AI · Data |
-| 2 | **IMDb Analytics** | [`IMDb_Analytics_FullStack_Data_Pipeline_And_Dashboarding`](https://github.com/DhanvardiniRajendran25/IMDb_Analytics_FullStack_Data_Pipeline_And_Dashboarding) | — | Data |
-| 3 | **NYPD Crime** | [`End_to_End_NYPD_Crime_Arrest_Data_Engineering_Pipeline`](https://github.com/DhanvardiniRajendran25/End_to_End_NYPD_Crime_Arrest_Data_Engineering_Pipeline) | — | Data |
-| 4 | **Food Inspection** | [`Public_Health_Compliance_Food_Inspection_Analytics_Platform`](https://github.com/DhanvardiniRajendran25/Public_Health_Compliance_Food_Inspection_Analytics_Platform) | — | Data |
-| 5 | **Sage** | not found | ✅ [Cloud Run](https://sage-compliance-assistant-138449082911.us-central1.run.app/) | AI · Systems |
-| 6 | **CourtVisionAI** | [`CourtVisionAI`](https://github.com/DhanvardiniRajendran25/CourtVisionAI) | — | AI |
-| 7 | **ReflexAI** | [`ReflexAI_AI-Powered_Stock_And_Macro_Risk_Analysis_Platform`](https://github.com/DhanvardiniRajendran25/ReflexAI_AI-Powered_Stock_And_Macro_Risk_Analysis_Platform) | — | AI · Data |
-| 8 | **DocuParse** | [`Docuparse`](https://github.com/DhanvardiniRajendran25/Docuparse) | — | AI · Systems |
-| 9 | **Meta TradePulse** | [`Quantitative_Trading_Analysis_on_META_Stock`](https://github.com/DhanvardiniRajendran25/Quantitative_Trading_Analysis_on_META_Stock) | — | Data |
+| 2 | **Sage** | not found | ✅ [Streamlit](https://sage-compliance-assistant.streamlit.app/) | AI · Systems |
+| 3 | **DocuParse** | [`Docuparse`](https://github.com/DhanvardiniRajendran25/Docuparse) | — | AI · Systems |
+| 4 | **IMDb Analytics** | omitted, see below | — | Data |
+| 5 | **CourtVisionAI** | [`CourtVisionAI`](https://github.com/DhanvardiniRajendran25/CourtVisionAI) | — | AI |
+| 6 | **NYPD Crime** | [`End_to_End_NYPD_Crime_Arrest_Data_Engineering_Pipeline`](https://github.com/DhanvardiniRajendran25/End_to_End_NYPD_Crime_Arrest_Data_Engineering_Pipeline) | — | Data |
+| 7 | **ReflexAI** | [`ReflexAI_AI-Powered_Stock_And_Macro_Risk_Analysis_Platform`](https://github.com/DhanvardiniRajendran25/ReflexAI_AI-Powered_Stock_And_Macro_Risk_Analysis_Platform) | ✅ [Vercel](https://reflex-ai-ai-powered-stock-and-macr.vercel.app/) | AI · Data |
+| 8 | **Meta TradePulse** | [`Quantitative_Trading_Analysis_on_META_Stock`](https://github.com/DhanvardiniRajendran25/Quantitative_Trading_Analysis_on_META_Stock) | — | Data |
+| 9 | **Food Inspection** | [`Public_Health_Compliance_Food_Inspection_Analytics_Platform`](https://github.com/DhanvardiniRajendran25/Public_Health_Compliance_Food_Inspection_Analytics_Platform) | — | Data |
+
+All 9 now have a bespoke deep dive. See [PROJECT_DEEP_DIVES.md](./PROJECT_DEEP_DIVES.md).
+
+**IMDb repo deliberately unlinked:** [`IMDb_Analytics_FullStack_Data_Pipeline_And_Dashboarding`](https://github.com/DhanvardiniRajendran25/IMDb_Analytics_FullStack_Data_Pipeline_And_Dashboarding) exists, but still documents the earlier Azure Data Factory and Snowflake build. The page describes the AWS build, so linking it would put ADF and Snowflake one click behind an AWS-titled page. Restore once the code matches.
+
+**Sage live URL changed:** the Cloud Run deployment returned 503, so the Streamlit deployment is the one linked.
 
 **Removed from the featured set:** Seattle Pet ETL (repo still exists; can be an archive row).
 

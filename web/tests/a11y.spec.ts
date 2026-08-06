@@ -13,7 +13,7 @@ import AxeBuilder from "@axe-core/playwright";
 /**
  * Every route with a distinct rendering pattern, not a sample.
  *
- * All four deep dives are included deliberately. Each introduces something the
+ * Every deep dive is included deliberately. Each introduces something the
  * others do not: PodcastIQ has the agent console, whose `.console-surface`
  * rebinds the theme tokens to a fixed dark palette that nothing else exercises;
  * DocuParse and IMDb each carry a large inline architecture SVG; IMDb also has
@@ -33,6 +33,7 @@ const ROUTES = [
   "/work/nypd-crime",
   "/work/reflexai",
   "/work/meta-tradepulse",
+  "/work/food-inspection",
 ];
 
 for (const route of ROUTES) {
