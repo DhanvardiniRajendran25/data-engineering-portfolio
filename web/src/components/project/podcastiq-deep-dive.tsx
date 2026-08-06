@@ -59,6 +59,39 @@ export function PodcastIQDeepDive() {
         </dl>
       </section>
 
+      {/* Demo first.
+          The console and the walkthrough used to sit at positions 4 and 6, which
+          meant the one thing on this page that is not a claim was four scrolls
+          below the fold. The stat strip above supplies enough framing for the
+          trace to make sense; everything after this section explains how it
+          works, for whoever wants that. */}
+      <Section id="demo" label="See it run" kicker="Recorded trace, then the video" wide>
+        <p className="max-w-measure text-sm text-ink-soft">
+          Eight queries, one per intent. Each replays the real execution trace:
+          guardrails, routing, agent steps and measured timings.
+        </p>
+        <div className="mt-6">
+          <AgentConsole />
+        </div>
+
+        <div className="mt-14">
+          <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
+            Full walkthrough
+          </p>
+          <div className="mt-5 overflow-hidden rounded-brand border border-line bg-black">
+            <div className="aspect-video w-full">
+              <iframe
+                src={`https://drive.google.com/file/d/${DEMO_VIDEO_ID}/preview`}
+                title="PodcastIQ application walkthrough"
+                allow="autoplay"
+                allowFullScreen
+                className="h-full w-full"
+              />
+            </div>
+          </div>
+        </div>
+      </Section>
+
       {/* Problem stated as three impossibilities */}
       <Section id="problem" label="The problem" kicker="Audio is not queryable">
         <ul className="grid gap-4 md:grid-cols-3">
@@ -180,18 +213,6 @@ export function PodcastIQDeepDive() {
           ))}
         </ul>
 
-        <div className="mt-12">
-          <p className="font-mono text-[10px] tracking-[0.16em] text-ink-faint uppercase">
-            Try it
-          </p>
-          <p className="mt-2 max-w-measure text-sm text-ink-soft">
-            Eight queries, one per intent. Each replays the real execution trace:
-            guardrails, routing, agent steps and measured timings.
-          </p>
-          <div className="mt-5">
-            <AgentConsole />
-          </div>
-        </div>
       </Section>
 
       <Section id="architecture" label="Architecture" kicker="Full system" wide>
@@ -214,20 +235,6 @@ export function PodcastIQDeepDive() {
         <p className="mt-3 font-mono text-[10px] tracking-[0.1em] text-ink-faint uppercase">
           Scroll to follow the flow
         </p>
-      </Section>
-
-      <Section id="demo" label="Walkthrough" kicker="Running application" wide>
-        <div className="overflow-hidden rounded-brand border border-line bg-black">
-          <div className="aspect-video w-full">
-            <iframe
-              src={`https://drive.google.com/file/d/${DEMO_VIDEO_ID}/preview`}
-              title="PodcastIQ application walkthrough"
-              allow="autoplay"
-              allowFullScreen
-              className="h-full w-full"
-            />
-          </div>
-        </div>
       </Section>
 
       <Section id="cost" label="Cost per query" kicker="$1.19 per 1,000">

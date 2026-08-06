@@ -14,6 +14,10 @@
 }
 
 [data-theme="light"] {
+  /* Bound to the theme attribute, not to the OS. Without this the UA picks
+     scrollbar and form-control rendering from prefers-color-scheme, so a
+     dark-OS visitor got dark scrollbars framing a cream page. */
+  color-scheme: light;
   --bg: #f8f5ef;
   --bg-elev: #fffdf8;
   --ink: #1a2230;
@@ -28,6 +32,7 @@
 }
 
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg: #11151c;
   --bg-elev: #19202a;
   --ink: #ece7dd;

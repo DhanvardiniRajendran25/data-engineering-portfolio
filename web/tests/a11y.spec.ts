@@ -53,8 +53,27 @@ for (const route of ROUTES) {
   });
 
   test(`${route} has no detectable a11y violations (dark)`, async ({ page }) => {
+    // Dark is now reached only by the toggle, which persists to localStorage.
+    // This used to be `emulateMedia({ colorScheme: "dark" })`, which stopped
+    // selecting the dark theme the moment the bootstrap stopped reading
+    // prefers-color-scheme. The tests kept passing while silently checking the
+    // light palette twice, so the seeding is done the way a real visitor
+    // reaches dark: set the stored preference, then load.
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem("theme", "dark");
+      } catch {
+        /* private browsing; the assertion below will catch the miss */
+      }
+    });
     await page.emulateMedia({ colorScheme: "dark" });
     await page.goto(route);
+
+    // Fail loudly if the seeding stops working, rather than quietly retesting
+    // light. This assertion is the whole reason the regression above was
+    // survivable once and must not be survivable twice.
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       // Third-party embed content is out of scope. axe reaches inside the Drive
