@@ -103,7 +103,12 @@ export function SiteHeader() {
 
         <nav
           aria-label="Primary"
-          className={`glass hidden items-center gap-1 rounded-full border border-line px-2 py-2 text-sm font-medium shadow-brand transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none lg:flex ${
+          // Shown from 640px up, not 1024px. Four short labels plus the
+          // wordmark and the toggle measure about 420px, so collapsing them at
+          // 1024px was hiding a nav that had roughly 200px of room to spare and
+          // putting a tablet a tap away from every page. Below 640px the pill
+          // genuinely does not fit, which is where the menu earns its place.
+          className={`glass hidden items-center gap-0.5 rounded-full border border-line px-1.5 py-1.5 text-sm font-medium shadow-brand transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none sm:flex lg:gap-1 lg:px-2 lg:py-2 ${
             navHidden
               ? "pointer-events-none -translate-y-3 opacity-0"
               : "translate-y-0 opacity-100"
@@ -116,7 +121,7 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 aria-current={isActive ? "page" : undefined}
-                className="relative rounded-full px-4 py-1.5"
+                className="relative rounded-full px-2.5 py-1.5 lg:px-4"
               >
                 {isActive && (
                   <motion.span
@@ -146,7 +151,7 @@ export function SiteHeader() {
             aria-label="Open menu"
             aria-expanded={open}
             aria-controls="site-menu"
-            className="grid h-10 w-10 place-items-center glass rounded-full border border-line text-ink shadow-brand transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent lg:hidden"
+            className="grid h-10 w-10 place-items-center glass rounded-full border border-line text-ink shadow-brand transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent sm:hidden"
           >
             <svg
               viewBox="0 0 24 24"
