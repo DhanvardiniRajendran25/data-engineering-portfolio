@@ -203,6 +203,51 @@ def parse_date(value: Any) -> date | None:
         return None
 
 
+def clean_coords(lat: Any, lon: Any) -> dict[str, float | None]:
+    """Reject placeholder coordinates.
+
+    NYC publishes 0,0 for records it has not geocoded. Kept as-is, a single one
+    of those stretches a map's extent from the equator to Manhattan and collapses
+    every real point into one corner, which is exactly what happened.
+
+    The envelope is deliberately generous rather than per-city: a bounds check
+    tight enough to be interesting is a bounds check that silently drops a
+    legitimately relocated establishment.
+    """
+    lat_f, lon_f = to_float(lat), to_float(lon)
+    if lat_f is None or lon_f is None:
+        return {"latitude": None, "longitude": None}
+    # Null island. Not a restaurant in the Gulf of Guinea.
+    if abs(lat_f) < 0.01 and abs(lon_f) < 0.01:
+        return {"latitude": None, "longitude": None}
+    if not (18 <= lat_f <= 72) or not (-180 <= lon_f <= -66):
+        return {"latitude": None, "longitude": None}
+    return {"latitude": lat_f, "longitude": lon_f}
+
+
+def dallas_coords(raw: Any) -> dict[str, float | None]:
+    """Pull latitude and longitude out of Dallas's nested lat_long field.
+
+    Socrata returns it as a dict when the column is a location type, but it
+    arrives as a stringified dict often enough that both are handled. Anything
+    unparseable yields nulls rather than raising: a missing coordinate is a
+    normal gap, not a reason to reject an inspection.
+    """
+    if not raw:
+        return {"latitude": None, "longitude": None}
+
+    if isinstance(raw, dict):
+        lat, lon = raw.get("latitude"), raw.get("longitude")
+    else:
+        text = str(raw)
+        lat_match = re.search(r"'latitude':\s*'([-\d.]+)'", text)
+        lon_match = re.search(r"'longitude':\s*'([-\d.]+)'", text)
+        lat = lat_match.group(1) if lat_match else None
+        lon = lon_match.group(1) if lon_match else None
+
+    return clean_coords(lat, lon)
+
+
 def transform_chicago(row: dict[str, Any]) -> tuple[list[Violation], str | None]:
     """PARSE. One inspection row, N violations inside one delimited string."""
     inspection_id = row.get("inspection_id")
@@ -225,8 +270,7 @@ def transform_chicago(row: dict[str, Any]) -> tuple[list[Violation], str | None]
         },
         "location": {
             "zip": clean_zip(row.get("zip")),
-            "latitude": to_float(row.get("latitude")),
-            "longitude": to_float(row.get("longitude")),
+            **clean_coords(row.get("latitude"), row.get("longitude")),
         },
         # Chicago grades the establishment's risk, not the individual violation.
         "severity": row.get("risk"),
@@ -300,8 +344,11 @@ def transform_dallas(row: dict[str, Any]) -> tuple[list[Violation], str | None]:
         },
         "location": {
             "zip": clean_zip(row.get("zip")),
-            "latitude": None,
-            "longitude": None,
+            # Dallas nests coordinates inside a lat_long object alongside a
+            # human_address blob, rather than publishing plain columns the way
+            # Chicago and NYC do. These were being dropped, which quietly cost
+            # the whole city its place on any map.
+            **dallas_coords(row.get("lat_long")),
         },
         "severity": None,
     }
@@ -368,8 +415,7 @@ def transform_nyc(row: dict[str, Any]) -> tuple[list[Violation], str | None]:
             },
             "location": {
                 "zip": clean_zip(row.get("zipcode")),
-                "latitude": to_float(row.get("latitude")),
-                "longitude": to_float(row.get("longitude")),
+                **clean_coords(row.get("latitude"), row.get("longitude")),
             },
         }
     ], None
@@ -390,10 +436,11 @@ TRANSFORMS = {
 PROFILE_COLUMNS = {
     "chicago": ["dba_name", "facility_type", "risk", "results", "violations",
                 "zip", "latitude", "inspection_type"],
-    "dallas": ["program_identifier", "type", "score", "zip",
-               "violation1_description", "violation5_description",
-               "violation10_description", "violation17_description",
-               "violation25_description"],
+    # All 25 blocks, so the sparsity profile is a curve rather than five points.
+    # The falloff from 92% to 0.01% is the finding; a handful of samples of it
+    # cannot show a shape.
+    "dallas": ["program_identifier", "type", "score", "zip", "lat_long",
+               *[f"violation{i}_description" for i in range(1, 26)]],
     "nyc": ["dba", "cuisine_description", "violation_code", "critical_flag",
             "score", "grade", "zipcode", "latitude"],
 }
@@ -535,6 +582,13 @@ def load_violations(cur, violations: list[Violation], job_id: str,
            source, job_id)
         values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         on conflict (city, inspection_id, violation_seq) do update set
+          -- Dimension keys are re-pointed too. Without this, enriching a
+          -- dimension leaves every existing fact row aimed at the old version
+          -- of it: adding coordinates to Dallas created new dim_location rows
+          -- that nothing referenced.
+          establishment_key = excluded.establishment_key,
+          location_key = excluded.location_key,
+          violation_key = excluded.violation_key,
           result = excluded.result,
           score = excluded.score,
           critical = excluded.critical,
