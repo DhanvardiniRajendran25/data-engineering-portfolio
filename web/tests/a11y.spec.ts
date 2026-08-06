@@ -30,6 +30,9 @@ const ROUTES = [
   "/work/docuparse",
   "/work/imdb-analytics",
   "/work/courtvision",
+  "/work/nypd-crime",
+  "/work/reflexai",
+  "/work/meta-tradepulse",
 ];
 
 for (const route of ROUTES) {

@@ -8,6 +8,9 @@ import { PodcastIQDeepDive } from "@/components/project/podcastiq-deep-dive";
 import { SageDeepDive } from "@/components/project/sage-deep-dive";
 import { DocuparseDeepDive } from "@/components/project/docuparse-deep-dive";
 import { CourtvisionDeepDive } from "@/components/project/courtvision-deep-dive";
+import { MetaTradepulseDeepDive } from "@/components/project/meta-tradepulse-deep-dive";
+import { NypdDeepDive } from "@/components/project/nypd-deep-dive";
+import { ReflexaiDeepDive } from "@/components/project/reflexai-deep-dive";
 import { ImdbDeepDive } from "@/components/project/imdb-deep-dive";
 
 type Params = { slug: string };
@@ -43,7 +46,10 @@ export default async function ProjectPage({
     slug === "sage" ||
     slug === "docuparse" ||
     slug === "imdb-analytics" ||
-    slug === "courtvision";
+    slug === "courtvision" ||
+    slug === "nypd-crime" ||
+    slug === "reflexai" ||
+    slug === "meta-tradepulse";
 
   const loadBody = PROJECT_BODIES[slug];
   const Body =
@@ -154,6 +160,9 @@ export default async function ProjectPage({
       {slug === "docuparse" && <DocuparseDeepDive />}
       {slug === "imdb-analytics" && <ImdbDeepDive />}
       {slug === "courtvision" && <CourtvisionDeepDive />}
+      {slug === "nypd-crime" && <NypdDeepDive />}
+      {slug === "reflexai" && <ReflexaiDeepDive />}
+      {slug === "meta-tradepulse" && <MetaTradepulseDeepDive />}
 
       {project.gallery && project.gallery.length > 0 && (
         <section aria-label="Project images" className="shell mt-16 space-y-10">
