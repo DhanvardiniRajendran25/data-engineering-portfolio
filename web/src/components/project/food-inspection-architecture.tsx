@@ -1,9 +1,9 @@
 /**
  * Food Inspection architecture.
  *
- * The drawing is organised around the actual difficulty: two cities publish the
- * same domain in incompatible shapes, so the pipeline runs as two lanes that
- * converge at exactly one point. A single left-to-right flow would hide that,
+ * The drawing is organised around the actual difficulty: three cities publish
+ * the same domain in three incompatible shapes, so the pipeline runs as three
+ * lanes that converge at exactly one point. A single left-to-right flow would hide that,
  * which is the only interesting thing about this pipeline.
  *
  * Columns are layers. Rows are cities. The profiling column sits between bronze
@@ -20,11 +20,12 @@ const COL = {
 };
 
 const LANE_H = 150;
-const LANE_Y = { chi: 120, dal: 320 };
-const MID_Y = 295;
+const LANE_Y = { chi: 120, dal: 300, nyc: 480 };
+// Vertical centre of the three lanes, which is where the union sits.
+const MID_Y = 375;
 
 type Lane = {
-  key: "chi" | "dal";
+  key: "chi" | "dal" | "nyc";
   city: string;
   agency: string;
   shape: string;
@@ -41,14 +42,14 @@ const LANES: Lane[] = [
     shape: "LONG",
     quirks: [
       "Violations in one pipe-separated string",
-      "Risk categories 1 to 3",
-      "Geographic fields incomplete",
+      "Grades the establishment, not the violation",
+      "ZIP codes arrive as floats",
     ],
     transform: "PARSE",
     steps: [
       "Regex split on the pipe delimiter",
       "Code, description, comment separated",
-      "Risk 1 to 3 mapped to standard levels",
+      "Establishment Risk 1 to 3 captured",
       "Result: one row per violation",
     ],
   },
@@ -70,6 +71,24 @@ const LANES: Lane[] = [
       "Result: one row per violation",
     ],
   },
+  {
+    key: "nyc",
+    city: "NEW YORK",
+    agency: "Dept of Health and Mental Hygiene",
+    shape: "NARROW",
+    quirks: [
+      "Already one row per violation",
+      "0,0 published for ungeocoded records",
+      "Letter grade only on some inspections",
+    ],
+    transform: "PASS THROUGH",
+    steps: [
+      "No reshaping required at all",
+      "Null-island coordinates rejected",
+      "Critical flag carried as published",
+      "Result: one row per violation",
+    ],
+  },
 ];
 
 /**
@@ -87,7 +106,7 @@ const PROFILE_FINDINGS = [
 
 const DIMS = ["dim_establishment", "dim_location", "dim_violation", "dim_date"];
 
-const STAR_Y = 566;
+const STAR_Y = 726;
 const FACT_Y = STAR_Y + 96;
 
 export function FoodInspectionArchitecture() {
@@ -100,7 +119,7 @@ export function FoodInspectionArchitecture() {
         className="overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
       >
         <svg
-          viewBox="0 0 1580 880"
+          viewBox="0 0 1580 1040"
           role="img"
           aria-labelledby="food-arch-title food-arch-desc"
           className="h-auto w-full min-w-[1400px]"
@@ -139,7 +158,7 @@ export function FoodInspectionArchitecture() {
             x="14"
             y="52"
             width="1552"
-            height="418"
+            height="598"
             rx="10"
             className="fill-ink/[0.02] stroke-accent"
             strokeWidth="1.4"
@@ -564,7 +583,7 @@ export function FoodInspectionArchitecture() {
           {/* ---- UNIFY, the single convergence point ---- */}
           <rect
             x={COL.unify.x}
-            y="180"
+            y="260"
             width={COL.unify.w}
             height="230"
             rx="8"
@@ -573,7 +592,7 @@ export function FoodInspectionArchitecture() {
           />
           <rect
             x={COL.unify.x}
-            y="180"
+            y="260"
             width={COL.unify.w}
             height="26"
             rx="8"
@@ -581,14 +600,14 @@ export function FoodInspectionArchitecture() {
           />
           <rect
             x={COL.unify.x}
-            y="194"
+            y="274"
             width={COL.unify.w}
             height="12"
             className="fill-accent"
           />
           <text
             x={COL.unify.x + COL.unify.w / 2}
-            y="198"
+            y="278"
             textAnchor="middle"
             className="fill-bg font-mono"
             fontSize="9.5"
@@ -599,7 +618,7 @@ export function FoodInspectionArchitecture() {
           </text>
           <text
             x={COL.unify.x + COL.unify.w / 2}
-            y="228"
+            y="308"
             textAnchor="middle"
             className="fill-accent font-mono"
             fontSize="8"
@@ -610,15 +629,15 @@ export function FoodInspectionArchitecture() {
           </text>
           <line
             x1={COL.unify.x + 14}
-            y1="240"
+            y1="320"
             x2={COL.unify.x + COL.unify.w - 14}
-            y2="240"
+            y2="320"
             className="stroke-accent"
             strokeWidth="1"
           />
           <text
             x={COL.unify.x + 14}
-            y="262"
+            y="342"
             className="fill-ink font-mono"
             fontSize="8.5"
             fontWeight="700"
@@ -626,7 +645,7 @@ export function FoodInspectionArchitecture() {
             GRAIN: one violation
           </text>
           {[
-            "Both lanes already share it",
+            "All three lanes reach it",
             "Risk levels standardised",
             "Results standardised",
             "source column stamped",
@@ -634,7 +653,7 @@ export function FoodInspectionArchitecture() {
             <text
               key={t}
               x={COL.unify.x + 14}
-              y={280 + j * 15}
+              y={360 + j * 15}
               className="fill-ink-soft"
               fontSize="8.5"
             >
@@ -643,7 +662,7 @@ export function FoodInspectionArchitecture() {
           ))}
           <text
             x={COL.unify.x + 14}
-            y="356"
+            y="436"
             className="fill-ink-faint"
             fontSize="7.5"
           >
@@ -651,7 +670,7 @@ export function FoodInspectionArchitecture() {
           </text>
           <text
             x={COL.unify.x + 14}
-            y="368"
+            y="448"
             className="fill-ink-faint"
             fontSize="7.5"
           >
@@ -659,7 +678,7 @@ export function FoodInspectionArchitecture() {
           </text>
           <text
             x={COL.unify.x + 14}
-            y="380"
+            y="460"
             className="fill-ink-faint"
             fontSize="7.5"
           >
@@ -667,7 +686,7 @@ export function FoodInspectionArchitecture() {
           </text>
           <text
             x={COL.unify.x + COL.unify.w / 2}
-            y="400"
+            y="480"
             textAnchor="middle"
             className="fill-ink-faint font-mono"
             fontSize="7.5"
@@ -678,7 +697,7 @@ export function FoodInspectionArchitecture() {
           {/* ---- GOLD ---- */}
           <rect
             x={COL.gold.x}
-            y="140"
+            y="220"
             width={COL.gold.w}
             height="310"
             rx="8"
@@ -687,7 +706,7 @@ export function FoodInspectionArchitecture() {
           />
           <rect
             x={COL.gold.x}
-            y="140"
+            y="220"
             width={COL.gold.w}
             height="26"
             rx="8"
@@ -695,14 +714,14 @@ export function FoodInspectionArchitecture() {
           />
           <rect
             x={COL.gold.x}
-            y="154"
+            y="234"
             width={COL.gold.w}
             height="12"
             className="fill-accent"
           />
           <text
             x={COL.gold.x + COL.gold.w / 2}
-            y="158"
+            y="238"
             textAnchor="middle"
             className="fill-bg font-mono"
             fontSize="9.5"
@@ -713,7 +732,7 @@ export function FoodInspectionArchitecture() {
           </text>
           <text
             x={COL.gold.x + 14}
-            y="186"
+            y="266"
             className="fill-ink font-mono"
             fontSize="8.5"
             fontWeight="700"
@@ -724,7 +743,7 @@ export function FoodInspectionArchitecture() {
             <text
               key={e}
               x={COL.gold.x + 14}
-              y={204 + j * 15}
+              y={284 + j * 15}
               className={j === 0 ? "fill-accent font-mono" : "fill-ink-soft font-mono"}
               fontSize="8.5"
             >
@@ -733,22 +752,22 @@ export function FoodInspectionArchitecture() {
           ))}
           <line
             x1={COL.gold.x + 14}
-            y1="288"
+            y1="368"
             x2={COL.gold.x + COL.gold.w - 14}
-            y2="288"
+            y2="368"
             className="stroke-line"
             strokeWidth="1"
           />
           <text
             x={COL.gold.x + 14}
-            y="306"
+            y="386"
             className="fill-accent font-mono"
             fontSize="8"
             fontWeight="700"
           >
             TRADEOFF
           </text>
-          <text x={COL.gold.x + 14} y="320" className="fill-ink" fontSize="8.5">
+          <text x={COL.gold.x + 14} y="400" className="fill-ink" fontSize="8.5">
             Dynamic Tables, not MERGE
           </text>
           {[
@@ -761,7 +780,7 @@ export function FoodInspectionArchitecture() {
             <text
               key={t}
               x={COL.gold.x + 14}
-              y={336 + j * 13}
+              y={416 + j * 13}
               className="fill-ink-soft"
               fontSize="7.5"
             >
@@ -770,7 +789,7 @@ export function FoodInspectionArchitecture() {
           ))}
           <text
             x={COL.gold.x + COL.gold.w / 2}
-            y="436"
+            y="516"
             textAnchor="middle"
             className="fill-ink-faint font-mono"
             fontSize="7.5"
@@ -1033,17 +1052,18 @@ export function FoodInspectionArchitecture() {
             investigation.
           </text>
 
-          <text x="30" y="852" className="fill-ink-soft" fontSize="8.5">
-            Two lanes exist because wide-to-long and free-text parsing share no
-            logic. A single generic pipeline would branch on city at every step,
-            so the branch is made explicit and pushed to the top. The cost is
-            real: a third city means writing a third transformation, not adding a
-            config entry.
+          <text x="30" y="1006" className="fill-ink-soft" fontSize="8.5">
+            Three lanes exist because unpivoting, free-text parsing and passing through share no logic. A single
+            generic pipeline would branch on city at every step, so the branch is made explicit and pushed to the top.
+          </text>
+          <text x="30" y="1022" className="fill-ink-soft" fontSize="8.5">
+            The cost is real and worth stating: a fourth city means writing a fourth transformation, not adding a config
+            entry. New York was cheap only because its feed happens to arrive at the target grain already.
           </text>
         </svg>
       </div>
       <figcaption className="border-t border-line px-4 py-2 font-mono text-[10px] tracking-[0.1em] text-ink-faint uppercase">
-        Two lanes, one convergence point. The shape mismatch is the project, so it is drawn rather than described.
+        Three lanes, one convergence point. The shape mismatch is the project, so it is drawn rather than described.
       </figcaption>
     </figure>
   );

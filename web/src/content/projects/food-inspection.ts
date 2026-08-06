@@ -1,40 +1,80 @@
 /**
  * Food Inspection Analytics deep-dive content.
  *
- * SOURCE: transcribed from the project README, including the two cities'
- * differing shapes, the profiling findings that drove selective transformation,
- * and the audit columns stamped on every record.
+ * The original academic build unified two cities, Chicago and Dallas, on Azure
+ * Data Factory, Databricks and Snowflake. That stack cannot be left running for
+ * a portfolio, so it was rebuilt on free infrastructure and a third city was
+ * added: New York, whose feed is already one row per violation and therefore
+ * needs no reshaping at all.
+ *
+ * Three shapes make the argument better than two did. A long feed, a wide feed
+ * and a narrow feed is the full range of ways a source can publish the same
+ * facts, and it is why the pipeline is three lanes rather than one generic path
+ * with a city flag.
+ *
+ * Figures here describe the design. Anything countable is measured live by the
+ * dashboard on the page instead of being asserted in this file.
  */
 
 export type Stat = { value: string; label: string };
 
 export const SCALE: Stat[] = [
-  { value: "2", label: "Cities unified" },
+  { value: "3", label: "Cities unified" },
+  { value: "3", label: "Source shapes" },
   { value: "3", label: "Medallion layers" },
   { value: "25", label: "Dallas violation blocks" },
   { value: "5", label: "Gold entities" },
-  { value: "Dynamic", label: "Snowflake tables" },
-  { value: "2025", label: "Delivered" },
+  { value: "2x", label: "Daily refresh" },
 ];
 
 /**
- * The whole problem in one table. Same domain, incompatible shapes, which is
- * why one generic pipeline could not have worked.
+ * The whole problem in one table. Same domain, three incompatible shapes, which
+ * is why one generic pipeline could not have worked.
+ *
+ * The severity row matters more than it looks. No two of these cities measure
+ * danger the same way or even at the same level, so there is no honest way to
+ * put them on a shared severity scale. The dashboard shows them side by side
+ * and says so rather than normalising them into a single invented number.
  */
 export const CITIES = [
   {
     city: "Chicago",
     source: "Chicago Department of Public Health",
     shape: "Long",
-    violations: "Pipe-separated free-text strings",
-    quirks: ["Risk categories 1 to 3", "Violations need regex parsing", "Missing geographic fields"],
+    transform: "Parse",
+    violations: "Every violation packed into one pipe-delimited string",
+    severity: "Rates the establishment Risk 1 to 3",
+    quirks: [
+      "Violations need regex parsing out of free text",
+      "No per-violation severity at all",
+      "ZIP codes arrive as floats",
+    ],
   },
   {
     city: "Dallas",
     source: "Dallas Code Compliance Services",
     shape: "Wide",
-    violations: "Up to 25 violation blocks per inspection",
-    quirks: ["Coordinates embedded in text", "Blocks past 5 over 99% null", "Address split across columns"],
+    transform: "Unpivot",
+    violations: "Up to 25 numbered blocks spread across 63 columns",
+    severity: "Assigns numeric point deductions",
+    quirks: [
+      "Coordinates nested inside a lat_long object",
+      "Blocks thin out but do not stop until 17",
+      "Frozen since February 2024",
+    ],
+  },
+  {
+    city: "New York",
+    source: "NYC Department of Health and Mental Hygiene",
+    shape: "Narrow",
+    transform: "Pass through",
+    violations: "Already one row per violation",
+    severity: "Flags each violation critical or not",
+    quirks: [
+      "Publishes 0,0 for records it has not geocoded",
+      "Letter grade present only on some inspections",
+      "Needs no reshaping, which is its own lesson",
+    ],
   },
 ];
 
@@ -88,7 +128,7 @@ export const STAGES: Stage[] = [
     title: "Ingest",
     tool: "Azure Data Factory",
     facts: [
-      "Both cities landed unchanged",
+      "All three cities landed unchanged",
       "Azure Data Lake Gen2 as the raw store",
       "Pipeline control and scheduling in ADF",
     ],
@@ -135,22 +175,23 @@ export const STAGES: Stage[] = [
     facts: [
       "Dallas: wide to long, blocks unpivoted",
       "Chicago: pipe-separated strings regex-parsed",
+      "New York: already at grain, passed through",
       "Coordinates extracted from text via regex",
       "Modular notebooks, run in a fixed order",
     ],
     decision: {
       chose: "One pipeline per city, then union",
-      over: ["A single generic pipeline handling both"],
+      over: ["A single generic pipeline handling all three"],
       because: [
-        "Wide-to-long and text-parsing share no logic",
+        "Unpivoting, text-parsing and passing through share no logic",
         "A generic path would branch on city at every step anyway",
         "City-specific code is readable; a branching monolith is not",
       ],
-      cost: "Adding a third city means writing a third transformation, not a config entry.",
+      cost: "A fourth city means writing a fourth transformation, not adding a config entry. New York cost exactly that, and the honest note is that it was cheap because its feed happened to need no reshaping."
     },
     output: [
       { value: "Silver", label: "layer" },
-      { value: "2", label: "city pipelines" },
+      { value: "3", label: "city pipelines" },
     ],
   },
   {
@@ -159,7 +200,7 @@ export const STAGES: Stage[] = [
     title: "Unify",
     tool: "PySpark · staging table",
     facts: [
-      "Both cities land in one unified staging table",
+      "All three cities land in one unified staging table",
       "Violation grain reconciled across shapes",
       "Risk levels and results standardised",
     ],
@@ -169,7 +210,7 @@ export const STAGES: Stage[] = [
       because: [
         "Dallas carries many violations per inspection, Chicago packs them into one string",
         "Inspection grain would need an array column and block violation-level analysis",
-        "Violation grain makes the two cities genuinely comparable",
+        "Violation grain is the only one all three can reach",
       ],
       cost: "Inspection-level counts now require a distinct, which is easy to forget.",
     },

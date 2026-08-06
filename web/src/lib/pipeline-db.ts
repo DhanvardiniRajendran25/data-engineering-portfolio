@@ -58,6 +58,7 @@ export type PipelineSnapshot = {
   hotspots: { zip: string; city: string; violations: number; establishments: number }[];
   outcomes: { result: string; count: number }[];
   severity: { city: string; critical: number; notCritical: number; unknown: number }[];
+  risk: { city: string; risk: string; inspections: number }[];
   stages: { city: string; stage: string; rows: number }[];
   profile: {
     city: string;
@@ -127,6 +128,7 @@ export async function readSnapshot(): Promise<
     const [
       runRows, totalRows, cityRows, dailyRows, monthlyRows,
       monthlyCityRows, weekdayRows, zipScatterRows, geoRows, cityRowsRows, storageRows,
+      riskRows,
       topViolationRows, hotspotRows, outcomeRows, severityRows,
       profileRows, rejectRows, stageRows, historyRows,
     ] = await Promise.all([
@@ -217,6 +219,18 @@ export async function readSnapshot(): Promise<
       // The free tier is the constraint that shaped the whole design, so it is
       // on the dashboard rather than in a footnote.
       sql`select pg_database_size(current_database()) as bytes`,
+
+      // Each city's own severity measure, at the level it actually publishes.
+      // Chicago grades the establishment Risk 1 to 3 and never grades a
+      // violation, which is why its per-violation critical share is empty: the
+      // signal exists, just not at that grain.
+      sql`select e.city, e.risk,
+                 count(distinct (f.city || f.inspection_id)) as inspections
+            from fact_inspection_violations f
+            join dim_establishment e on e.establishment_key = f.establishment_key
+           where e.risk is not null and e.risk <> ''
+           group by e.city, e.risk
+           order by e.city, count(distinct (f.city || f.inspection_id)) desc`,
 
       // Violation frequency and severity, the workbook's third view.
       sql`select v.description, v.city, count(*) as count
@@ -357,6 +371,11 @@ export async function readSnapshot(): Promise<
       outcomes: outcomeRows.map((r) => ({
         result: String(r.result),
         count: num(r.count),
+      })),
+      risk: riskRows.map((r) => ({
+        city: String(r.city),
+        risk: String(r.risk),
+        inspections: num(r.inspections),
       })),
       severity: severityRows.map((r) => ({
         city: String(r.city),

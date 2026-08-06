@@ -139,14 +139,14 @@ export const PROJECTS: ProjectMeta[] = [
   {
     slug: "food-inspection",
     image: "/projects/food-inspection.webp",
-    metric: { value: "2", label: "cities unified" },
+    metric: { value: "Live", label: "refreshed twice daily" },
     title: "Multi-City Food Inspection Platform",
     year: 2025,
     context: "Northeastern",
     oneLiner:
-      "Medallion pipeline reconciling two incompatible city schemas, Chicago long-form and Dallas wide-form, into one violation-grain star schema on Databricks PySpark, Snowflake Dynamic Tables, and Tableau.",
+      "Medallion pipeline reconciling three incompatible city schemas, long, wide and narrow, into one violation-grain star schema. Rebuilt on free infrastructure and genuinely running: a scheduled job refreshes it twice a day and the page reads that database live.",
     roles: ["data"],
-    stack: ["Databricks", "PySpark", "Snowflake", "Tableau"],
+    stack: ["PySpark", "Snowflake", "Postgres", "GitHub Actions"],
     repo: "https://github.com/DhanvardiniRajendran25/Public_Health_Compliance_Food_Inspection_Analytics_Platform",
     hasWriteUp: true,
   },

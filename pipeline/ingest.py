@@ -267,6 +267,10 @@ def transform_chicago(row: dict[str, Any]) -> tuple[list[Violation], str | None]
             "name": row.get("dba_name") or row.get("aka_name"),
             "facility_type": row.get("facility_type"),
             "cuisine": None,
+            # Chicago's only severity signal. It grades the establishment, not
+            # the violation, which is why its per-violation critical flag is
+            # null everywhere and the severity chart had nothing to draw for it.
+            "risk": (row.get("risk") or None),
         },
         "location": {
             "zip": clean_zip(row.get("zip")),
@@ -341,6 +345,7 @@ def transform_dallas(row: dict[str, Any]) -> tuple[list[Violation], str | None]:
             "name": str(program_id),
             "facility_type": row.get("type"),
             "cuisine": None,
+            "risk": None,
         },
         "location": {
             "zip": clean_zip(row.get("zip")),
@@ -412,6 +417,8 @@ def transform_nyc(row: dict[str, Any]) -> tuple[list[Violation], str | None]:
                 "name": row.get("dba"),
                 "facility_type": row.get("inspection_type"),
                 "cuisine": row.get("cuisine_description"),
+                # NYC's letter grade, where the inspection produced one.
+                "risk": (row.get("grade") or None),
             },
             "location": {
                 "zip": clean_zip(row.get("zipcode")),
@@ -543,14 +550,24 @@ def load_violations(cur, violations: list[Violation], job_id: str,
     ensure_dates(cur, (v["inspection_date"] for v in violations))
 
     payload = []
+    # Collected for one bulk update below rather than folded into the upsert.
+    # upsert_dimension uses ON CONFLICT DO NOTHING on purpose, so it never
+    # writes to an establishment that already exists, which means a column
+    # added after those rows were created would stay null forever.
+    risks: dict[str, str] = {}
+
     for v in violations:
         est = v["establishment"]
         loc = v["location"]
+        natural_key = f"{v['city']}|{est['source_id']}"
+        if est.get("risk"):
+            risks[natural_key] = est["risk"]
         est_key = upsert_dimension(
             cur, "dim_establishment", "establishment_key",
-            f"{v['city']}|{est['source_id']}",
+            natural_key,
             {"city": v["city"], "source_id": est["source_id"], "name": est["name"],
-             "facility_type": est["facility_type"], "cuisine": est["cuisine"]},
+             "facility_type": est["facility_type"], "cuisine": est["cuisine"],
+             "risk": est.get("risk")},
             caches["establishment"],
         )
         loc_key = upsert_dimension(
@@ -597,6 +614,21 @@ def load_violations(cur, violations: list[Violation], job_id: str,
         """,
         payload,
     )
+
+    # One statement, and only where the value is actually missing or has moved.
+    # Doing this per row through ON CONFLICT DO UPDATE would take a row-level
+    # write lock on every establishment the batch touches, which is what
+    # deadlocked two overlapping runs before.
+    if risks:
+        cur.executemany(
+            """
+            update dim_establishment set risk = %s
+             where natural_key = %s
+               and (risk is null or risk <> %s)
+            """,
+            [(risk, key, risk) for key, risk in risks.items()],
+        )
+
     return len(payload)
 
 

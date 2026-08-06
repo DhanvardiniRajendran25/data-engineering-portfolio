@@ -95,8 +95,17 @@ create table if not exists dim_establishment (
   source_id         text not null,
   name              text,
   facility_type     text,
-  cuisine           text
+  cuisine           text,
+  -- Each city grades danger at a different level and on a different scale:
+  -- Chicago rates the establishment Risk 1 to 3, NYC flags individual
+  -- violations critical, Dallas assigns numeric point deductions. This holds
+  -- whatever the source publishes about the establishment itself, which for
+  -- Chicago is the only severity signal it gives at all.
+  risk              text
 );
+
+-- Added after the table shipped, so existing databases need it too.
+alter table dim_establishment add column if not exists risk text;
 
 create table if not exists dim_location (
   location_key bigserial primary key,
