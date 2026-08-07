@@ -2,48 +2,62 @@
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import {
-  ClockIcon,
-  CloudIcon,
   DatabaseIcon,
   GraduationCapIcon,
   LayersIcon,
-  ToolIcon,
+  NetworkIcon,
+  QuoteIcon,
+  ShieldIcon,
 } from "./icons";
 
+/**
+ * Outcomes only. Every figure here is something that happened to a system or to
+ * the people using it, not an inventory of what is on the CV.
+ *
+ * "10+ engineering tools mastered" and "3+ cloud platforms" were the two that
+ * had to go. Both are self-assessed breadth, which is unfalsifiable and which
+ * every candidate claims; the skills section already lists the tooling, and a
+ * reader who cares can check it there. "3+ years of experience" went for the
+ * same reason: it is a fact about a calendar, not about work.
+ *
+ * The reliability figure is stated as the reduction rather than as "40% to
+ * 10%", because a tile has room for one number and 75% fewer failures is the
+ * thing that actually improved.
+ */
 const STATS = [
   {
-    value: "8+",
-    label: "Pipelines & systems shipped",
-    tag: "DELIVERY",
-    Icon: LayersIcon,
-  },
-  {
-    value: "5B+",
-    label: "Records processed",
+    value: "4B+",
+    label: "Claims records processed",
     tag: "SCALE",
     Icon: DatabaseIcon,
   },
   {
-    value: "3+",
-    label: "Cloud platforms",
-    tag: "INFRA",
-    Icon: CloudIcon,
+    value: "75%",
+    label: "Fewer pipeline failures",
+    tag: "RELIABILITY",
+    Icon: ShieldIcon,
+  },
+  {
+    value: "5M+",
+    label: "Health plan members served",
+    tag: "REACH",
+    Icon: NetworkIcon,
   },
   {
     value: "10+",
-    label: "Engineering tools mastered",
-    tag: "TOOLING",
-    Icon: ToolIcon,
+    label: "Production ETL pipelines",
+    tag: "DELIVERY",
+    Icon: LayersIcon,
   },
   {
-    value: "3+",
-    label: "Years of engineering experience",
-    tag: "TENURE",
-    Icon: ClockIcon,
+    value: "2",
+    label: "Peer-reviewed papers",
+    tag: "RESEARCH",
+    Icon: QuoteIcon,
   },
   {
     value: "70+",
-    label: "Students taught",
+    label: "Engineers onboarded",
     tag: "MENTORSHIP",
     Icon: GraduationCapIcon,
   },
