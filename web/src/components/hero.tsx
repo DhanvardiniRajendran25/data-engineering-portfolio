@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { EmailIcon, GithubIcon, LinkedinIcon, PhoneIcon } from "./icons";
 import { RoleRotator } from "./role-rotator";
+import { SITE } from "@/content/site";
 
 const SOCIAL_LINKS = [
   {
@@ -78,8 +79,8 @@ export function Hero() {
 
         <motion.div variants={item} className="mt-10 flex flex-wrap items-center gap-4">
           <a
-            href="/resume.pdf"
-            download="Dhanvardini_Rajendran_Resume.pdf"
+            href={SITE.resume}
+            download={SITE.resumeFilename}
             className="rounded-full border border-ink px-6 py-3 text-xs font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg"
           >
             Download Resume

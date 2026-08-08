@@ -106,6 +106,20 @@ const nextConfig: NextConfig = {
   // Strips the header that advertises the framework and version.
   poweredByHeader: false,
 
+  async redirects() {
+    return [
+      {
+        // The resume is served under its real filename now. Anyone who saved or
+        // shared the old path, including the copy that went out on earlier
+        // versions of the PDF itself, still lands on the current document
+        // instead of a 404.
+        source: "/resume.pdf",
+        destination: "/Dhanvardini_Rajendran.pdf",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
