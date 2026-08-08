@@ -1,4 +1,5 @@
 import { DownloadIcon, EmailIcon, GithubIcon, LinkedinIcon } from "./icons";
+import { SITE } from "@/content/site";
 
 const FOOTER_LINKS = [
   {
@@ -20,11 +21,11 @@ const FOOTER_LINKS = [
     external: false,
   },
   {
-    href: "/resume.pdf",
+    href: SITE.resume,
     label: "Resume",
     Icon: DownloadIcon,
     external: false,
-    download: "Dhanvardini_Rajendran_Resume.pdf",
+    download: SITE.resumeFilename,
   },
 ];
 

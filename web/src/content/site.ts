@@ -58,6 +58,14 @@ export const SITE = {
   phoneDisplay: "+1 617 935 3175",
   linkedin: "https://www.linkedin.com/in/dhanvardini/",
   github: "https://github.com/DhanvardiniRajendran25",
-  resume: "/resume.pdf",
-  resumeFilename: "Dhanvardini_Rajendran_Resume.pdf",
+  // Served under its real name rather than /resume.pdf. A recruiter's Downloads
+  // folder ends up with one more anonymous resume.pdf otherwise, and the
+  // `download` attribute only renames it for people who use the button, not
+  // for anyone who saves it from the browser's PDF viewer.
+  //
+  // Keep this in step with the file in public/. Everything that links to the
+  // resume reads it from here, so a rename is a one-line change; next.config.ts
+  // redirects the old /resume.pdf path so existing links survive.
+  resume: "/Dhanvardini_Rajendran.pdf",
+  resumeFilename: "Dhanvardini_Rajendran.pdf",
 } as const;
