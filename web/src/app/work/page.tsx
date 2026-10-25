@@ -4,7 +4,7 @@ import { ProjectIndex } from "@/components/project-index";
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Data engineering, backend, and AI projects by Dhanvardini Rajendran.",
+    "Backend, full-stack, and AI projects by Dhanvardini Rajendran.",
 };
 
 type Search = { role?: string };

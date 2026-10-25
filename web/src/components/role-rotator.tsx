@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 const ROLES = [
-  "Software Engineer",
-  "Data Engineer",
+  "Full-Stack Software Engineer",
+  "Backend Engineer",
+  "Java / Spring Boot Engineer",
   "AI Engineer",
-  "Forward Deployed Engineer",
-  "Analytics Engineer",
+  "Software Engineer",
 ];
 
 // Deliberately slow: this is ambient, not attention-grabbing.

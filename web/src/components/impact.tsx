@@ -26,40 +26,40 @@ import {
  */
 const STATS = [
   {
-    value: "4B+",
-    label: "Claims records processed",
-    tag: "SCALE",
-    Icon: DatabaseIcon,
-  },
-  {
-    value: "75%",
-    label: "Fewer pipeline failures",
-    tag: "RELIABILITY",
-    Icon: ShieldIcon,
-  },
-  {
-    value: "5M+",
-    label: "Health plan members served",
-    tag: "REACH",
-    Icon: NetworkIcon,
-  },
-  {
-    value: "10+",
-    label: "Production ETL pipelines",
+    value: "25+",
+    label: "Production features owned",
     tag: "DELIVERY",
     Icon: LayersIcon,
   },
   {
-    value: "2",
-    label: "Peer-reviewed papers",
-    tag: "RESEARCH",
-    Icon: QuoteIcon,
+    value: "90%+",
+    label: "Test coverage, TDD and XP",
+    tag: "QUALITY",
+    Icon: ShieldIcon,
+  },
+  {
+    value: "30%",
+    label: "Faster releases via CI/CD",
+    tag: "VELOCITY",
+    Icon: NetworkIcon,
+  },
+  {
+    value: "4B+",
+    label: "Records processed",
+    tag: "SCALE",
+    Icon: DatabaseIcon,
   },
   {
     value: "70+",
-    label: "Engineers onboarded",
+    label: "Engineers mentored",
     tag: "MENTORSHIP",
     Icon: GraduationCapIcon,
+  },
+  {
+    value: "4",
+    label: "Peer-reviewed papers",
+    tag: "RESEARCH",
+    Icon: QuoteIcon,
   },
 ];
 

@@ -29,23 +29,22 @@ export const metadata: Metadata = {
  */
 
 const LOOKING_FOR = [
+  "Full-Stack Software Engineer",
+  "Backend Engineer",
   "Software Engineer",
-  "Data Engineer",
   "AI Engineer",
-  "Forward Deployed Engineer",
-  "Analytics Engineer",
 ];
 
 const GOOD_FIT = [
-  "Data infrastructure is treated as a product, not an afterthought",
-  "Engineers own their pipelines end to end, including the on-call",
-  "Correctness and observability matter as much as shipping speed",
+  "Engineers own features end to end, from the API to the UI, including the on-call",
+  "Clean service boundaries and code quality are treated as features, not afterthoughts",
+  "Correctness, testing, and observability matter as much as shipping speed",
   "There is appetite for AI in production, not just prototypes",
 ];
 
 const LESS_GOOD_FIT = [
-  "Dashboards are the deliverable and the pipeline is someone else's problem",
-  "Data quality is handled by patching downstream reports",
+  "Features are thrown over the wall and the running service is someone else's problem",
+  "Tests and code quality are optional when a deadline is close",
   "AI work stops at the demo",
 ];
 

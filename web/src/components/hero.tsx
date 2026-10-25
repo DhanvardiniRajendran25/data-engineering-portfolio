@@ -73,8 +73,8 @@ export function Hero() {
         </motion.h1>
 
         <motion.p variants={item} className="mt-6 max-w-measure text-base text-ink-soft sm:text-lg">
-          I engineer data pipelines, backend systems, and AI features that
-          ship to production.
+          I build full-stack products and backend systems in Java and Spring
+          Boot, with AI features that ship to production.
         </motion.p>
 
         <motion.div variants={item} className="mt-10 flex flex-wrap items-center gap-4">
