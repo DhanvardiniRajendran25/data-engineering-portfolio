@@ -25,8 +25,8 @@ import {
  */
 const STATS = [
   {
-    value: "25+",
-    label: "Production features owned",
+    value: "40+",
+    label: "Production features shipped",
     tag: "DELIVERY",
     Icon: LayersIcon,
   },
@@ -43,8 +43,8 @@ const STATS = [
     Icon: ClockIcon,
   },
   {
-    value: "9",
-    label: "AI agents orchestrated",
+    value: "6+",
+    label: "AI systems shipped, 17+ agents",
     tag: "AI SYSTEMS",
     Icon: RouteIcon,
   },
