@@ -73,7 +73,7 @@ export function Hero() {
         </motion.h1>
 
         <motion.p variants={item} className="mt-6 max-w-measure text-base text-ink-soft sm:text-lg">
-          I build full-stack products and backend systems in Java and Spring
+          I build full-stack products and backend services in Java and Spring
           Boot, with AI features that ship to production.
         </motion.p>
 

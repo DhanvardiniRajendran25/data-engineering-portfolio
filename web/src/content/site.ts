@@ -47,7 +47,7 @@ export const SITE = {
   url: resolveSiteUrl(),
   role: "Full-stack software engineer",
   description:
-    "Dhanvardini Rajendran builds full-stack products and backend systems in Java and Spring Boot, with AI features that ship to production.",
+    "Dhanvardini Rajendran builds full-stack products and backend services in Java and Spring Boot, with AI features that ship to production.",
   location: "Boston, MA",
   /** When I can start. Distinct from graduation, which is May 2026. */
   availableFrom: "August 2026",

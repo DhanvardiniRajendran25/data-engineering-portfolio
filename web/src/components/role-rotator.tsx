@@ -6,9 +6,10 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 const ROLES = [
   "Full-Stack Software Engineer",
   "Backend Engineer",
-  "Java / Spring Boot Engineer",
   "AI Engineer",
   "Software Engineer",
+  "Forward Deployed Engineer",
+  "Data Engineer",
 ];
 
 // Deliberately slow: this is ambient, not attention-grabbing.

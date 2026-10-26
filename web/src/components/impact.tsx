@@ -2,27 +2,26 @@
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import {
+  ClockIcon,
   DatabaseIcon,
   GraduationCapIcon,
   LayersIcon,
   NetworkIcon,
   QuoteIcon,
+  RouteIcon,
   ShieldIcon,
 } from "./icons";
 
 /**
- * Outcomes only. Every figure here is something that happened to a system or to
- * the people using it, not an inventory of what is on the CV.
+ * Outcomes only. Every figure here is something that happened to a system, to
+ * the people it served, or to the team, not an inventory of what is on the CV.
  *
- * "10+ engineering tools mastered" and "3+ cloud platforms" were the two that
- * had to go. Both are self-assessed breadth, which is unfalsifiable and which
- * every candidate claims; the skills section already lists the tooling, and a
- * reader who cares can check it there. "3+ years of experience" went for the
- * same reason: it is a fact about a calendar, not about work.
- *
- * The reliability figure is stated as the reduction rather than as "40% to
- * 10%", because a tile has room for one number and 75% fewer failures is the
- * thing that actually improved.
+ * Self-assessed breadth ("tools mastered", "cloud platforms", "years of
+ * experience") is deliberately excluded: it is unfalsifiable and every
+ * candidate claims it. The skills section lists the tooling for anyone who
+ * wants it. The eight tiles below span the three areas the work actually
+ * covers, full-stack and backend delivery, the AI systems, and the scale and
+ * people those systems reached.
  */
 const STATS = [
   {
@@ -41,6 +40,18 @@ const STATS = [
     value: "30%",
     label: "Faster releases via CI/CD",
     tag: "VELOCITY",
+    Icon: ClockIcon,
+  },
+  {
+    value: "9",
+    label: "AI agents orchestrated",
+    tag: "AI SYSTEMS",
+    Icon: RouteIcon,
+  },
+  {
+    value: "5M+",
+    label: "Members served by systems built",
+    tag: "IMPACT",
     Icon: NetworkIcon,
   },
   {
@@ -94,7 +105,7 @@ export function Impact() {
         whileInView={prefersReducedMotion ? undefined : "show"}
         viewport={{ once: true, margin: "-80px" }}
         variants={container}
-        className="shell grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-6"
+        className="shell grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4"
       >
         {STATS.map(({ value, label, tag, Icon }) => (
           <motion.div

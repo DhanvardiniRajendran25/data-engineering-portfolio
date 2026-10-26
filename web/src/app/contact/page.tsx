@@ -31,8 +31,10 @@ export const metadata: Metadata = {
 const LOOKING_FOR = [
   "Full-Stack Software Engineer",
   "Backend Engineer",
-  "Software Engineer",
   "AI Engineer",
+  "Software Engineer",
+  "Forward Deployed Engineer",
+  "Data Engineer",
 ];
 
 const GOOD_FIT = [

@@ -38,7 +38,7 @@ export default async function Image({
         <OgCard
           eyebrow="Dhanvardini Rajendran"
           title="Selected work"
-          body="Full-stack products, backend systems, and AI features that ship to production."
+          body="Full-stack products, backend services, and AI features that ship to production."
         />
       ),
       { ...size, fonts: await loadOgFonts() },
