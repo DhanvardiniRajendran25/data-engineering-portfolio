@@ -49,8 +49,8 @@ export const SITE = {
   description:
     "Dhanvardini Rajendran builds full-stack products and backend services in Java and Spring Boot, with AI features that ship to production.",
   location: "Boston, MA",
-  /** When I can start. Distinct from graduation, which is May 2026. */
-  availableFrom: "August 2026",
+  /** When I can start. */
+  availableFrom: "immediately",
   relocation: "Open to relocation anywhere in the US",
   responseTime: "I reply within hours, and always within a day.",
   email: "dhanvardini.rajendran@gmail.com",

@@ -23,41 +23,45 @@ export const PROFESSIONAL: Role[] = [
     period: "Jan 2026 to May 2026",
     location: "Boston, MA",
     points: [
-      "Supported a graduate course in Business Process Engineering spanning product management, supply chain strategy, and Agile, Lean, CI/CD, and DevOps delivery across 15 weeks of on-ground sessions.",
-      "Guided student teams through product management deliverables: product vision, roadmaps, feature prioritization (MoSCoW, RICE, Kano), user story creation, and backlog ranking in Scrum simulations.",
-      "Coached teams on supply chain and process-led analysis, mapping workflows, identifying inefficiencies, and evaluating IT logistics technologies (WMS, TMS, RFID, IoT, blockchain, AI).",
-      "Graded quizzes, team projects, and exams against rubrics with written feedback, helping students translate goals into KPIs such as North Star, retention, churn, and engagement.",
-      "Held office hours and collected attendance, resolving questions on Agile ceremonies, roadmaps, and metrics to keep the cohort on track.",
+      "Teaching assistant for a graduate Business Process Engineering course spanning product management, supply-chain strategy, and modern delivery across 15 weeks of live sessions.",
+      "Mentored student teams through **Agile**, **Scrum**, **Kanban**, **Lean**, **CI/CD**, and **DevOps** practice, reviewing sprint artifacts, workflows, and delivery decisions.",
+      "Guided product-management deliverables: product vision, roadmaps, prioritization with **RICE**, **MoSCoW**, and **Kano**, user stories, and backlog ranking in Scrum simulations.",
+      "Coached process-led analysis, mapping workflows and evaluating logistics technologies including **WMS**, **TMS**, **RFID**, and **IoT**, and translating goals into KPIs such as North Star, retention, and churn.",
+      "Graded quizzes, team projects, and exams against detailed rubrics with written feedback, pushing work from description to evidence-based analysis.",
+      "Ran office hours and course operations with the instructor and TA supervisors, keeping the cohort unblocked on ceremonies, roadmaps, and metrics.",
     ],
   },
   {
     org: "Optum, UnitedHealth Group",
     logo: "/logos/optum.webp",
-    title: "Software Engineer, Health Plan Platforms",
+    title: "Software Engineer",
     period: "Feb 2023 to Aug 2024",
     location: "Hyderabad, India",
     points: [
-      "Engineered Java and Spring Boot microservices using service discovery and API gateway patterns, owning 25+ production features end to end from API design and implementation through testing, release, and production verification.",
-      "Built full-stack features across FastAPI and Django REST APIs and React interfaces, turning business requirements into well-structured endpoints and responsive internal healthcare applications used by teams supporting 5M+ members.",
-      "Designed event-driven Kafka workflows with retries, dead letter topics, and idempotent consumers, keeping message processing reliable and duplicate free through failures and redeliveries.",
-      "Accelerated releases 30% by containerizing services with Docker, deploying on Kubernetes, and automating build, test, and deploy stages through Jenkins CI/CD.",
-      "Sustained 90%+ test coverage through TDD, pair programming, and Extreme Programming, and raised team code quality by reviewing pull requests for correctness, readability, and design.",
-      "Mentored 70+ new university hires in Java and Docker through the Technology Development Program, and earned three Bravo Awards for Performance, Quality, and Relationships.",
+      "Designed, built, and owned **Java** and **Spring Boot** microservices behind **service discovery** and an **API gateway**, taking 25+ production features from API contract through implementation, testing, release, and production verification on UnitedHealth Group health-plan platforms.",
+      "Delivered full-stack features end to end, pairing **FastAPI** and **Django** REST APIs with **React** interfaces that turned complex healthcare requirements into responsive internal applications used by teams serving 5M+ members.",
+      "Architected event-driven **Apache Kafka** workflows with retries, dead-letter topics, and idempotent consumers, keeping high-volume message processing reliable and duplicate-free through failures and redeliveries.",
+      "Containerized services with **Docker**, deployed to **Kubernetes**, and automated build, test, and deploy stages in **Jenkins** CI/CD, cutting release time by 30%.",
+      "Drove engineering quality through **TDD**, pair programming, and **Extreme Programming**, holding 90%+ coverage and reviewing pull requests for correctness, readability, and design.",
+      "Modeled data and tuned **SQL** across relational stores, closing recurring data gaps and performance bottlenecks in claim- and member-level datasets.",
+      "Verified releases on multi-team deployment calls, diagnosing and fixing live defects and coordinating changes across dependent services.",
+      "Mentored 70+ new university hires in **Java** and **Docker** through the Technology Development Program, and earned three Optum Bravo Awards for Performance, Quality, and Relationships.",
     ],
   },
   {
     org: "Optum, UnitedHealth Group",
     logo: "/logos/optum.webp",
-    title: "Associate Software Engineer, Health Plan Platforms",
+    title: "Associate Software Engineer",
     period: "Jul 2022 to Feb 2023",
     location: "Hyderabad, India",
     points: [
-      "Rebuilt 40+ features on the NextGen architecture in Java, redesigning legacy business logic into maintainable, modular code and validating each feature against legacy results for a seamless cutover.",
-      "Developed eligibility and Medicare Part D accumulator logic, implementing the business rules that determine member eligibility and track benefit accumulations across plan periods.",
-      "Cut incident detection time 40% by instrumenting services with Prometheus metrics and alerting and building Grafana dashboards for real time visibility into failures and performance.",
-      "Shipped features with 100% test coverage across unit, mutation, regression, and feature tests, and owned production deployments for the team through release verification and fixes.",
-      "Earned Bronze Subject Matter Expert recognition for NextGen Eligibility, HFB, and Part D Accumulators, becoming a go-to resource for domain logic and troubleshooting.",
-      "Promoted to Software Engineer in under a year for consistent delivery and ownership.",
+      "Re-engineered 40+ features onto the **NextGen** architecture in **Java**, converting legacy business logic into modular, maintainable services validated against legacy output for a zero-surprise cutover.",
+      "Implemented core eligibility and **Medicare Part D** accumulator logic, encoding the rules that determine member eligibility and track benefit accumulations across plan periods.",
+      "Instrumented services with **Prometheus** metrics and alerting and built **Grafana** dashboards, cutting incident-detection time by 40% with real-time visibility into failures and performance.",
+      "Shipped every feature with 100% coverage across unit, **mutation**, regression, and feature tests, owning deployments through release verification and hotfixes.",
+      "Hardened reliability with reconciliation, deduplication, and rerun-from-failed-step recovery across multi-step execution flows.",
+      "Tuned **SQL** and query paths on billion-row datasets, applying predicate pushdown and selective aggregation to cut runtime.",
+      "Earned Bronze **Subject Matter Expert** recognition across NextGen Eligibility, HFB, and Part D Accumulators, and was promoted to Software Engineer in under a year.",
     ],
   },
   {
@@ -67,11 +71,11 @@ export const PROFESSIONAL: Role[] = [
     period: "Dec 2021 to Jul 2022",
     location: "Tiruchirappalli, India",
     points: [
-      "Designed and trained NLP and ML models for two research systems, both published in Springer LNNS.",
-      "Built KnowSOntoWSR, a QoS ontology-driven web service recommender using XGBoost and Twitter-based semantic similarity, reaching 95.94% accuracy and 95.93% F-measure.",
-      "Developed QG-SKI, an NLP pipeline for question classification and MCQ generation using dynamic ontology construction over LOD Cloud and WikiData, TF-IDF, and semantic similarity measures (Shannon entropy, Jaccard, Normalized Google Distance), reaching 98.15% accuracy.",
-      "Engineered end-to-end ML workflows spanning data collection, feature engineering, model training, and evaluation, benchmarking each against baseline models.",
-      "Co-authored two peer-reviewed papers accepted at international conferences (ICIoTCT 2023, HIS 2023).",
+      "Designed and trained **NLP** and machine-learning models for two research systems, both published in **Springer** LNNS.",
+      "Built **KnowSOntoWSR**, a QoS-ontology-driven web-service recommender using an **XGBoost** classifier with semantic-similarity features, reaching 95.94% accuracy and 95.93% F-measure.",
+      "Developed **QG-SKI**, an NLP pipeline for question classification and MCQ generation, inducing dynamic ontologies over the **LOD Cloud** and **WikiData** with **TF-IDF** and semantic measures (Shannon entropy, Jaccard, Normalized Google Distance), reaching 98.15% accuracy.",
+      "Engineered end-to-end ML workflows across data collection, feature engineering, training, and evaluation, benchmarking every model against baselines.",
+      "Co-authored and presented two peer-reviewed papers at international conferences (ICIoTCT, HIS).",
     ],
   },
   {
@@ -81,11 +85,11 @@ export const PROFESSIONAL: Role[] = [
     period: "May 2020 to Jul 2022",
     location: "Thanjavur, India",
     points: [
-      "Built a blockchain-enabled smart grid energy trading system implementing a dynamic auction mechanism with cryptographic authentication for secure, transparent electricity trading.",
-      "Developed and tested Ethereum smart contracts using Solidity, Truffle, and Web3.js, integrating MetaMask for authenticated transactions.",
-      "Conducted literature review and experimentation in applied ML and semantic web, contributing to research later published in Springer LNNS.",
-      "Prepared datasets, ran experiments, and documented results to support peer-reviewed submissions and conference presentations.",
-      "Collaborated with faculty and graduate researchers, iterating on methodology and presenting findings across the research cycle.",
+      "Researched blockchain and Web3 systems, producing two **IEEE** publications on decentralized applications and smart contracts.",
+      "Built a decentralized smart-grid energy-trading platform with an authenticated dynamic-auction mechanism and a market-clearing-price algorithm for secure, transparent electricity trading.",
+      "Developed and deployed **Ethereum** smart contracts in **Solidity** with the **Truffle** framework, wiring them to a **React** front end via **Web3.js** with **MetaMask** for authenticated transactions, tested on **Ganache**.",
+      "Prototyped a decentralized e-commerce dApp on Ethereum that removed intermediary listing fees and centralized control.",
+      "Prepared datasets, ran experiments, and documented results with faculty and graduate researchers across the full research cycle.",
     ],
   },
   {
@@ -95,11 +99,11 @@ export const PROFESSIONAL: Role[] = [
     period: "Mar 2021 to Aug 2021",
     location: "Chennai, India",
     points: [
-      "Built full stack Java features end to end, developing Spring Boot services and the React front end screens that consumed them, alongside senior engineers across multiple sprint releases.",
-      "Designed and consumed REST APIs, wiring service and repository layers to relational databases with JPA and SQL.",
-      "Built responsive UI in React with JavaScript, HTML, and CSS, integrating components with backend endpoints.",
-      "Wrote unit and integration tests and resolved defects from QA and production tickets through root cause analysis.",
-      "Worked in an Agile team with code reviews and Git version control, following the team's engineering and delivery standards.",
+      "Built full-stack **Java** features end to end, developing **Spring Boot** services and the **React** screens that consumed them alongside senior engineers across multiple sprint releases.",
+      "Designed and consumed **REST APIs**, wiring service and repository layers to relational databases with **JPA** and **SQL**.",
+      "Built responsive UI in **React** with **JavaScript**, HTML, and CSS, integrating components with backend endpoints.",
+      "Wrote unit and integration tests and resolved QA and production defects through root-cause analysis.",
+      "Worked in an **Agile** team with code reviews and **Git**, following the team's engineering and delivery standards; recognized with Sparkling Stars and Learning Paladins awards.",
     ],
   },
 ];
@@ -132,12 +136,24 @@ export const LEADERSHIP: Role[] = [
       "Partnered with organizers and volunteers to manage attendee flow and last minute schedule changes during a high volume event week.",
     ],
   },
+  {
+    org: "Husky Systers Code, Northeastern",
+    logo: "/logos/husky-systers-code.jpg",
+    title: "Member",
+    period: "2024 to 2026",
+    location: "Boston, MA",
+    points: [
+      "Active member of Northeastern's women-in-tech community, joining technical workshops, talks, and peer mentorship throughout the year.",
+      "Collaborated with women engineers and students to support learning, representation, and community in computing.",
+      "Took part in coding sessions and events that build technical skills and a supportive network across the program.",
+    ],
+  },
 ];
 
 export const SKILL_GROUPS: { label: string; items: string[] }[] = [
   {
     label: "Languages and fundamentals",
-    items: ["Java", "Python", "TypeScript", "JavaScript", "Go", "SQL", "Scala", "Solidity", "DSA"],
+    items: ["Java", "Python", "TypeScript", "JavaScript", "Go", "SQL", "Scala", "DSA"],
   },
   {
     label: "Backend and APIs",
@@ -239,10 +255,6 @@ export const SKILL_GROUPS: { label: string; items: string[] }[] = [
     label: "Analytics and visualization",
     items: ["Power BI", "Tableau", "QuickSight", "Looker", "Streamlit", "KPI design"],
   },
-  {
-    label: "Blockchain and Web3",
-    items: ["Ethereum", "Truffle", "web3.js", "MetaMask", "Ganache", "Smart contracts"],
-  },
 ];
 
 export type Education = {
@@ -311,7 +323,7 @@ export const PUBLICATIONS: Publication[] = [
     venue: "International Conference on Internet of Things and Connected Technologies",
     publisher: "Springer",
     logo: "/logos/springer.webp",
-    year: "2023",
+    year: "July 23, 2023",
     url: "https://link.springer.com/chapter/10.1007/978-981-19-9719-8_19",
   },
   {
@@ -320,7 +332,7 @@ export const PUBLICATIONS: Publication[] = [
     venue: "International Conference on Hybrid Intelligent Systems",
     publisher: "Springer",
     logo: "/logos/springer.webp",
-    year: "2023",
+    year: "May 25, 2023",
     url: "https://link.springer.com/chapter/10.1007/978-3-031-27409-1_11",
   },
   {
@@ -328,7 +340,7 @@ export const PUBLICATIONS: Publication[] = [
     venue: "International Conference on Computer Communication and Informatics",
     publisher: "IEEE",
     logo: "/logos/ieee.webp",
-    year: "2023",
+    year: "January 23, 2023",
     url: "https://ieeexplore.ieee.org/abstract/document/10128536",
   },
   {
@@ -337,7 +349,7 @@ export const PUBLICATIONS: Publication[] = [
     venue: "International Conference on Computer Communication and Informatics",
     publisher: "IEEE",
     logo: "/logos/ieee.webp",
-    year: "2023",
+    year: "January 23, 2023",
     url: "https://ieeexplore.ieee.org/abstract/document/10128406",
   },
 ];

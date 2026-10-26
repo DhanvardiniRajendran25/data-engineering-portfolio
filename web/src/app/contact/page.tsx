@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { CopyButton } from "@/components/copy-button";
 import { LocalTime } from "@/components/local-time";
 import {
+  CheckIcon,
+  CloseIcon,
   CredlyIcon,
   DownloadIcon,
   EmailIcon,
@@ -63,7 +65,7 @@ export default function ContactPage() {
             <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-70 motion-safe:animate-ping" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
           </span>
-          Available from {SITE.availableFrom}
+          Available {SITE.availableFrom}
         </span>
         <span aria-hidden="true" className="opacity-30">
           /
@@ -185,10 +187,10 @@ export default function ContactPage() {
               What I am looking for
             </h2>
             <p className="mt-4 text-body-lg text-ink-soft">
-              I finish my MS at Northeastern in May 2026 and am available to
-              start from {SITE.availableFrom}. I am looking for a team where I
-              can own full-stack, backend, and AI systems end to end, in any of
-              these shapes:
+              I am wrapping up my MS at Northeastern and am available to start{" "}
+              {SITE.availableFrom}. I am looking for a team where I can own
+              full-stack, backend, and AI systems end to end, in any of these
+              shapes:
             </p>
             <ul className="mt-5 flex flex-wrap gap-2">
               {LOOKING_FOR.map((role) => (
@@ -204,33 +206,48 @@ export default function ContactPage() {
 
           {/* The distinguishing part: stating the negative case as plainly as
               the positive one. Most portfolios only claim fit. */}
-          <section className="mt-14 grid gap-8 sm:grid-cols-2">
-            <div>
-              <h2 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
-                We will get on if
-              </h2>
-              <ul className="mt-4 space-y-3">
+          <section className="mt-14 grid gap-5 sm:grid-cols-2">
+            {/* Good fit */}
+            <div className="rounded-brand border border-line bg-bg-elev p-6 sm:p-7">
+              <div className="flex items-center gap-2.5">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/10 text-accent">
+                  <CheckIcon className="h-4 w-4" />
+                </span>
+                <h2 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
+                  We will get on if
+                </h2>
+              </div>
+              <ul className="mt-5 space-y-3.5">
                 {GOOD_FIT.map((item) => (
                   <li
                     key={item}
-                    className="border-l-2 border-accent/40 pl-4 text-sm leading-relaxed text-ink-soft"
+                    className="flex gap-3 text-sm leading-relaxed text-ink-soft"
                   >
-                    {item}
+                    <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div>
-              <h2 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
-                Probably not a fit if
-              </h2>
-              <ul className="mt-4 space-y-3">
+
+            {/* Not a fit */}
+            <div className="rounded-brand border border-line bg-bg-elev/40 p-6 sm:p-7">
+              <div className="flex items-center gap-2.5">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink/[0.06] text-ink-faint">
+                  <CloseIcon className="h-4 w-4" />
+                </span>
+                <h2 className="font-mono text-[11px] tracking-[0.2em] text-ink-faint uppercase">
+                  Probably not a fit if
+                </h2>
+              </div>
+              <ul className="mt-5 space-y-3.5">
                 {LESS_GOOD_FIT.map((item) => (
                   <li
                     key={item}
-                    className="border-l-2 border-line pl-4 text-sm leading-relaxed text-ink-faint"
+                    className="flex gap-3 text-sm leading-relaxed text-ink-faint"
                   >
-                    {item}
+                    <CloseIcon className="mt-0.5 h-4 w-4 shrink-0 text-ink-faint/70" />
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>

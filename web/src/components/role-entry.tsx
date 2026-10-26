@@ -5,6 +5,22 @@ import { useState } from "react";
 import type { Role } from "@/content/about";
 
 /**
+ * Render **double-asterisk** spans as emphasis, used in bullets to make the
+ * tech stack scannable without bolding the surrounding prose or the numbers.
+ */
+function withEmphasis(text: string) {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i} className="font-medium text-ink">
+        {part.slice(2, -2)}
+      </strong>
+    ) : (
+      part
+    ),
+  );
+}
+
+/**
  * One role. Logo, title, org, and period are always visible; the detail
  * bullets expand on hover.
  *
@@ -58,7 +74,7 @@ export function RoleEntry({ role }: { role: Role }) {
                 key={point}
                 className="border-l border-line pl-4 text-sm leading-relaxed text-ink-soft"
               >
-                {point}
+                {withEmphasis(point)}
               </li>
             ))}
           </ul>
