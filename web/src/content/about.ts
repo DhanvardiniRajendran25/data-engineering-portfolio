@@ -52,7 +52,7 @@ export const PROFESSIONAL: Role[] = [
     org: "Optum, UnitedHealth Group",
     logo: "/logos/optum.webp",
     title: "Associate Software Engineer",
-    period: "Jul 2022 to Feb 2023",
+    period: "May 2022 to Feb 2023",
     location: "Hyderabad, India",
     points: [
       "Re-engineered 40+ features onto the **NextGen** architecture in **Java**, converting legacy business logic into modular, maintainable services validated against legacy output for a zero-surprise cutover.",
