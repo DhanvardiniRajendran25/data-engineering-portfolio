@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { CopyButton } from "@/components/copy-button";
 import { LocalTime } from "@/components/local-time";
 import {
+  CredlyIcon,
   DownloadIcon,
   EmailIcon,
   GithubIcon,
+  GoogleScholarIcon,
+  InstagramIcon,
   LinkedinIcon,
   PhoneIcon,
 } from "@/components/icons";
@@ -137,6 +140,33 @@ export default function ContactPage() {
             GitHub
           </a>
           <a
+            href={SITE.scholar}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2.5 text-sm transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <GoogleScholarIcon className="h-4 w-4" />
+            Scholar
+          </a>
+          <a
+            href={SITE.credly}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2.5 text-sm transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <CredlyIcon className="h-4 w-4" />
+            Credly
+          </a>
+          <a
+            href={SITE.instagram}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2.5 text-sm transition-colors hover:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <InstagramIcon className="h-4 w-4" />
+            Instagram
+          </a>
+          <a
             href={SITE.resume}
             download={SITE.resumeFilename}
             className="inline-flex items-center gap-2 rounded-full border border-ink px-5 py-2.5 font-mono text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:bg-ink hover:text-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
@@ -157,7 +187,8 @@ export default function ContactPage() {
             <p className="mt-4 text-body-lg text-ink-soft">
               I finish my MS at Northeastern in May 2026 and am available to
               start from {SITE.availableFrom}. I am looking for a team where I
-              can own data and AI systems end to end, in any of these shapes:
+              can own full-stack, backend, and AI systems end to end, in any of
+              these shapes:
             </p>
             <ul className="mt-5 flex flex-wrap gap-2">
               {LOOKING_FOR.map((role) => (

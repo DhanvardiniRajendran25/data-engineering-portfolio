@@ -58,6 +58,9 @@ export const SITE = {
   phoneDisplay: "+1 617 935 3175",
   linkedin: "https://www.linkedin.com/in/dhanvardini/",
   github: "https://github.com/DhanvardiniRajendran25",
+  scholar: "https://scholar.google.com/citations?user=rvlX5GQAAAAJ&hl=en",
+  instagram: "https://www.instagram.com/dhanvardini_rajendran",
+  credly: "https://www.credly.com/users/dhanvardini-rajendran.15fde269",
   // Served under its real name rather than /resume.pdf. A recruiter's Downloads
   // folder ends up with one more anonymous resume.pdf otherwise, and the
   // `download` attribute only renames it for people who use the button, not

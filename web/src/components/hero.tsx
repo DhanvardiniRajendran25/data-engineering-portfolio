@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { EmailIcon, GithubIcon, LinkedinIcon, PhoneIcon } from "./icons";
+import {
+  CredlyIcon,
+  EmailIcon,
+  GithubIcon,
+  GoogleScholarIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  PhoneIcon,
+} from "./icons";
 import { RoleRotator } from "./role-rotator";
 import { SITE } from "@/content/site";
 
@@ -17,6 +25,24 @@ const SOCIAL_LINKS = [
     href: "https://github.com/DhanvardiniRajendran25",
     label: "GitHub",
     Icon: GithubIcon,
+    external: true,
+  },
+  {
+    href: SITE.scholar,
+    label: "Google Scholar",
+    Icon: GoogleScholarIcon,
+    external: true,
+  },
+  {
+    href: SITE.credly,
+    label: "Credly",
+    Icon: CredlyIcon,
+    external: true,
+  },
+  {
+    href: SITE.instagram,
+    label: "Instagram",
+    Icon: InstagramIcon,
     external: true,
   },
   {

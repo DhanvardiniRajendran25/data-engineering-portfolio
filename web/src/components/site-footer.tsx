@@ -1,4 +1,12 @@
-import { DownloadIcon, EmailIcon, GithubIcon, LinkedinIcon } from "./icons";
+import {
+  CredlyIcon,
+  DownloadIcon,
+  EmailIcon,
+  GithubIcon,
+  GoogleScholarIcon,
+  InstagramIcon,
+  LinkedinIcon,
+} from "./icons";
 import { SITE } from "@/content/site";
 
 const FOOTER_LINKS = [
@@ -12,6 +20,24 @@ const FOOTER_LINKS = [
     href: "https://github.com/DhanvardiniRajendran25",
     label: "GitHub",
     Icon: GithubIcon,
+    external: true,
+  },
+  {
+    href: SITE.scholar,
+    label: "Google Scholar",
+    Icon: GoogleScholarIcon,
+    external: true,
+  },
+  {
+    href: SITE.credly,
+    label: "Credly",
+    Icon: CredlyIcon,
+    external: true,
+  },
+  {
+    href: SITE.instagram,
+    label: "Instagram",
+    Icon: InstagramIcon,
     external: true,
   },
   {
