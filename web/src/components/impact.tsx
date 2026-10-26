@@ -44,7 +44,7 @@ const STATS = [
   },
   {
     value: "6+",
-    label: "AI systems shipped, 17+ agents",
+    label: "AI systems shipped, 20+ agents",
     tag: "AI SYSTEMS",
     Icon: RouteIcon,
   },
